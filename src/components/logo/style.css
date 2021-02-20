@@ -1,7 +1,10 @@
 .logo {
-    width: 100px;
+    width: var(--logo-width);
     background-color: var(--theme-color);
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .logo span {
     font-size: 17px;
