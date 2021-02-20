@@ -1,0 +1,28 @@
+.header-container {
+    width: 100%;
+    height: var(--header-height);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-tabs {
+    display: flex;
+    flex-direction: row;
+}
+
+.tab-container {
+    width: 120px;
+    color: var(--secondary-text);
+    cursor: pointer;
+}
+.tab-active {
+    font-weight: 600;
+    color: var(--theme-color);
+}
