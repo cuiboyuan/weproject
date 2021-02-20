@@ -1,0 +1,10 @@
+.logo {
+    width: 100px;
+    background-color: var(--theme-color);
+    padding: 10px;
+}
+.logo span {
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+}
