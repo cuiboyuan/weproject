@@ -1,33 +1,42 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 import "./style.css";
 import Layout from "../layout";
 import Logo from "../logo";
-import Tab from "./tab.js";
+import Tab from "./tab";
+import Auth from "./auth";
 
-export default class Header extends Component {
+class Header extends Component {
 	render() {
-		return (
-			<div className="header-container col-h-center shadow">
-				<Layout>
-					<div className="header-content">
-						<Logo />
-						<div className="header-tabs row-v-center">
-							{this.props.routes.map((r, index) => (
-								<Tab
-									key={index}
-									active={this.props.activeIndex === index}
-									onSelect={() => this.props.onSelect(index)}
-								>
-									{r.name}
-								</Tab>
-							))}
+		if (
+			this.props.routes.findIndex(r => r.url === this.props.location.pathname) >
+			-1
+		) {
+			return (
+				<div className="header-container col-h-center shadow">
+					<Layout>
+						<div className="header-content">
+							<Logo />
+							<div className="header-tabs row-v-center">
+								{this.props.routes.map((r, index) => (
+									<Tab
+										key={index}
+										to={r.url}
+										active={this.props.location.pathname === r.url}
+									>
+										{r.name}
+									</Tab>
+								))}
+							</div>
+							<Auth authInfo={this.props.authInfo} />
 						</div>
-						{/* TODO: sign in / user name */}
-						<div>Jerry</div>
-					</div>
-				</Layout>
-			</div>
-		);
+					</Layout>
+				</div>
+			);
+		}
+		return <></>;
 	}
 }
+
+export default withRouter(Header);

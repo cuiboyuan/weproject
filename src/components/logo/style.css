@@ -5,8 +5,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
-.logo span {
+.logo-container {
+    width: var(--logo-container);
+}
+.logo a {
+    text-decoration: none;
     font-size: 17px;
     font-weight: bold;
     color: white;
