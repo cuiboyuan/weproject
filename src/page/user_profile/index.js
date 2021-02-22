@@ -1,9 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
-import './App.css';
+import './style.css';
 import { uid } from "react-uid";
-
-import User from './model/lib/user'
 
 class SkillList extends React.Component {
   render(){

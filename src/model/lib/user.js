@@ -1,5 +1,6 @@
 export default class User {
-	constructor(userName, passward) {
+	constructor(userId, userName, passward) {
+		this.id = userId;
 		this.userName = userName;
 		this.passward = passward; /* change passward to SHA-256 */
 		this.ownedProjectIds = [];
