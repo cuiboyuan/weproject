@@ -4,6 +4,7 @@ export default class Project {
 		this.ownerId = ownerId;
 		this.userIds = [];
 		this.status = "incomplete";
+		
 	}
 
 	static fromResponseBody(object) {
