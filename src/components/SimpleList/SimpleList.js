@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Container } from 'react-bootstrap'
 import reactDom from 'react-dom'
 import SimpleRow from './SimpleRow';
-
+import { uid } from "react-uid";
 export default class SimpleList extends Component {
     render() {
 
@@ -19,12 +19,16 @@ export default class SimpleList extends Component {
         // }
 
 
-
+//==========
 //here is an example:
-        const data = [{projectName: "csc309", projectDiscription: "interesting Project"}, {projectName:"csc413", projectDiscription:"... I don't want to take this course"}, {}, {}]
+        const data = [{pid:1, projectName: "csc309", projectDiscription: "interesting Project"}, {pid:2, projectName:"csc413", projectDiscription:"... I don't want to take this course"}, {}, {}]
         const numCol = 2;
         const isProject=true;
         const numItem = 4;
+//=========
+
+
+
         let acc = [];
         for (let i=0; i < data.length; i=i+numCol){
             acc.push(data.slice(i, i+numCol));
@@ -33,6 +37,7 @@ export default class SimpleList extends Component {
                 <Container>
                     {acc.map(
                         item=><SimpleRow 
+                        key={uid(item)}
                         isProject={isProject}
                         data={item}
                         />

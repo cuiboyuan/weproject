@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Row } from 'react-bootstrap'
-import SimpleCard from '../SimpleCard/SimpleCard'
-
+import SimpleCard from '../SimpleCard/SimpleCard';
+import {uid} from "react-uid";
 export default class extends Component {
     render() {
         const {data, isProject} = this.props;
@@ -13,7 +13,8 @@ export default class extends Component {
             <Row className="top5">
             {data.map(item =>(
                 <SimpleCard data={item}
-                isProject={isProject}/>
+                isProject={isProject}
+                key={uid(item)}/>
             ))}
             </Row>
 
