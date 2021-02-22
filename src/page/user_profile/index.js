@@ -78,13 +78,16 @@ class UserProfile extends React.Component {
 
     return (
         <div>    
-            <ProfilePhoto picture="logo.svg"></ProfilePhoto>
+            {/* <ProfilePhoto picture="logo.svg"></ProfilePhoto> */}
             <h1>{user.userName}</h1>
             <p> I am {user.userName}</p>
+
             <h4>Project Highlights</h4>
             <ProjectList projectIds={projectIds} allProjects={allProjects}></ProjectList>
+            
             <h4>Skills</h4>
             <SkillList></SkillList>
+            
             <h4>Experiences</h4>
             <ExperienceList></ExperienceList>
         </div>
