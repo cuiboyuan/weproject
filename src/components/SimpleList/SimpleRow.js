@@ -4,20 +4,19 @@ import SimpleCard from '../SimpleCard/SimpleCard'
 
 export default class extends Component {
     render() {
-        // const {numCol, data, isProject} = this.props;
-        // const numCol, data = [4, [{projectName: "csc309", projectDiscription: "interesting Project"}, {}, {}, {}]]
-
-        const data = [{projectName: "csc309", projectDiscription: "interesting Project"}, {}, {}, {}]
+        const {data, isProject} = this.props;
+        // simple example here
+        // const data = [{projectName: "csc309", projectDiscription: "interesting Project"}, {}, {}, {}]
+        // const isProject = true;
         return(
         <div>
-            simple row in the list 
             <Row className="top5">
-            <SimpleCard data={data[0]} isProject={true}/>
-            <SimpleCard data={data[0]} isProject={true}/>
-
-            <SimpleCard data={data[0]} isProject={true}/>
-            <SimpleCard data={data[0]} isProject={true}/>
+            {data.map(item =>(
+                <SimpleCard data={item}
+                isProject={isProject}/>
+            ))}
             </Row>
+
         </div>
         )
     }

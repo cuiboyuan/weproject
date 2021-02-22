@@ -23,11 +23,11 @@ export default class SimpleCard extends Component {
                         <Card.Title>
                             {projectName}
                             
-                             (the simple card! Project Name here)
+                 
                         </Card.Title>
                         <Card.Body>
                             {projectDiscription}
-                            (project discription here)
+                          
                         </Card.Body>
                         <Card.Footer>
                             <Button variant="primary" size="sm" className="float-left">See more</Button>
@@ -43,11 +43,11 @@ export default class SimpleCard extends Component {
                 <Card>
                     <Card.Title>
                         {peopleName}
-                        (your name here)
+            
                     </Card.Title>
                     <Card.Body>
                         {selfIntro}
-                        (description here)
+          
                     </Card.Body>
                     <Card.Footer>
                         <Button variant="primary" className="float-left">See more</Button>

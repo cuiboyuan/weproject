@@ -6,22 +6,38 @@ import SimpleRow from './SimpleRow';
 
 export default class SimpleList extends Component {
     render() {
-        //ifProject is an indicator, whether it is used for people / project view
-        const {numCol, numItem, data, ifProject} = this.props;
-        if (numItem % numCol != 0){
-            let i = 0;
-            while(i < numItem % numCol){
-                data.push("");
-            }
-        }
 
+
+//isProject is an indicator, whether it is used for people / project view
+//uncomment the code after the project browsing view implementation
+        // const {numCol, numItem, data, isProject} = this.props;
+        // if (numItem % numCol != 0){
+        //     let i = 0;
+        //     while(i < numItem % numCol){
+        //         data.push({});
+        //     }
+        // }
+
+
+
+//here is an example:
+        const data = [{projectName: "csc309", projectDiscription: "interesting Project"}, {projectName:"csc413", projectDiscription:"... I don't want to take this course"}, {}, {}]
+        const numCol = 2;
+        const isProject=true;
+        const numItem = 4;
+        let acc = [];
+        for (let i=0; i < data.length; i=i+numCol){
+            acc.push(data.slice(i, i+numCol));
+        }
         return (
-            <reactDom>
                 <Container>
-                    the simple list!
-                    <SimpleRow />
+                    {acc.map(
+                        item=><SimpleRow 
+                        isProject={isProject}
+                        data={item}
+                        />
+                    )}
                 </Container>
-            </reactDom>
         
             )
     }
