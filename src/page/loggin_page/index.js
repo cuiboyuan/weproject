@@ -29,7 +29,7 @@ const InputField = props => {
 const Loggin = props => {
 	const auth = useAuthState();
 	const [type, setType] = useState(props.location.state.type);
-	const toggleType = () => setType(type === "CREATE" ? "SIGNIN" : "CREATE");
+	const toggleType = () => setType(type === "CREATE" ? "CREATE" : "SIGNIN");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPwd, setConfirmPwd] = useState("");

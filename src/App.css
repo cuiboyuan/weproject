@@ -1,5 +1,6 @@
 @import '~antd/dist/antd.css';
 
+
 :root {
   --theme-color: #08c9a3;
   --theme-color-darker: #07a384;
@@ -38,12 +39,12 @@
   justify-content: center;
 }
 
-.shadow {
+.shadow-cust {
   -webkit-box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 5px -2px rgba(0, 0, 0, 0.3);
 }
-.shadow-strong {
+.shadow-strong-cust {
   -webkit-box-shadow: 2px 1px 7px 0px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 2px 1px 7px 0px rgba(0, 0, 0, 0.3);
   box-shadow: 2px 1px 7px 0px rgba(0, 0, 0, 0.3);

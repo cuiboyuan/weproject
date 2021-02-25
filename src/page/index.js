@@ -28,11 +28,17 @@ const Routes = props => {
 	return (
 		<Router>
 			<div className="App">
-				<Header authInfo={authContext} routes={header} logout={authContext.logout}/>
+				<Header
+					authInfo={authContext}
+					routes={header}
+					logout={authContext.logout}
+				/>
 				<Switch>
 					<Route path="/" exact component={ProjectBrowserPage} />
 					{/* <Route path="/teammates" exact component={} /> */}
-					<Route path="/project" exact component={ProjectDetailPage} />
+					<Route path="/project" exact>
+						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
+					</Route>
 					<Route path="/loggin">
 						{authContext.isLoggedIn ? <Redirect to="/" /> : <Login />}
 					</Route>

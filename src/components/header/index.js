@@ -14,7 +14,7 @@ class Header extends Component {
 			-1
 		) {
 			return (
-				<div className="header-container col-h-center shadow">
+				<div className="header-container col-h-center shadow-cust">
 					<Layout>
 						<div className="header-content">
 							<Logo />
