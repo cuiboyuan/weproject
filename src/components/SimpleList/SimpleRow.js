@@ -9,10 +9,14 @@ export default class SimpleRow extends Component {
 		// const data = [{projectName: "csc309", projectDiscription: "interesting Project"}, {}, {}, {}]
 		// const isProject = true;
 		return (
-			<div>
-				<Row className="top5">
+			<div className="top5">
+				<Row>
 					{data.map(item => (
-						<SimpleCard data={{...item, pathname: this.props.pathname}} isProject={isProject} key={uid(item)} />
+						<SimpleCard
+							data={{ ...item, pathname: this.props.pathname }}
+							isProject={isProject}
+							key={uid(item)}
+						/>
 					))}
 				</Row>
 			</div>

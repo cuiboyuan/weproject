@@ -29,7 +29,7 @@ const InputField = props => {
 const Loggin = props => {
 	const auth = useAuthState();
 	const [type, setType] = useState(props.location.state.type);
-	const toggleType = () => setType(type === "CREATE" ? "CREATE" : "SIGNIN");
+	const toggleType = () => setType(type === "CREATE" ? "SIGNIN" : "CREATE");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPwd, setConfirmPwd] = useState("");
@@ -44,7 +44,7 @@ const Loggin = props => {
 			<div className="loggin-view-half loggin-grad-bg">
 				<div className="loggin-back-button-container">
 					<div
-						className="loggin-back-button shadow-strong"
+						className="loggin-back-button shadow-strong-cust"
 						onClick={() => props.history.goBack()}
 					>
 						<GoArrowSmallLeft className="loggin-back-button-icon" />
@@ -81,7 +81,7 @@ const Loggin = props => {
 									Sign In
 								</div>
 							</div>
-							<div className="loggin-input-submit rounded shadow">
+							<div className="loggin-input-submit rounded shadow-cust">
 								Create an account
 							</div>
 						</>
@@ -105,7 +105,7 @@ const Loggin = props => {
 								</div>
 							</div>
 							<div
-								className="loggin-input-submit rounded shadow"
+								className="loggin-input-submit rounded shadow-cust"
 								onClick={onSubmit}
 							>
 								Sign In

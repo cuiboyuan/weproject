@@ -45,16 +45,18 @@ export default class SimpleList extends Component {
 		}
 		console.log("oh noe",acc)
 		return (
-			<Container>
-				{acc.map(item => (
-					<SimpleRow
-						key={uid(item)}
-						isProject={isProject}
-                        data={item}
-                        pathname={this.props.pathname}
-					/>
-				))}
-			</Container>
+			<div className="scard-container">
+				<Container>
+					{acc.map(item => (
+						<SimpleRow
+							key={uid(item)}
+							isProject={isProject}
+							data={item}
+							pathname={this.props.pathname}
+						/>
+					))}
+				</Container>
+			</div>
 		);
 	}
 }

@@ -9,7 +9,9 @@ const Popup = props => {
 		<div className="auth-popup">
 			<p>Profile</p>
 			<p>My projects</p>
-			<p className="auth-loggout" onClick={props.onClick}>Log out</p>
+			<p className="auth-loggout" onClick={props.onClick}>
+				Log out
+			</p>
 		</div>
 	);
 };
@@ -19,7 +21,11 @@ const Auth = props => {
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (
 				<>
-					<Popover content={() => <Popup onClick={props.logout}/>} placement="bottomRight" title="">
+					<Popover
+						content={() => <Popup onClick={props.logout} />}
+						placement="bottomRight"
+						title=""
+					>
 						<span>{props.authInfo.userName}</span>
 					</Popover>
 				</>
@@ -30,11 +36,10 @@ const Auth = props => {
 							Sign In
 						</Link>
 					</span>
-					<div className="rounded">
-						<Link to={{ pathname: "/loggin", state: { type: "CREATE" } }}>
-							Get Started
-						</Link>
-					</div>
+
+					<Link to={{ pathname: "/loggin", state: { type: "CREATE" } }}>
+						<div className="rounded">Get Started</div>
+					</Link>
 				</div>
 			)}
 		</div>
