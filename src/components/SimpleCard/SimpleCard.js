@@ -7,9 +7,8 @@ import { Link } from "react-router-dom";
 export default class SimpleCard extends Component {
 	render() {
 		const { data, isProject } = this.props;
-
 		//in case there is no content
-		if (Object.keys(data).length === 0) {
+		if (Object.keys(data).length === 1) {
 			return <Col className="col-md-offset-2"></Col>;
 		}
 		if (isProject) {

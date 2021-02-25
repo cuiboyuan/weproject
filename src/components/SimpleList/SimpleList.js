@@ -7,39 +7,43 @@ export default class SimpleList extends Component {
 	render() {
 		//isProject is an indicator, whether it is used for people / project view
 		//uncomment the code after the project browsing view implementation
-		// const {numCol, numItem, data, isProject} = this.props;
-		// if (numItem % numCol != 0){
-		//     let i = 0;
-		//     while(i < numItem % numCol){
-		//         data.push({});
-		//     }
-		// }
+		const {numCol, numItem, data, isProject} = this.props;
+		console.log("xxxxxxxxxx",data)
+		if (data.length % numCol != 0){
+		    let i = 0;
+		    while(i < numItem % numCol){
+		        data.push({});
+				i+=1;
+		    }
+		}
+		console.log("yyyyyyy",data, numItem, numCol)
 
 		//==========
 		//here is an example:
-		const data = [
-			{
-				pid: 1,
-				projectName: "csc309",
-				projectDiscription: "interesting Project",
-			},
-			{
-				pid: 2,
-				projectName: "csc413",
-				projectDiscription: "... I don't want to take this course",
-			},
-			// {},
-			// {},
-		];
-		const numCol = 2;
-		const isProject = true;
-		const numItem = 4;
+		// const data = [
+		// 	{
+		// 		pid: 1,
+		// 		projectName: "csc309",
+		// 		projectDiscription: "interesting Project",
+		// 	},
+		// 	{
+		// 		pid: 2,
+		// 		projectName: "csc413",
+		// 		projectDiscription: "... I don't want to take this course",
+		// 	},
+		// 	// {},
+		// 	// {},
+		// ];
+		// const numCol = 2;
+		// const isProject = true;
+		// const numItem = 4;
 		//=========
 
 		let acc = [];
 		for (let i = 0; i < data.length; i = i + numCol) {
 			acc.push(data.slice(i, i + numCol));
 		}
+		console.log("oh noe",acc)
 		return (
 			<Container>
 				{acc.map(item => (

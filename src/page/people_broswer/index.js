@@ -10,7 +10,7 @@ import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Layout from "../../components/layout";
-export default class ProjectBrowser extends Component {
+export default class TeammateBrowser extends Component {
   state = {
     inputForm: "",
     projects: [],
@@ -19,23 +19,23 @@ export default class ProjectBrowser extends Component {
   render() {
     const data = [
       {
-        pid: 1,
-        projectName: "project 1",
-        projectDiscription: "project 1 discription",
+        uid: 1,
+        peopleName: "project 1",
+        peopleDiscription: "people1 self intro",
       },
       {
-        pid: 2,
-        projectName: "project 2",
-        projectDiscription: "project 2 discription",
+        uid: 2,
+        peopleName: "project 2",
+        peopleDiscription: "people2 self intro",
       },
 	  {
-		  pid:3,
-		  projectName:"project 3",
-		  projectDiscription:"project 3 discription",
+		  uid:3,
+		  peopleName:"project 3",
+		  peopleDiscription:"people3 self intro",
 	  }
     ];
     const numCol = 2;
-    const isProject = true;
+    const isProject = false;
     const numItem = 3;
 	console.log("browser index.js", data)
 
@@ -49,7 +49,7 @@ export default class ProjectBrowser extends Component {
           <div className="project-brw-container">
             <SearchBar />
             <SimpleList
-              pathname={"/project"}
+              pathname={"/teammates"}
               numCol={numCol}
               numItem={numItem}
               data={data}
