@@ -17,12 +17,69 @@
     flex-direction: row;
 }
 
-.tab-container {
+.tab {
     width: 120px;
+    cursor: pointer;
     color: var(--secondary-text);
+}
+.tab:hover{
+    color: var(--theme-color);
+}
+
+.tab-active {
+    color: var(--theme-color);
+}
+
+.auth-container {
+    width: var(--logo-container);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;   
+}
+
+.auth-container span{
+    font-size: 17px;
     cursor: pointer;
 }
-.tab-active {
-    font-weight: 600;
+
+.auth-sign-in {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.auth-sign-in > *{
+    cursor: pointer;
+    margin-left: 25px;
+    color: var(--secondary-text);
+}
+
+.auth-sign-in div{
+    padding: 10px 20px;
+    border: 1px solid var(--theme-color-darker);
+    /* color: var(--theme-color-darker); */
+}
+
+.auth-sign-in a {
+    text-decoration: none;
+    color: var(--theme-color-darker);
+}
+
+.auth-sign-in div a {
+    text-decoration: none;
+    color: var(--theme-color-darker);
+}
+
+.auth-sign-in a:hover{
     color: var(--theme-color);
+}
+
+.auth-popup p{
+    cursor: pointer;
+}
+
+.auth-loggout {
+    color: rgb(255, 107, 107);
 }
