@@ -12,6 +12,7 @@ import ProjectDetailPage from "./project";
 import Login from "./loggin_page";
 import Header from "../components/header";
 import TeammateBrowser from "./TeammateBrowser"
+import UserProfile from "./user_profile/UserProfile";
 
 const header = [
 	{
@@ -44,6 +45,10 @@ const Routes = props => {
 					</Route>
 					<Route path="/loggin">
 						{authContext.isLoggedIn ? <Redirect to="/" /> : <Login />}
+					</Route>
+
+					<Route path="/user" exact>
+						{authContext.isLoggedIn ? <UserProfile auth={authContext}/> : <Login />}
 					</Route>
 				</Switch>
 			</div>

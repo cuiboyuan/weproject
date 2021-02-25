@@ -7,7 +7,12 @@ import "./style.css";
 const Popup = props => {
 	return (
 		<div className="auth-popup">
-			<p>Profile</p>
+			
+			<Link to={ {pathname: "/user"}}>
+				<p>Profile</p>
+			</Link>
+
+			<p>My projects</p>
 			<p className="auth-loggout" onClick={props.onClick}>
 				Log out
 			</p>
