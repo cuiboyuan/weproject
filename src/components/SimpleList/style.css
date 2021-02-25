@@ -1,1 +1,8 @@
-.top5 { margin-top:5px; }
+.top5 { 
+    margin-top: 20px; 
+    width: 100%;
+}
+
+.scard-container {
+    width: 100%;
+}

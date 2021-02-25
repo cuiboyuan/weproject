@@ -1,4 +1,5 @@
 
+
 .loggin-view {
     width: 100%;
     height: 800px;
@@ -98,7 +99,7 @@
 .loggin-input-container {
     width: 100%;
     height: 50px;
-    background-color: rgba(0, 255, 170, 0.219);
+    background-color: rgba(0, 255, 170, 0.089);
     display: flex;
     flex-direction: column;
     justify-content: center;

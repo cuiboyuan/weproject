@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import "./style.css";
+
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 export default class SimpleCard extends Component {
@@ -17,11 +19,15 @@ export default class SimpleCard extends Component {
 			return (
 				<Col className="col-md-offset-2">
 					<Card>
-						<Card.Title>{projectName}</Card.Title>
+						<div className="p-3">
+							<Card.Title>{projectName}</Card.Title>
+						</div>
 						<Card.Body>{projectDiscription}</Card.Body>
 						<Card.Footer>
 							<Button variant="primary" size="sm" className="float-left">
-								<Link to={{ pathname: data.pathname, state: { data: data } }}> See more </Link>
+								<Link to={{ pathname: data.pathname, state: { data: data } }}>
+									<span className="simplecard-see-more"> See more</span>{" "}
+								</Link>
 							</Button>
 							{/* <Button variant="primary" size="sm" className="float-right">
 								Join the group
