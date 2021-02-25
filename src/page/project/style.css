@@ -76,6 +76,30 @@
     width: 100%;
     padding: 20px;
 }
+
+.project-page-info-block-title {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
 .project-page-info-block > * {
     margin-bottom: 20px;
+}
+
+.project-page-owner {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.project-page-owner > *{
+    margin-right: 20px;
+}
+.project-page-owner span{
+    font-size: 20px;
+    color: var(--primary-text);
 }

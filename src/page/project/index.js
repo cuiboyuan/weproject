@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import Layout from "../../components/layout";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import TeamSvg from "../../assets/team.svg";
-import { Avatar } from 'antd';
+import { Avatar, Button } from "antd";
 
 import "./style.css";
+
+const members = [...Array(3).keys()].map((_, i) => { return { username: `member ${i}` } });
+const applicants = [...Array(3).keys()].map((_, i) => { return { username: `applicant ${i}` } });
 
 class Project extends Component {
 	render() {
 		const data = this.props.location.state.data;
+		console.log(data);
 		return (
 			<div className="project-page-container">
 				<Layout>
@@ -32,12 +36,33 @@ class Project extends Component {
 							<p>{data.projectDiscription}</p>
 						</div>
 						<div className="project-page-info-block shadow-cust rounded">
-							<div className="project-page-owner">{data.projectName}</div>
-							<div className="project-page-team">
-								<div className="project-page-tag">tag</div>
-								<div className="project-page-tag">tag</div>
+							<div className="project-page-info-block-title">
+								<span>Team members</span>
+								<Button className="rounded" size="large">Join the project</Button>
 							</div>
-							<p>{data.projectDiscription}</p>
+
+							{[data.owner, ...members].map(member => (<div className="project-page-owner">
+								<Avatar
+									className="simplecard-avatar"
+									size={50}
+									icon={<UserOutlined />}
+								/>
+								<span>{member.username}</span>
+							</div>))}
+						</div>
+						<div className="project-page-info-block shadow-cust rounded">
+							<div className="project-page-info-block-title">
+								<span>Project Applicants</span>
+							</div>
+
+							{applicants.map(member => (<div className="project-page-owner">
+								<Avatar
+									className="simplecard-avatar"
+									size={50}
+									icon={<UserOutlined />}
+								/>
+								<span>{member.username}</span>
+							</div>))}
 						</div>
 					</div>
 				</Layout>
