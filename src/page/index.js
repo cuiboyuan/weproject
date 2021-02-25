@@ -11,6 +11,7 @@ import ProjectBrowserPage from "./project_browser";
 import ProjectDetailPage from "./project";
 import Login from "./loggin_page";
 import Header from "../components/header";
+import TeammateBrowser from "./TeammateBrowser"
 
 const header = [
 	{
@@ -35,7 +36,7 @@ const Routes = props => {
 				/>
 				<Switch>
 					<Route path="/" exact component={ProjectBrowserPage} />
-					{/* <Route path="/teammates" exact component={} /> */}
+					<Route path="/teammates" exact component={TeammateBrowser} />
 					<Route path="/project" exact>
 						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
 					</Route>

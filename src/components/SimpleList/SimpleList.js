@@ -8,7 +8,6 @@ export default class SimpleList extends Component {
 		//isProject is an indicator, whether it is used for people / project view
 		//uncomment the code after the project browsing view implementation
 		const {numCol, numItem, data, isProject} = this.props;
-		console.log("xxxxxxxxxx",data)
 		if (data.length % numCol != 0){
 		    let i = 0;
 		    while(i < numItem % numCol){
@@ -16,7 +15,6 @@ export default class SimpleList extends Component {
 				i+=1;
 		    }
 		}
-		console.log("yyyyyyy",data, numItem, numCol)
 
 		//==========
 		//here is an example:
@@ -43,7 +41,6 @@ export default class SimpleList extends Component {
 		for (let i = 0; i < data.length; i = i + numCol) {
 			acc.push(data.slice(i, i + numCol));
 		}
-		console.log("oh noe",acc)
 		return (
 			<div className="scard-container">
 				<Container>
