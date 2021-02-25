@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 :root {
   --theme-color: #08c9a3;
   --theme-color-darker: #07a384;
@@ -7,6 +9,7 @@
   --logo-width: 100px;
   --primary-text: #000;
   --secondary-text: rgba(0, 0, 0, 0.6);
+  --detail-background: rgba(189, 255, 230, 0.068);
 }
 /* row alignment */
 .row {

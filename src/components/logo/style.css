@@ -1,6 +1,6 @@
 .logo {
     width: var(--logo-width);
-    background-color: var(--theme-color);
+    background: linear-gradient(to right, rgb(48, 177, 252), rgb(48, 252, 157));
     padding: 10px;
     display: flex;
     justify-content: center;
