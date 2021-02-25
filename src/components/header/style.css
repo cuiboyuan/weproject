@@ -38,6 +38,11 @@
     justify-content: flex-end;   
 }
 
+.auth-container span{
+    font-size: 17px;
+    cursor: pointer;
+}
+
 .auth-sign-in {
     display: flex;
     flex-direction: row;
@@ -69,4 +74,12 @@
 
 .auth-sign-in a:hover{
     color: var(--theme-color);
+}
+
+.auth-popup p{
+    cursor: pointer;
+}
+
+.auth-loggout {
+    color: rgb(255, 107, 107);
 }

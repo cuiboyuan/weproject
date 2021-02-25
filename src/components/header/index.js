@@ -29,7 +29,7 @@ class Header extends Component {
 									</Tab>
 								))}
 							</div>
-							<Auth authInfo={this.props.authInfo} />
+							<Auth authInfo={this.props.authInfo} logout={this.props.logout}/>
 						</div>
 					</Layout>
 				</div>

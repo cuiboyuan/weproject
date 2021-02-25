@@ -1,0 +1,13 @@
+.list-container {
+    width: 100%;
+}
+
+.list-row {
+    margin-bottom: var(--p--margin--vertical);
+    justify-content: flex-start;
+    margin-top: 30px;
+}
+
+.list-item {
+    /* TODO: change */
+}
