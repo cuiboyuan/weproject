@@ -30,6 +30,7 @@
     - Connect with users
 - Project Details
 - Teammate Details
+- Admin Previliges (In progress)
 
 
 
