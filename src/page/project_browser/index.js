@@ -17,23 +17,32 @@ export default class ProjectBrowser extends Component {
 	};
 
 	render() {
-		const data = [
-			{
-				pid: 1,
-				projectName: "project 1",
-				projectDiscription: "project 1 discription",
-			},
-			{
-				pid: 2,
-				projectName: "project 2",
-				projectDiscription: "project 2 discription",
-			},
-			{
-				pid: 3,
-				projectName: "project 3",
-				projectDiscription: "project 3 discription",
-			},
-		];
+		const data = [...Array(9).keys()].map((_, i) => {
+			return {
+        pid: i,
+        owner: { username: `user ${i}` },
+				projectName: `project ${i}`,
+				projectDiscription: `project ${i} discription`,
+			};
+		});
+
+		// [
+		// 	{
+		// 		pid: 1,
+		// 		projectName: "project 1",
+		// 		projectDiscription: "project 1 discription",
+		// 	},
+		// 	{
+		// 		pid: 2,
+		// 		projectName: "project 2",
+		// 		projectDiscription: "project 2 discription",
+		// 	},
+		// 	{
+		// 		pid: 3,
+		// 		projectName: "project 3",
+		// 		projectDiscription: "project 3 discription",
+		// 	},
+		// ];
 		const numCol = 3;
 		const isProject = true;
 		console.log("browser index.js", data);
@@ -46,7 +55,9 @@ export default class ProjectBrowser extends Component {
 			<div>
 				<Layout>
 					<div className="project-brw-container">
-						<SearchBar />
+						<div className="project-brw-search-container">
+							<SearchBar />
+						</div>
 						<SimpleList
 							pathname={"/project"}
 							numCol={numCol}

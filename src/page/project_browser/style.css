@@ -3,3 +3,8 @@
 .project-brw-container {
     padding-top: 20px;
 }
+
+.project-brw-search-container {
+    width: 100%;
+    margin-bottom: 20px;
+}

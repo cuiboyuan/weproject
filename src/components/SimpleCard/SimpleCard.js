@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
+import { Avatar } from "antd";
 import { Link } from "react-router-dom";
-import { AiOutlineFileImage } from "react-icons/ai";
+import {
+	AiOutlineFileImage,
+	AiOutlineEye,
+	AiOutlineTeam,
+	AiOutlineLike,
+} from "react-icons/ai";
+import { UserOutlined } from '@ant-design/icons';
+// credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
 
@@ -29,11 +37,28 @@ export default class SimpleCard extends Component {
 							<div className="simplecard-img-container rounded">
 								<AiOutlineFileImage />
 							</div>
-							<div className="p-4">
+							<div className="simplecard-name">
 								<Card.Title>{projectName}</Card.Title>
 							</div>
 							<Card.Body className="simplecard-description">
-								{projectDiscription}
+								<div className="simplecard-username-container">
+									<Avatar className="simplecard-avatar" icon={<UserOutlined />} />
+									<span>{data.owner.username}</span>
+								</div>
+								<p>{projectDiscription}</p>
+								<div className="simplecard-info-container">
+									<div className="simplecard-icon">
+										<AiOutlineEye />
+										<span>10</span>
+									</div>
+									<div className="simplecard-icon">
+										<AiOutlineTeam />
+										<span>10</span>
+									</div>
+									<div className="simplecard-icon">
+										<AiOutlineLike /> <span>10</span>
+									</div>
+								</div>
 							</Card.Body>
 							{/* <Card.Footer>
 							<Button variant="primary" size="sm" className="float-left">
@@ -47,12 +72,12 @@ export default class SimpleCard extends Component {
 				</Col>
 			);
 		} else {
-			const { peopleName, selfIntro } = data;
+			const { peopleName, peopleDiscription } = data;
 			return (
 				<Col className="col-md-offset-2">
 					<Card>
 						<Card.Title>{peopleName}</Card.Title>
-						<Card.Body>{selfIntro}</Card.Body>
+						<Card.Body>{peopleDiscription}</Card.Body>
 						<Card.Footer>
 							<Button variant="primary" className="float-left">
 								See more

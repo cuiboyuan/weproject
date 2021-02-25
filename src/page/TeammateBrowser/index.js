@@ -20,17 +20,17 @@ export default class TeammateBrowser extends Component {
     const data = [
       {
         uid: 1,
-        peopleName: "project 1",
+        peopleName: "p 1",
         peopleDiscription: "people1 self intro",
       },
       {
         uid: 2,
-        peopleName: "project 2",
+        peopleName: "p 2",
         peopleDiscription: "people2 self intro",
       },
 	  {
 		  uid:3,
-		  peopleName:"project 3",
+		  peopleName:"p 3",
 		  peopleDiscription:"people3 self intro",
 	  }
     ];
@@ -46,7 +46,7 @@ export default class TeammateBrowser extends Component {
 
       <div>
         <Layout>
-          <div className="project-brw-container">
+          <div className="teammate-brw-container">
             <SearchBar />
             <SimpleList
               pathname={"/teammates"}
