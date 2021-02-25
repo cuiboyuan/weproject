@@ -37,7 +37,6 @@ export default class ProjectBrowser extends Component {
     const numCol = 2;
     const isProject = true;
     const numItem = 3;
-	console.log("browser index.js", data)
 
     return (
       // <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
