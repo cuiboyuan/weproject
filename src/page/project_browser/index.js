@@ -22,7 +22,7 @@ export default class ProjectBrowser extends Component {
 				pid: i,
 				owner: { username: `user ${i}` },
 				projectName: `project ${i}`,
-				projectDiscription: `project ${i} discription`,
+				projectDiscription: `project ${i} description`,
 			};
 		});
 

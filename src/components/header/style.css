@@ -81,6 +81,11 @@
     cursor: pointer;
 }
 
+.auth-popup a{
+    text-decoration: none;
+    color: var(--secondary-text);
+}
+
 .auth-loggout {
     color: rgb(255, 107, 107);
 }

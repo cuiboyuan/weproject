@@ -8,7 +8,7 @@ import { Avatar, Button } from "antd";
 import "./style.css";
 
 const members = [...Array(3).keys()].map((_, i) => { return { username: `member ${i}` } });
-const applicants = [...Array(3).keys()].map((_, i) => { return { username: `applicant ${i}` } });
+const applicants = [...Array(1).keys()].map((_, i) => { return { username: `applicant ${i}` } });
 
 class Project extends Component {
 	render() {
