@@ -86,7 +86,7 @@ class UserProfile extends React.Component {
         <div>    
             <div className='userIntroSection'>
               <ProfilePhoto></ProfilePhoto>
-              <div className="userNameBio">
+              <div className="userNameBioSection">
                 <h1>{auth.userName}</h1>
                 <p> I am {auth.userName}</p>
               </div>
