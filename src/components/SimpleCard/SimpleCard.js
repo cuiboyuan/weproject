@@ -36,12 +36,12 @@ export default class SimpleCard extends Component {
 				</Col>
 			);
 		} else {
-			const { peopleName, selfIntro } = data;
+			const { peopleName, peopleDiscription } = data;
 			return (
 				<Col className="col-md-offset-2">
 					<Card>
 						<Card.Title>{peopleName}</Card.Title>
-						<Card.Body>{selfIntro}</Card.Body>
+						<Card.Body>{peopleDiscription}</Card.Body>
 						<Card.Footer>
 							<Button variant="primary" className="float-left">
 								See more
