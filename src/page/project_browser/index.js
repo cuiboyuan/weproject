@@ -11,53 +11,52 @@ import SimpleList from "../../components/SimpleList/SimpleList";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Layout from "../../components/layout";
 export default class ProjectBrowser extends Component {
-  state = {
-    inputForm: "",
-    projects: [],
-  };
+	state = {
+		inputForm: "",
+		projects: [],
+	};
 
-  render() {
-    const data = [
-      {
-        pid: 1,
-        projectName: "project 1",
-        projectDiscription: "project 1 discription",
-      },
-      {
-        pid: 2,
-        projectName: "project 2",
-        projectDiscription: "project 2 discription",
-      },
-	  {
-		  pid:3,
-		  projectName:"project 3",
-		  projectDiscription:"project 3 discription",
-	  }
-    ];
-    const numCol = 2;
-    const isProject = true;
-    const numItem = 3;
-	console.log("browser index.js", data)
+	render() {
+		const data = [
+			{
+				pid: 1,
+				projectName: "project 1",
+				projectDiscription: "project 1 discription",
+			},
+			{
+				pid: 2,
+				projectName: "project 2",
+				projectDiscription: "project 2 discription",
+			},
+			{
+				pid: 3,
+				projectName: "project 3",
+				projectDiscription: "project 3 discription",
+			},
+		];
+		const numCol = 3;
+		const isProject = true;
+		console.log("browser index.js", data);
 
-    return (
-      // <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      // 	<a href="/project">to go project</a>
-      // </div>
+		return (
+			// <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+			// 	<a href="/project">to go project</a>
+			// </div>
 
-      <div>
-        <Layout>
-          <div className="project-brw-container">
-            <SearchBar />
-            <SimpleList
-              pathname={"/project"}
-              numCol={numCol}
-              numItem={numItem}
-              data={data}
-              isProject={isProject}
-            />
-          </div>
-        </Layout>
-      </div>
-    );
-  }
+			<div>
+				<Layout>
+					<div className="project-brw-container">
+						<SearchBar />
+						<SimpleList
+							pathname={"/project"}
+							numCol={numCol}
+							numItem={data.length}
+							data={data}
+							isProject={isProject}
+						/>
+					</div>
+				</Layout>
+			</div>
+		);
+	}
 }

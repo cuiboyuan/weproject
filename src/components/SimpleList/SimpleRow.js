@@ -11,11 +11,12 @@ export default class SimpleRow extends Component {
 		return (
 			<div className="top5">
 				<Row>
-					{data.map(item => (
+					{data.map((item, index) => (
 						<SimpleCard
 							data={{ ...item, pathname: this.props.pathname }}
 							isProject={isProject}
 							key={uid(item)}
+							isLast={index === (data.length - 1)}
 						/>
 					))}
 				</Row>

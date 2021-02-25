@@ -8,7 +8,6 @@ const Popup = props => {
 	return (
 		<div className="auth-popup">
 			<p>Profile</p>
-			<p>My projects</p>
 			<p className="auth-loggout" onClick={props.onClick}>
 				Log out
 			</p>

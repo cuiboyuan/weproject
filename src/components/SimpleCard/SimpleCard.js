@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { AiOutlineFileImage } from "react-icons/ai";
 
 import "./style.css";
 
@@ -16,23 +17,33 @@ export default class SimpleCard extends Component {
 		if (isProject) {
 			const { projectName, projectDiscription } = data;
 			return (
-				<Col className="col-md-offset-2">
-					<Card>
-						<div className="p-3">
-							<Card.Title>{projectName}</Card.Title>
-						</div>
-						<Card.Body>{projectDiscription}</Card.Body>
-						<Card.Footer>
+				<Col
+					className={`simpplecard simplecard-nopad ${
+						this.props.isLast ? "" : "simplecard-not-last"
+					}`}
+				>
+					<Link to={{ pathname: data.pathname, state: { data: data } }}>
+						{/* <span className="simplecard-see-more"> See more</span>{" "} */}
+
+						<Card>
+							<div className="simplecard-img-container rounded">
+								<AiOutlineFileImage />
+							</div>
+							<div className="p-4">
+								<Card.Title>{projectName}</Card.Title>
+							</div>
+							<Card.Body className="simplecard-description">
+								{projectDiscription}
+							</Card.Body>
+							{/* <Card.Footer>
 							<Button variant="primary" size="sm" className="float-left">
 								<Link to={{ pathname: data.pathname, state: { data: data } }}>
 									<span className="simplecard-see-more"> See more</span>{" "}
 								</Link>
 							</Button>
-							{/* <Button variant="primary" size="sm" className="float-right">
-								Join the group
-							</Button> */}
-						</Card.Footer>
-					</Card>
+						</Card.Footer> */}
+						</Card>
+					</Link>
 				</Col>
 			);
 		} else {
