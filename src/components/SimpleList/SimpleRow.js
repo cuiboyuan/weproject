@@ -13,6 +13,7 @@ export default class SimpleRow extends Component {
 				<Row>
 					{data.map((item, index) => (
 						<SimpleCard
+							isAdmin={ this.props.isAdmin}
 							data={{ ...item, pathname: this.props.pathname }}
 							isProject={isProject}
 							key={uid(item)}

@@ -19,8 +19,8 @@ export default class ProjectBrowser extends Component {
 	render() {
 		const data = [...Array(9).keys()].map((_, i) => {
 			return {
-        pid: i,
-        owner: { username: `user ${i}` },
+				pid: i,
+				owner: { username: `user ${i}` },
 				projectName: `project ${i}`,
 				projectDiscription: `project ${i} discription`,
 			};
@@ -59,6 +59,7 @@ export default class ProjectBrowser extends Component {
 							<SearchBar />
 						</div>
 						<SimpleList
+							isAdmin={this.props.isAdmin}
 							pathname={"/project"}
 							numCol={numCol}
 							numItem={data.length}

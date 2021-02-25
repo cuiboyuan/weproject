@@ -26,6 +26,7 @@ export default class SimpleList extends Component {
 				<Container fluid>
 					{acc.map(item => (
 						<SimpleRow
+							isAdmin={this.props.isAdmin}
 							key={uid(item)}
 							isProject={isProject}
 							data={item}

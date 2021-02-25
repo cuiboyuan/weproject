@@ -7,8 +7,10 @@ import {
 	AiOutlineEye,
 	AiOutlineTeam,
 	AiOutlineLike,
+	AiOutlineDelete,
+	AiOutlineToTop,
 } from "react-icons/ai";
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
@@ -42,22 +44,37 @@ export default class SimpleCard extends Component {
 							</div>
 							<Card.Body className="simplecard-description">
 								<div className="simplecard-username-container">
-									<Avatar className="simplecard-avatar" icon={<UserOutlined />} />
+									<Avatar
+										className="simplecard-avatar"
+										icon={<UserOutlined />}
+									/>
 									<span>{data.owner.username}</span>
 								</div>
 								<p>{projectDiscription}</p>
 								<div className="simplecard-info-container">
-									<div className="simplecard-icon">
-										<AiOutlineEye />
-										<span>10</span>
+									<div className="simplecard-info-left">
+										<div className="simplecard-icon">
+											<AiOutlineEye />
+											<span>10</span>
+										</div>
+										<div className="simplecard-icon">
+											<AiOutlineTeam />
+											<span>10</span>
+										</div>
+										<div className="simplecard-icon">
+											<AiOutlineLike /> <span>10</span>
+										</div>
 									</div>
-									<div className="simplecard-icon">
-										<AiOutlineTeam />
-										<span>10</span>
-									</div>
-									<div className="simplecard-icon">
-										<AiOutlineLike /> <span>10</span>
-									</div>
+									{this.props.isAdmin && (
+										<div className="simplecard-info-left">
+											<div className="simplecard-icon-admin">
+												<AiOutlineToTop />
+											</div>
+											<div className="simplecard-icon-admin">
+												<AiOutlineDelete />
+											</div>
+										</div>
+									)}
 								</div>
 							</Card.Body>
 							{/* <Card.Footer>

@@ -35,7 +35,9 @@ const Routes = props => {
 					logout={authContext.logout}
 				/>
 				<Switch>
-					<Route path="/" exact component={ProjectBrowserPage} />
+					<Route path="/" exact>
+						<ProjectBrowserPage isAdmin={authContext.isAdmin}/>
+					</Route>
 					<Route path="/teammates" exact component={TeammateBrowser} />
 					<Route path="/project" exact>
 						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
