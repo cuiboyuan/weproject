@@ -1,7 +1,8 @@
 import React from 'react'
-import { useParams } from 'react-router-dom';
 import './style.css';
 import { uid } from "react-uid";
+// import defaultPic from "../../assets/defaultPic.svg"
+import defaultPic from "../../logo.svg"
 
 class SkillList extends React.Component {
   render(){
@@ -27,16 +28,16 @@ class ProjectList extends React.Component {
 
     render(){
         // EXTERNAL CALL to server to get this user's projects
-        const {projectIds, allProjects} = this.props;
-        const userProject = allProjects.filter(
-          (project) => {
-            return (projectIds.includes(project.id));
-          }
-        );
+        // const {projectIds, allProjects} = this.props;
+        // const userProject = allProjects.filter(
+        //   (project) => {
+        //     return (projectIds.includes(project.id));
+        //   }
+        // );
         
         return (
             <ul>
-              {userProject.map(
+              {/* {userProject.map(
                 (project) => {
                   return (
                     <li key={uid(project)}>
@@ -46,7 +47,7 @@ class ProjectList extends React.Component {
                     </li>
                   )
                 }
-              )}
+              )} */}
             </ul>
         )
     }
@@ -55,10 +56,13 @@ class ProjectList extends React.Component {
 class ProfilePhoto extends React.Component {
   render(){
     // EXTERNAL CALL to server to get this user's profile pic
-    const pic = this.props.picture;
+    let pic = this.props.picture;
+    if (!pic){
+      pic = defaultPic;//"../../assets/defaultPic.jpg";
+    }
     return (
-      <div>
-        <img src={pic}></img>
+      <div className="avatarContainer">
+        <img className="avatar" src={pic} alt="avatar"></img>
       </div>
     )
   }
@@ -69,21 +73,27 @@ class UserProfile extends React.Component {
 
   render(){
     // EXTERNAL CALL to get this user's info
-    const {allUsers, allProjects} = this.props.appState;
-    let id = 0
-    // id = useParams();
-    let user = allUsers[id];
+    const {auth} = this.props;
 
-    let projectIds = (user.joinedProjectIds).concat(user.ownedProjectIds);
+    console.log(auth);
+    
+    // let id = 0
+    // // id = useParams();
+
+    // let projectIds = (user.joinedProjectIds).concat(user.ownedProjectIds);
 
     return (
         <div>    
-            {/* <ProfilePhoto picture="logo.svg"></ProfilePhoto> */}
-            <h1>{user.userName}</h1>
-            <p> I am {user.userName}</p>
+            <div className='userIntroSection'>
+              <ProfilePhoto></ProfilePhoto>
+              <div className="userNameBio">
+                <h1>{auth.userName}</h1>
+                <p> I am {auth.userName}</p>
+              </div>
+            </div>
 
             <h4>Project Highlights</h4>
-            <ProjectList projectIds={projectIds} allProjects={allProjects}></ProjectList>
+            <ProjectList></ProjectList>
             
             <h4>Skills</h4>
             <SkillList></SkillList>
