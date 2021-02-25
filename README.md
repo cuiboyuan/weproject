@@ -3,6 +3,9 @@
 ## How to start
 - Install all the dependencies: `npm i`
 - Build and run at the localhost PORT=3000: `npm start`
+- Login Credential `username:password`
+    - user: `user:user`
+    - admin: `admin:admin`
 
 ## Third party libraries:
 - React
