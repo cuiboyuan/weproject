@@ -49,7 +49,7 @@ export default class TeammateBrowser extends Component {
           <div className="teammate-brw-container">
             <SearchBar />
             <SimpleList
-              pathname={"/teammates"}
+              pathname={"/user"}
               numCol={numCol}
               numItem={numItem}
               data={data}
