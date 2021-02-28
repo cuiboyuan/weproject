@@ -44,12 +44,3 @@
 	position:relative;
 	
 }
-
-#bio {
-	width: 500px;
-	min-height: 50px;
-}
-
-#bio:hover {
-	background-color: whitesmoke;
-}
