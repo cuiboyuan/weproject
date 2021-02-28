@@ -90,9 +90,11 @@ export default class SimpleCard extends Component {
 						<Card.Title>{peopleName}</Card.Title>
 						<Card.Body>{peopleDiscription}</Card.Body>
 						<Card.Footer>
-							<Button variant="primary" className="float-left">
-								See more
-							</Button>
+							<Link to={{ pathname: data.pathname, state: { data: data } }}>
+								<Button variant="primary" className="float-left">
+									See more
+								</Button>
+							</Link>
 							<Button variant="primary" className="float-right">
 								Connect
 							</Button>
