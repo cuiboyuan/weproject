@@ -79,15 +79,16 @@ class UserProfile extends React.Component {
 
 		// let projectIds = (user.joinedProjectIds).concat(user.ownedProjectIds);
 
-		return (
-			<div>
-				<div className="userIntroSection">
-					<ProfilePhoto></ProfilePhoto>
-					<div className="userNameBioSection">
-						<h1>{auth.userName}</h1>
-						<p> I am {auth.userName}</p>
-					</div>
-				</div>
+    return (
+        <div>    
+            <div id='userIntroSection'>
+              <ProfilePhoto></ProfilePhoto>
+              <div id="userNameBioSection">
+                <h1 id='name'>{auth.userName}</h1>
+                <p id='bio'> I am {auth.userName}</p>
+              </div>
+              <button id="editProfile">Edit Profile</button>
+            </div>
 
 				<h4>Project Highlights</h4>
 				<ProjectList></ProjectList>
