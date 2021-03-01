@@ -7,7 +7,7 @@ import "./style.css";
 const Popup = props => {
 	return (
 		<div className="auth-popup">
-			<Link to={{ pathname: "/user" }}>
+			<Link to={{ pathname: "/profile" }}>
 				<p>Profile</p>
 			</Link>
 			<p className="auth-loggout" onClick={props.onClick}>
