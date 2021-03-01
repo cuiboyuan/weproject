@@ -67,6 +67,18 @@ class ProfilePhoto extends React.Component {
 	}
 }
 
+class BioSection extends React.Component {
+	render(){
+		const {bio} = this.props
+		
+		return (
+			<div id='bio'>
+				{bio}
+			</div>
+		)
+	}
+}
+
 class UserProfile extends React.Component {
 	render() {
 		// EXTERNAL CALL to get this user's info
@@ -74,23 +86,18 @@ class UserProfile extends React.Component {
 
 		console.log(auth);
 
-		// let id = 0
-		// // id = useParams();
-
-		// let projectIds = (user.joinedProjectIds).concat(user.ownedProjectIds);
-
     return (
         <div>    
             <div id='userIntroSection'>
               <ProfilePhoto></ProfilePhoto>
               <div id="userNameBioSection">
                 <h1 id='name'>{auth.userName}</h1>
-                <p id='bio'> I am {auth.userName}</p>
+				<BioSection bio={`I am ${auth.userName}`}></BioSection>
               </div>
               <button id="editProfile">Edit Profile</button>
             </div>
 
-				<h4>Project Highlights</h4>
+				<h4>My Projects</h4>
 				<ProjectList></ProjectList>
 
 				<h4>Skills</h4>
