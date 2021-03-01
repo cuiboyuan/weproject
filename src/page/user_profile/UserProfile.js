@@ -37,12 +37,14 @@ class Profile extends Component {
 		let currentName, currentUser;
 		console.log(this.props);
 
-		if (this.props.location.state){
-			currentName = this.props.location.state.username;
-			currentUser = this.props.allUsers.users.filter(item => item.userName == currentName)[0];
-		} else {
+		let isProfile = false;
+		if (this.props.location.pathname === '/profile'){
 			currentName = loginName;
 			currentUser = loginUser;
+			isProfile = true;
+		} else {
+			currentName = this.props.location.state.username;
+			currentUser = this.props.allUsers.users.filter(item => item.userName == currentName)[0];
 		}
 		
 		// Need some modification
@@ -55,14 +57,15 @@ class Profile extends Component {
 			ownedProjects: ownedProjects,
 			joinedProjects: joinedProjects,
 
-			isAdmin: auth.isAdmin
+			isAdmin: auth.isAdmin,
+			isProfile: isProfile,
 		};
 	}
 	handleClick = e => {
 		this.setState({ currentTab: e.key });
 	};
 	render() {
-		let {currentTab, username, ownedProjects, joinedProjects, isAdmin} = this.state;
+		let {currentTab, username, ownedProjects, joinedProjects, isAdmin, isProfile} = this.state;
 		return (
 			<div>
 
@@ -87,11 +90,11 @@ class Profile extends Component {
 								<div className="project-page-name">{username}</div>
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
-									{/* <Button className="rounded" size="medium" type="primary">
-										Join the project
-									</Button> */}
+									{isProfile && (<Button className="rounded" size="medium" type="primary">
+										Edit Profile
+									</Button>)}
 
-									{isAdmin && (<Button className="rounded" size="medium" danger>
+									{isAdmin && !isProfile && (<Button className="rounded" size="medium" danger>
 										Delete
 									</Button>)}
 								</div>
