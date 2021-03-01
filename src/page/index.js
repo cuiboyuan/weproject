@@ -5,7 +5,7 @@ import {
 	Route,
 	Switch,
 } from "react-router-dom";
-import { useAuthState } from "./../context";
+import { useAuthState, useProjectState, useUsersState } from "./../context";
 
 import ProjectBrowserPage from "./project_browser";
 import ProjectDetailPage from "./project";
@@ -13,7 +13,6 @@ import Login from "./loggin_page";
 import Header from "../components/header";
 import TeammateBrowser from "./TeammateBrowser"
 import UserProfile from "./user_profile/UserProfile";
-import UserDetail from "./user_detail/UserDetail";
 
 const header = [
 	{
@@ -28,6 +27,8 @@ const header = [
 
 const Routes = props => {
 	const authContext = useAuthState();
+	const usersContext = useUsersState();
+	const projectsContext = useProjectState();
 	return (
 		<Router>
 			<div className="App">
@@ -49,11 +50,7 @@ const Routes = props => {
 					</Route>
 
 					<Route path="/user" exact>
-						{authContext.isLoggedIn ? <UserDetail/> : <Login />}
-					</Route>
-
-					<Route path="/profile" exact>
-						{authContext.isLoggedIn ? <UserProfile auth={authContext}/> : <Login />}
+						{authContext.isLoggedIn ? <UserProfile allUsers={usersContext} allProjects={projectsContext} auth={authContext}/> : <Login />}
 					</Route>
 
 				</Switch>

@@ -7,6 +7,7 @@ import Layout from "../../components/layout";
 import List from "../../components/list";
 import Card from "../../components/card";
 import { useUsersState } from "../../context";
+import { Link } from "react-router-dom";
 
 const TeammateBrowser = () => {
 	const userContext = useUsersState();
@@ -24,7 +25,10 @@ const TeammateBrowser = () => {
 					<List
 						grid={{ space: 10, column: 4 }}
 						dataSource={userContext.users}
-            renderItem={item => <Card>{ item.userName}</Card>}
+            renderItem={item => 
+				<Link to={{pathname:"/user", state: {username: item.userName}}}>
+					<Card>{ item.userName}</Card>
+				</Link>}
 					/>
 					{/* <SimpleList
 							pathname={"/teammates"}
