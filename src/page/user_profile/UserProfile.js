@@ -130,13 +130,13 @@ class Profile extends Component {
 									<span>User detail</span>
 								</div>
 								<p> I am {username}. </p>
-								<div
+								{/* <div
 									style={{
 										width: "100%",
 										height: "150px",
 										backgroundColor: "#66666650",
 									}}
-								/>
+								/> */}
 							</div>
 						)}
 						{this.state.currentTab === "team" && (
