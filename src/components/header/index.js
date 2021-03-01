@@ -7,6 +7,7 @@ import Logo from "../logo";
 import Tab from "./tab";
 import Auth from "./auth";
 
+
 class Header extends Component {
 	render() {
 		if (

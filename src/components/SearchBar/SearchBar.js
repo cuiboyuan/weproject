@@ -15,7 +15,7 @@ export default class SearchBar extends Component {
 							className="float-right"
 							md="2"
 						>
-							Submit
+							Search
 						</Button>
 					</Col>
 				</Form.Row>

@@ -9,6 +9,7 @@
 }
 .logo-container {
     width: var(--logo-container);
+
 }
 .logo a {
     text-decoration: none;

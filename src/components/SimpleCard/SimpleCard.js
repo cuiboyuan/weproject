@@ -4,7 +4,6 @@ import { Avatar } from "antd";
 import { Link } from "react-router-dom";
 import {
 	AiOutlineFileImage,
-	AiOutlineEye,
 	AiOutlineTeam,
 	AiOutlineLike,
 	AiOutlineDelete,
@@ -25,7 +24,6 @@ export default class SimpleCard extends Component {
 			return <Col className="col-md-offset-2"></Col>;
 		}
 		if (isProject) {
-			const { projectName, projectDiscription } = data;
 			return (
 				<Col
 					className={`simpplecard simplecard-nopad ${
@@ -40,7 +38,7 @@ export default class SimpleCard extends Component {
 								<AiOutlineFileImage />
 							</div>
 							<div className="simplecard-name">
-								<Card.Title>{projectName}</Card.Title>
+								<Card.Title>{data.name}</Card.Title>
 							</div>
 							<Card.Body className="simplecard-description">
 								<div className="simplecard-username-container">
@@ -48,21 +46,17 @@ export default class SimpleCard extends Component {
 										className="simplecard-avatar"
 										icon={<UserOutlined />}
 									/>
-									<span>{data.owner.username}</span>
+									<span>{data.owner.userName}</span>
 								</div>
-								<p>{projectDiscription}</p>
+								<p>{data.description}</p>
 								<div className="simplecard-info-container">
 									<div className="simplecard-info-left">
 										<div className="simplecard-icon">
-											<AiOutlineEye />
-											<span>10</span>
-										</div>
-										<div className="simplecard-icon">
 											<AiOutlineTeam />
-											<span>10</span>
+											<span>{data?.userIds?.length || 0}</span>
 										</div>
 										<div className="simplecard-icon">
-											<AiOutlineLike /> <span>10</span>
+											<AiOutlineLike /> <span>{data.userLiked?.length}</span>
 										</div>
 									</div>
 									{this.props.isAdmin && (

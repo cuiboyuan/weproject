@@ -13,7 +13,7 @@ export default class List extends Component {
         const dataSize = this.props.dataSource.length;
         const numRow = Math.ceil(dataSize / column);
         const width = (100 - space * (column - 1)) / column; /* percent width */
-        console.log(numRow, column);
+        // console.log(numRow, column);
         return (
             <div className="list-container col-h-center">
                 {/* for each row */}

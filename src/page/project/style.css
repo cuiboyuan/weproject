@@ -15,6 +15,10 @@
     margin-bottom: 20px;
 }
 
+.project-page-margin > * {
+    margin-left: 20px;   
+}
+
 .project-page-name {
     font-size: 30px;
     font-weight: bold;
@@ -23,7 +27,7 @@
 
 .project-page-carouel {
     width: 100%;
-    height: 200px;
+    height: 300px;
     position: relative;
     display: flex;
     align-items: center;
@@ -38,7 +42,7 @@
 
 .project-page-tag {
     padding: 2px 15px;
-    font-size: 20px;
+    font-size: 17px;
     background-color:lightgreen;
     border-radius: 20px !important;
     margin-right: 20px;
@@ -84,8 +88,24 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    font-weight: 700;
 
 }
+.project-page-info {
+    width: 100%;
+    padding: 10px 30px;
+}
+.project-page-info > * {
+    margin-bottom: 20px;
+}
+.project-admin-control {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .project-page-info-block > * {
     margin-bottom: 20px;
 }
@@ -95,11 +115,23 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 10px;
 }
 .project-page-owner > *{
     margin-right: 20px;
 }
-.project-page-owner span{
-    font-size: 20px;
+.project-page-owner:hover{
+    background-color: #66666610
+}
+.project-page-owner-name-span{
+    font-size: 17px;
     color: var(--primary-text);
+}
+
+.project-owner-badge {
+    padding: 5px 10px;
+    border: 1px solid var(--theme-color);
+    color: var(--theme-color) !important;
+    border-radius: 25px;
+    font-size: 14px !important;
 }
