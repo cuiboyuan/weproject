@@ -17,3 +17,6 @@
     font-weight: bold;
     color: white;
 }
+.logo a:hover {
+    color: white;
+}
