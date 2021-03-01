@@ -24,6 +24,10 @@ const applicants = [...Array(4).keys()].map((_, i) => {
 });
 
 
+/**
+ * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
+ */
+
 class Profile extends Component {
 
 	constructor(props) {
@@ -31,20 +35,20 @@ class Profile extends Component {
 
 		let {auth, allUsers, allProjects, location} = this.props;
 
-		let loginName = this.props.auth.userName;
-		let loginUser = this.props.allUsers.users.filter(item => item.userName == loginName)[0];
+		let loginName = auth.userName;
+		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
 		
 		let currentName, currentUser;
 		console.log(this.props);
 
 		let isProfile = false;
-		if (this.props.location.pathname === '/profile'){
+		if (location.pathname === '/profile'){
 			currentName = loginName;
 			currentUser = loginUser;
 			isProfile = true;
 		} else {
-			currentName = this.props.location.state.username;
-			currentUser = this.props.allUsers.users.filter(item => item.userName == currentName)[0];
+			currentName = location.state.username;
+			currentUser = allUsers.users.filter(item => item.userName == currentName)[0];
 		}
 		
 		// Need some modification
