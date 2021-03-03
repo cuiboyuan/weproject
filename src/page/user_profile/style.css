@@ -5,51 +5,66 @@
 	margin-right: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	width: 100px;
-	height: 100px;
+	width: 150px;
+	height: 150px;
 	border-radius: 50%;
-    background-color: black;
+    background-color: whitesmoke;
+	border-color: cadetblue;
+	border-width: 10px;
 
 }
 
 .avatarContainer {
     
-	width: 80px;
 	height: 100%;
 	float: left;
 }
 
-#userIntroSection {
-	background-color: lightblue;
+.socialMedia {
+	color: grey;
+	font-size: small;
+}
+
+#socialMediaList {
+	list-style-type: none;
+	padding-left: 0px;
+}
+
+.removeSkill {
+	padding: 0px;
+	background: none;
+	border: none;
+	font-size: 8px;
+	margin: 1px;
+	height: 25px;
+	width: 25px;
+	vertical-align: top;
+}
+
+.removeSkill:hover{
+	background: none;
+	border: none;
+}
+
+.removeSkill:focus{
+	background: none;
+	border: none;
+}
+
+.addSkill {
+	padding: 0px;
+	background: none;
+	border: none;
+	border-radius: 50%;
+	font-size: 8px;
+	margin: 1px;
+	height: 25px;
+	width: 25px;
+	vertical-align: top;
+}
+
+.addSkill:focus {
 	
-	/* Add properties below */
-	
-	border: 1px solid grey;
-	min-height: 100px;
-	overflow:auto;
-}
-
-#userNameBioSection {
-    
-	margin: 0px;
-
-	/* Add properties below */
-	margin-left: 150px;
-	position:relative;
-}
-
-#editProfile {
-	margin-right: 50px;
-	float:right;
-	position:relative;
-	
-}
-
-#bio {
-	width: 500px;
-	min-height: 50px;
-}
-
-#bio:hover {
-	background-color: whitesmoke;
+	background: none;
+	border: none;
 }
