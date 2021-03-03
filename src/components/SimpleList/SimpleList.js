@@ -8,7 +8,6 @@ import SimpleCard from "../SimpleCard/SimpleCard";
 import PeopleCard from "../SimpleCard/PeopleCard"
 export default class SimpleList extends Component {
 	render() {
-		console.log("SimpleList pass in args", this.props)
 		return (
 				<Container fluid>
 					<Row>

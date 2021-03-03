@@ -18,10 +18,10 @@ import "./style.css";
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
-const ProjectCard = ({isAdmin, isProject, data, pathname})=>{
+const ProjectCard = ({isAdmin, data, pathname})=>{
 			return (
 				<Col lg="3" md="6" sm="12">
-					<Link to={{ pathname: data.pathname, state: { data: data } }}>
+					<Link to={{ pathname: pathname, state: { data: data } }}>
 						{/* <span className="simplecard-see-more"> See more</span>{" "} */}
 
 						<Card 

@@ -24,7 +24,6 @@ const SimpleCard = ({isAdmin, isProject, data, pathname})=>{
 	return(
 		<ProjectCard
 		isAdmin={isAdmin}
-		isProject={isProject}
 		data={data}
 		pathname={pathname}
 		></ProjectCard>
