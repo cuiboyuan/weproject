@@ -2,30 +2,18 @@ import React, { Component } from "react";
 import Layout from "../../components/layout";
 import {
 	ArrowLeftOutlined,
-	UserOutlined,
 	RiseOutlined,
 	ReadOutlined,
 	TeamOutlined,
-	ControlOutlined,
 	LikeOutlined,
-	GithubOutlined,
-	MailOutlined,
-	LinkedinOutlined,
-	LinkedinFilled,
 	DeleteFilled,
-	CrownOutlined,
-	DeleteTwoTone,
-	AppstoreAddOutlined,
-	FileAddFilled,
-	PlusCircleOutlined,
 	PlusCircleFilled,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
+
 import TeamSvg from "../../assets/team.svg";
 
 import { Avatar, Button, Menu } from "antd";
-
-import { Form } from "react-bootstrap";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
@@ -49,7 +37,8 @@ class Profile extends Component {
 		super(props);
 
 		let {auth, allUsers, allProjects, location} = this.props;
-
+		
+		// Change to EXTERNAL CALL in phase 2:
 		let loginName = auth.userName;
 		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
 		
@@ -73,20 +62,14 @@ class Profile extends Component {
 		this.state = {
 			currentTab: "detail",
 			username: currentName,
-
+			loginName: loginName,
+			
+			// Hard-coded data; Change to get information from server in phase 2
 			userBio: `I am ${currentName}.`,
 			email: `${currentName}@${currentName}.com`,
 			linkedin: `linkedin.com/${currentName}`,
 			github: `github.com/${currentName}`,
 			skills: ['JavaScript'],
-
-			newSkill: '',
-			newCompany: '',
-			newPosition: '',
-			newStart: '',
-			newEnd: '',
-
-			isEditing: false,
 
 			experiences: [
 				{
@@ -96,6 +79,14 @@ class Profile extends Component {
 					end: "2022-06-01",
 				},
 			],
+
+			newSkill: '',
+			newCompany: '',
+			newPosition: '',
+			newStart: '',
+			newEnd: '',
+
+			isEditing: false,
 
 			ownedProjects: ownedProjects,
 			joinedProjects: joinedProjects,
@@ -172,7 +163,7 @@ class Profile extends Component {
 
 	render() {
 		let {currentTab, username, ownedProjects, joinedProjects, userBio, experiences, github, linkedin, email, skills} = this.state;
-		let {isAdmin, isProfile, isEditing} = this.state
+		let {isAdmin, isProfile, isEditing, loginName} = this.state
 		let {newSkill, newCompany, newPosition, newStart, newEnd} = this.state;
 		
 		return (
@@ -189,18 +180,18 @@ class Profile extends Component {
 								<ArrowLeftOutlined />
 							</div>
 						</div>
-						<div className="project-page-info">
+						<div className="user-page-info">
 							<div className="project-admin-control">
-								<Avatar size="large" type='primary'
-										className="simplecard-avatar"
-										icon={<AiOutlineUser />}
-									/>
+								<Avatar size={100} icon={<AiOutlineUser />}/>
+
 								<div className="project-page-name">{username}</div>
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
+
 									{isProfile && (<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
 										{isEditing ? 'Save Changes' : 'Edit Profile'}
 									</Button>)}
+
 
 									{isAdmin && !isProfile && (<Button className="rounded" size="medium" danger>
 										Delete
@@ -223,9 +214,9 @@ class Profile extends Component {
 							<Menu.Item key="experiences" icon={<RiseOutlined/>}>
 								Experiences & Education
 							</Menu.Item>
-							<Menu.Item key="manage" icon={<ControlOutlined />}>
+							{/* <Menu.Item key="manage" icon={<ControlOutlined />}>
 								Manage
-							</Menu.Item>
+							</Menu.Item> */}
 						</Menu>
 						{currentTab === "detail" && (
 							<div className="project-page-info-block shadow-cust rounded">
@@ -233,7 +224,7 @@ class Profile extends Component {
 									<span>User detail</span>
 								</div>
 
-								{isEditing ? <input value={userBio} name='userBio' onChange={this.onEditChange}/> : <p> {userBio} </p>}
+								{isEditing ? <textarea id='bio' value={userBio} name='userBio' onChange={this.onEditChange}/> : <div id="bio"> {userBio} </div>}
 								
 								<ul id='socialMediaList'>
 									<li>
@@ -268,7 +259,7 @@ class Profile extends Component {
 
 								{isEditing && (
 									<div>
-										<input value={newSkill} name='newSkill' placeholder='new skill' onChange={this.onEditChange}/>
+										<input value={newSkill} name='newSkill' placeholder='New Skill' onChange={this.onEditChange}/>
 										<Button icon={<PlusCircleFilled/>} className='addSkill' onClick={this.addSkill}/>
 									</div>
 								)}
@@ -281,7 +272,7 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									<Button className="rounded" size="medium">Create Project</Button>
+									{(loginName == username) && (<Button className="rounded" size="medium">Create Project</Button>)}
 								</div>
 								
 								
@@ -335,7 +326,12 @@ class Profile extends Component {
 								<div className="project-page-owner">
 									
 									<div className="project-page-owner-name-span">
-										{!isEditing ? (
+										<div>
+											<span><strong>{exp.company} |</strong> {exp.position}</span>
+											<br></br>
+											<span>From {exp.start} to {exp.end}</span>
+										</div>
+										{/* {!isEditing ? (
 											<div>
 												<span><strong>{exp.company} |</strong> {exp.position}</span>
 												<br></br>
@@ -347,7 +343,7 @@ class Profile extends Component {
 												<br/>
 												<input type='date' value={exp.start}/> - <input type='date' value={exp.end}/>
 											</div>
-										)}
+										)} */}
 									</div>
 									{isEditing && (
 									<Button onClick={(e) => this.deleteExperience(exp)} className="rounded" size="medium" danger> 
@@ -365,13 +361,14 @@ class Profile extends Component {
 									</span>
 									<br/>
 									<span>
-										<input type='date' value={newStart} name='newStart' onChange={this.onEditChange}/> - <input type='date' value={newEnd} name='newEnd' onChange={this.onEditChange}/> 
+										From <input type='date' value={newStart} name='newStart' onChange={this.onEditChange}/> to <input type='date' value={newEnd} name='newEnd' onChange={this.onEditChange}/> 
 									</span>
 								</div>
 								<Button className="rounded" size="medium" onClick={this.addExperience}> Add </Button>
 							</div>)}
 						</div>
 						)}
+
 						{this.state.currentTab === "manage"}
 					</div>
 				</Layout>
