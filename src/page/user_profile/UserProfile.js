@@ -16,6 +16,8 @@ import TeamSvg from "../../assets/team.svg";
 
 import { Avatar, Button, Menu, Input, notification } from "antd";
 
+import { Form } from "react-bootstrap";
+
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
@@ -385,7 +387,6 @@ class Profile extends Component {
 							</div>)}
 						</div>
 						)}
-
 						{this.state.currentTab === "manage"}
 					</div>
 				</Layout>
