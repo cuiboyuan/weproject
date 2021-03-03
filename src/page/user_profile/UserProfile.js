@@ -16,8 +16,6 @@ import TeamSvg from "../../assets/team.svg";
 
 import { Avatar, Button, Menu, Input, notification } from "antd";
 
-import { Form } from "react-bootstrap";
-
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
@@ -34,7 +32,6 @@ class Profile extends Component {
 		super(props);
 
 		let {auth, allUsers, allProjects, location} = this.props;
-
 		// Change to EXTERNAL CALL in phase 2:
 		let loginName = auth.userName;
 		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
@@ -387,6 +384,7 @@ class Profile extends Component {
 							</div>)}
 						</div>
 						)}
+
 						{this.state.currentTab === "manage"}
 					</div>
 				</Layout>
