@@ -21,8 +21,6 @@ const ProjectBrowser = props => {
 					<SimpleList
 						isAdmin={props.isAdmin}
 						pathname={"/project"}
-						numCol={numCol}
-						numItem={projectContext.projects.length}
 						data={projectContext.projects}
 						isProject={true}
 					/>

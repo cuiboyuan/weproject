@@ -1,40 +1,28 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Row} from "react-bootstrap";
 
 import "./style.css";
 import SimpleRow from "./SimpleRow";
 import { uid } from "react-uid";
+import SimpleCard from "../SimpleCard/SimpleCard";
+import PeopleCard from "../SimpleCard/PeopleCard"
 export default class SimpleList extends Component {
 	render() {
-		//isProject is an indicator, whether it is used for people / project view
-		//uncomment the code after the project browsing view implementation
-		const { numCol, numItem, data, isProject } = this.props;
-		if (data.length % numCol != 0) {
-			let i = 0;
-			while (i < numItem % numCol) {
-				data.push({});
-				i += 1;
-			}
-		}
-
-		let acc = [];
-		for (let i = 0; i < data.length; i = i + numCol) {
-			acc.push(data.slice(i, i + numCol));
-		}
+		console.log("SimpleList pass in args", this.props)
 		return (
-			// <div className="scard-container">
 				<Container fluid>
-					{acc.map(item => (
-						<SimpleRow
+					<Row>
+					{this.props.data.map(item => (
+						<SimpleCard
 							isAdmin={this.props.isAdmin}
 							key={uid(item)}
-							isProject={isProject}
+							isProject={this.props.isProject}
 							data={item}
 							pathname={this.props.pathname}
 						/>
 					))}
+					</Row>
 				</Container>
-			// </div>
 		);
 	}
 }
