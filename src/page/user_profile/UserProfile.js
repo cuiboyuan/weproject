@@ -101,7 +101,7 @@ class Profile extends Component {
 	
 	editProfile = e => {
 		if (this.state.isEditing) {
-			// TODO: update this.state value to user data
+			// Phase 2: update this.state value to user data in server
 			//...
 		}
 		this.setState({isEditing: !this.state.isEditing})
@@ -298,22 +298,6 @@ class Profile extends Component {
 									data={joinedProjects}
 									isProject={true}
 								/>
-
-								{/* {[...members].map((member, i) => (
-									<div className="project-page-owner">
-										<Avatar
-											className="simplecard-avatar"
-											size={40}
-											icon={<UserOutlined />}
-										/>
-										<div className="project-page-owner-name-span">
-											<span>{member.userName}</span>
-										</div>
-										{i === 0 && (
-											<span className="project-owner-badge">owner</span>
-										)}
-									</div>
-								))} */}
 							</div>
 						)}
 						{this.state.currentTab === "experiences" && (
