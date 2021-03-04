@@ -16,26 +16,57 @@ import "./style.css";
 
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
+	
+const PeopleCard = ({isAdmin, data, pathname})=>{
+            console.log(data)
+			return (
+				<Col lg="3" md="6" sm="12">
+					<Link to={{ pathname: pathname, state: { data: data } }}>
+						{/* <span className="simplecard-see-more"> See more</span>{" "} */}
 
-
-
-const PeopleCard = (peopleName, peopleDiscription)=>{
-    return (
-        <Col className="col-md-offset-2">
-            <Card>
-                <Card.Title>{peopleName}</Card.Title>
-                <Card.Body>{peopleDiscription}</Card.Body>
-                <Card.Footer>
-                    <Button variant="primary" className="float-left">
-                        See more
-                    </Button>
-                    <Button variant="primary" className="float-right">
-                        Connect
-                    </Button>
-                </Card.Footer>
-            </Card>
-        </Col>
-    );
+						<Card 
+                        style={{"marginTop":"15px"}}>
+							<div className="simplecard-img-container rounded">
+								<AiOutlineFileImage />
+							</div>
+							<div className="simplecard-name">
+								<Card.Title>{data.userName}</Card.Title>
+							</div>
+							<Card.Body className="simplecard-description">
+								<div className="simplecard-username-container">
+									<Avatar
+										className="simplecard-avatar"
+										icon={<UserOutlined />}
+									/>
+									{/* <span>{data.owner.userName}</span> */}
+								</div>
+								<p>{data.description}</p>
+								<div className="simplecard-info-container">
+									<div className="simplecard-info-left">
+										<div className="simplecard-icon">
+											<AiOutlineTeam />
+											<span>{data?.userIds?.length || 0}</span>
+										</div>
+										<div className="simplecard-icon">
+											<AiOutlineLike /> <span>{data.userLiked?.length}</span>
+										</div>
+									</div>
+									{isAdmin && (
+										<div className="simplecard-info-left">
+											<div className="simplecard-icon-admin">
+												<AiOutlineToTop />
+											</div>
+											<div className="simplecard-icon-admin">
+												<AiOutlineDelete />
+											</div>
+										</div>
+									)}
+								</div>
+							</Card.Body>
+						</Card>
+					</Link>
+				</Col>
+			);
 }
 
 export default PeopleCard;

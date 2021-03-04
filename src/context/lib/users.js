@@ -8,6 +8,7 @@ const UsersContext = createContext();
 const data = [...Array(12).keys()].map((_, i) =>
 	User.fromResponseBody({
 		id: uuid(),
+		description: `user${i} discription`,
 		userName: `user${i}`,
 		password: `user${i}`,
 		ownedProjectIds: [],

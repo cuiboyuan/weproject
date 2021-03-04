@@ -19,7 +19,6 @@ const ProjectBrowser = props => {
 	const filterData = (searchContent)=>{
 		if (searchContent == ""){
 			setDisplayData(projectContext.projects);
-			console.log("nnnnnn",displayData);
 		}else{
 			setDisplayData(projectContext.projects.filter(project=>{return project.name.includes(searchContent)}));
 

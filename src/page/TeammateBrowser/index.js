@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
@@ -8,31 +8,39 @@ import List from "../../components/list";
 import Card from "../../components/card";
 import { useUsersState } from "../../context";
 
-const TeammateBrowser = () => {
+
+const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
-	const numCol = 2;
-	const isProject = false;
-	const numItem = 3;
+
+	//the data that is actually displayed on the teambrowing page
+	const [displayData, setDisplayData] = useState(userContext.users);
+
+	// the function used to respind to search request, used in searchBar Component
+	const filterData = (searchContent)=>{
+		if (searchContent == ""){
+			setDisplayData(userContext.projects);
+			console.log("nnnnnn",displayData);
+		}else{
+			setDisplayData(userContext.projects.filter(user=>{return user.name.includes(searchContent)}));
+		}
+	}
 
 	return (
 		<div>
 			<Layout>
 				<div className="project-brw-container">
 					<div className="project-brw-search-container">
-						<SearchBar />
+						<SearchBar 
+						filterFunction = {filterData}
+						pageName={"people"}	
+						/>
 					</div>
-					<List
-						grid={{ space: 10, column: 4 }}
-						dataSource={userContext.users}
-            renderItem={item => <Card>{ item.userName}</Card>}
-					/>
-					{/* <SimpleList
+					<SimpleList
 							pathname={"/teammates"}
-							numCol={numCol}
-							numItem={numItem}
-							data={data}
-							isProject={isProject}
-						/> */}
+							data={displayData}
+							isProject={false}
+							isAdmin={props.isAdmin}
+						/>
 				</div>
 			</Layout>
 		</div>

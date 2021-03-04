@@ -6,22 +6,40 @@ import SimpleRow from "./SimpleRow";
 import { uid } from "react-uid";
 import SimpleCard from "../SimpleCard/SimpleCard";
 import PeopleCard from "../SimpleCard/PeopleCard"
-export default class SimpleList extends Component {
-	render() {
+import ProjectCard from "../SimpleCard/ProjectCard";
+
+
+const SimpleList = ({isAdmin, pathname, data, isProject})=>{
+		if (isProject){
 		return (
 				<Container fluid>
 					<Row>
-					{this.props.data.map(item => (
-						<SimpleCard
-							isAdmin={this.props.isAdmin}
+					{data.map(item => (
+						<ProjectCard
+							isAdmin={isAdmin}
 							key={uid(item)}
-							isProject={this.props.isProject}
 							data={item}
-							pathname={this.props.pathname}
+							pathname={pathname}
 						/>
 					))}
 					</Row>
 				</Container>
-		);
-	}
+		);}else{
+			return(
+				<Container fluid>
+					<Row>
+					{data.map(item => (
+						<PeopleCard
+							isAdmin={isAdmin}
+							key={uid(item)}
+							data={item}
+							pathname={pathname}
+						/>
+					))}
+					</Row>
+				</Container>
+			)
+		}
 }
+
+export default SimpleList
