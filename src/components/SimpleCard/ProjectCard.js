@@ -1,5 +1,5 @@
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
 import { Avatar } from "antd";
 import { Link } from "react-router-dom";
@@ -14,11 +14,16 @@ import { UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
+import TopDownIcon from "./TopDownIcon";
 
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
-const ProjectCard = ({isAdmin, data, pathname})=>{
+const ProjectCard = ({isAdmin, data, pathname, sortFunction})=>{
+
+	const [ifTopped, setifTopped] = useState(data.topped);
+
+
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -53,8 +58,15 @@ const ProjectCard = ({isAdmin, data, pathname})=>{
 									</div>
 									{isAdmin && (
 										<div className="simplecard-info-left">
-											<div className="simplecard-icon-admin">
-												<AiOutlineToTop />
+											<div className="simplecard-icon-admin" onClick={(e)=>{
+													e.preventDefault();
+													data.topped = !data.topped;
+													console.log("top value", data.topped)
+													setifTopped(data.topped);
+													sortFunction();
+													
+												}}>
+												<TopDownIcon ifTopped = {ifTopped} ></TopDownIcon>
 											</div>
 											<div className="simplecard-icon-admin">
 												<AiOutlineDelete />

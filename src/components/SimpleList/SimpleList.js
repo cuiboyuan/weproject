@@ -9,7 +9,7 @@ import PeopleCard from "../SimpleCard/PeopleCard"
 import ProjectCard from "../SimpleCard/ProjectCard";
 
 
-const SimpleList = ({isAdmin, pathname, data, isProject})=>{
+const SimpleList = ({isAdmin, pathname, data, isProject, sortFunction})=>{
 		if (isProject){
 		return (
 				<Container fluid>
@@ -20,6 +20,7 @@ const SimpleList = ({isAdmin, pathname, data, isProject})=>{
 							key={uid(item)}
 							data={item}
 							pathname={pathname}
+							sortFunction={sortFunction}
 						/>
 					))}
 					</Row>
