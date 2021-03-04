@@ -19,7 +19,7 @@
 	float: left;
 }
 
-.userIntroSection {
+#userIntroSection {
 	background-color: lightblue;
 	
 	/* Add properties below */
@@ -29,10 +29,27 @@
 	overflow:auto;
 }
 
-.userNameBioSection {
+#userNameBioSection {
     
 	margin: 0px;
 
 	/* Add properties below */
 	margin-left: 150px;
+	position:relative;
+}
+
+#editProfile {
+	margin-right: 50px;
+	float:right;
+	position:relative;
+	
+}
+
+#bio {
+	width: 500px;
+	min-height: 50px;
+}
+
+#bio:hover {
+	background-color: whitesmoke;
 }

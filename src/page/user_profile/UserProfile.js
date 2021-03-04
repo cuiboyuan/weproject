@@ -14,6 +14,7 @@ import TeamSvg from "../../assets/team.svg";
 import { Avatar, Button, Menu } from "antd";
 
 import "./style.css";
+import SimpleList from "../../components/SimpleList/SimpleList";
 
 const members = [...Array(3).keys()].map((_, i) => {
 	return { userName: `member ${i}` };
@@ -22,19 +23,56 @@ const applicants = [...Array(4).keys()].map((_, i) => {
 	return { userName: `applicant ${i}` };
 });
 
+
+/**
+ * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
+ */
+
 class Profile extends Component {
+
 	constructor(props) {
 		super(props);
+
+		let {auth, allUsers, allProjects, location} = this.props;
+
+		let loginName = auth.userName;
+		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
+		
+		let currentName, currentUser;
+		console.log(this.props);
+
+		let isProfile = false;
+		if (location.pathname === '/profile'){
+			currentName = loginName;
+			currentUser = loginUser;
+			isProfile = true;
+		} else {
+			currentName = location.state.username;
+			currentUser = allUsers.users.filter(item => item.userName == currentName)[0];
+		}
+		
+		// Need some modification
+		let ownedProjects = allProjects.projects.filter(item => item.owner.userName == currentName);
+		let joinedProjects = allProjects.projects.filter(item => currentUser.joinedProjectIds.includes(item.id));
+
 		this.state = {
 			currentTab: "detail",
+			username: currentName,
+			ownedProjects: ownedProjects,
+			joinedProjects: joinedProjects,
+
+			isAdmin: auth.isAdmin,
+			isProfile: isProfile,
 		};
 	}
 	handleClick = e => {
 		this.setState({ currentTab: e.key });
 	};
 	render() {
-		// const data = this.props.location.state.data;
+		let {currentTab, username, ownedProjects, joinedProjects, isAdmin, isProfile} = this.state;
 		return (
+			<div>
+
 			<div className="project-page-container">
 				<Layout>
 					<div className="project-page-content row-v-center">
@@ -49,16 +87,20 @@ class Profile extends Component {
 						</div>
 						<div className="project-page-info">
 							<div className="project-admin-control">
-								{/* <div className="project-page-name">{data.name}</div> */}
+								<Avatar
+										className="simplecard-avatar"
+										icon={<UserOutlined />}
+									/>
+								<div className="project-page-name">{username}</div>
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
-									<Button className="rounded" size="medium" type="primary">
-										Join the project
-									</Button>
+									{isProfile && (<Button className="rounded" size="medium" type="primary">
+										Edit Profile
+									</Button>)}
 
-									<Button className="rounded" size="medium" danger>
+									{isAdmin && !isProfile && (<Button className="rounded" size="medium" danger>
 										Delete
-									</Button>
+									</Button>)}
 								</div>
 							</div>
 							<div className="project-page-tags">
@@ -77,7 +119,7 @@ class Profile extends Component {
 								Detail
 							</Menu.Item>
 							<Menu.Item key="team" icon={<TeamOutlined />}>
-								Team
+								My Projects
 							</Menu.Item>
 							<Menu.Item key="progress" icon={<RiseOutlined />}>
 								Progress
@@ -89,25 +131,48 @@ class Profile extends Component {
 						{this.state.currentTab === "detail" && (
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
-									<span>Project detail</span>
+									<span>User detail</span>
 								</div>
-								{/* <p>{data.description}</p> */}
-								<div
+								<p> I am {username}. </p>
+								{/* <div
 									style={{
 										width: "100%",
 										height: "150px",
 										backgroundColor: "#66666650",
 									}}
-								/>
+								/> */}
 							</div>
 						)}
 						{this.state.currentTab === "team" && (
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
-									<span>Team members</span>
+									<span>Owned Projects</span>
 								</div>
 
-								{[...members].map((member, i) => (
+								
+								<SimpleList
+									isAdmin={this.state.isAdmin}
+									pathname={"/project"}
+									numCol={3}
+									numItem={ownedProjects.length}
+									data={ownedProjects}
+									isProject={true}
+								/>
+								
+								<div className="project-page-info-block-title">
+									<span>Joined Projects</span>
+								</div>
+								
+								<SimpleList
+									isAdmin={this.state.isAdmin}
+									pathname={"/project"}
+									numCol={3}
+									numItem={joinedProjects.length}
+									data={joinedProjects}
+									isProject={true}
+								/>
+
+								{/* {[...members].map((member, i) => (
 									<div className="project-page-owner">
 										<Avatar
 											className="simplecard-avatar"
@@ -121,7 +186,7 @@ class Profile extends Component {
 											<span className="project-owner-badge">owner</span>
 										)}
 									</div>
-								))}
+								))} */}
 							</div>
 						)}
 						{this.state.currentTab === "progress" && (
@@ -160,6 +225,7 @@ class Profile extends Component {
 						)}
 					</div>
 				</Layout>
+			</div>
 			</div>
 		);
 	}

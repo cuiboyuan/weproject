@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import {
 	AiOutlineFileImage,
 	AiOutlineTeam,
-	AiOutlineLike,
 	AiOutlineDelete,
 	AiOutlineToTop,
     AiOutlineUserAdd

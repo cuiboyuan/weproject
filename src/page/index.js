@@ -5,7 +5,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import { useAuthState } from "./../context";
+import { useAuthState, useProjectState, useUsersState } from "./../context";
 
 import ProjectBrowserPage from "./project_browser";
 import ProjectDetailPage from "./project";

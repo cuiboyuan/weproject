@@ -7,6 +7,7 @@ import Layout from "../../components/layout";
 import List from "../../components/list";
 import Card from "../../components/card";
 import { useUsersState } from "../../context";
+import { Link } from "react-router-dom";
 
 
 const TeammateBrowser = (props) => {
@@ -24,8 +25,6 @@ const TeammateBrowser = (props) => {
 		}
 	}
 
-	console.log("teammate isAdmin!@@@@@@@@@@@@", props.isAdmin);
-
 	return (
 		<div>
 			<Layout>
@@ -37,7 +36,7 @@ const TeammateBrowser = (props) => {
 						/>
 					</div>
 					<SimpleList
-							pathname={"/user"}
+							pathname={'/user'}
 							data={displayData}
 							isProject={false}
 							isAdmin={props.isAdmin}

@@ -17,7 +17,24 @@ const data = [...Array(12).keys()].map((_, i) =>
 	})
 );
 
-console.log("user.js", data);
+
+/*
+data.push(User.fromResponseBody({
+	id: uuid(),
+	userName: `user`,
+	password: `user`,
+	ownedProjectIds: [],
+	joinedProjectIds: [],
+}))
+
+data.push(User.fromResponseBody({
+	id: uuid(),
+	userName: `admin`,
+	password: `admin`,
+	ownedProjectIds: [],
+	joinedProjectIds: [],
+}))
+*/
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 
