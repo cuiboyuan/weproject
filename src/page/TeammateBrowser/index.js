@@ -19,13 +19,12 @@ const TeammateBrowser = (props) => {
 	const filterData = (searchContent)=>{
 		if (searchContent == ""){
 			setDisplayData(userContext.projects);
-			console.log("nnnnnn",displayData);
 		}else{
 			setDisplayData(userContext.projects.filter(user=>{return user.name.includes(searchContent)}));
 		}
 	}
 
-	console.log("teammate data", displayData);
+	console.log("teammate isAdmin!@@@@@@@@@@@@", props.isAdmin);
 
 	return (
 		<div>

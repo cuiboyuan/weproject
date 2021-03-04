@@ -19,7 +19,7 @@ import "./style.css";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
 const PeopleCard = ({isAdmin, data, pathname})=>{
-            console.log(pathname)
+            console.log(isAdmin);
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
