@@ -19,13 +19,6 @@ import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 
-const members = [...Array(3).keys()].map((_, i) => {
-	return { userName: `member ${i}` };
-});
-const applicants = [...Array(4).keys()].map((_, i) => {
-	return { userName: `applicant ${i}` };
-});
-
 
 /**
  * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
@@ -37,7 +30,7 @@ class Profile extends Component {
 		super(props);
 
 		let {auth, allUsers, allProjects, location} = this.props;
-		
+
 		// Change to EXTERNAL CALL in phase 2:
 		let loginName = auth.userName;
 		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
@@ -60,25 +53,19 @@ class Profile extends Component {
 		let joinedProjects = allProjects.projects.filter(item => currentUser.joinedProjectIds.includes(item.id));
 
 		this.state = {
+
 			currentTab: "detail",
 			username: currentName,
 			loginName: loginName,
 			
 			// Hard-coded data; Change to get information from server in phase 2
-			userBio: `I am ${currentName}.`,
-			email: `${currentName}@${currentName}.com`,
-			linkedin: `linkedin.com/${currentName}`,
-			github: `github.com/${currentName}`,
-			skills: ['JavaScript'],
+			userBio: currentUser.userBio,
+			email: currentUser.socialMedia.email,
+			linkedin: currentUser.socialMedia.linkedin,
+			github: currentUser.socialMedia.github,
+			skills: currentUser.skills,
 
-			experiences: [
-				{
-					company: "University of Toronto",
-					position: "Undergraduate",
-					start: "2018-09-10",
-					end: "2022-06-01",
-				},
-			],
+			experiences: currentUser.experiences,
 
 			newSkill: '',
 			newCompany: '',
@@ -103,6 +90,24 @@ class Profile extends Component {
 		if (this.state.isEditing) {
 			// Phase 2: update this.state value to user data in server
 			//...
+			let newUsers = this.props.allUsers.users.map(
+				(item) => {
+					let updatedUser = item;
+					if (updatedUser.userName === this.state.username){
+						updatedUser.userBio = this.state.userBio;
+						updatedUser.socialMedia = {
+							email: this.state.email,
+							linkedin: this.state.linkedin,
+							github: this.state.github
+						};
+						updatedUser.experiences = this.state.experiences;
+						updatedUser.skills = this.state.skills;
+					}
+					return updatedUser
+				}
+			);
+
+			this.props.allUsers.updateUsers(newUsers);
 		}
 		this.setState({isEditing: !this.state.isEditing})
 	};
@@ -188,9 +193,13 @@ class Profile extends Component {
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
 
-									{isProfile && (<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
+									{/* {isProfile && (<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
 										{isEditing ? 'Save Changes' : 'Edit Profile'}
-									</Button>)}
+									</Button>)} */}
+									{isProfile && (
+										<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
+											{isEditing ? 'Save Changes' : 'Edit Profile'}
+										</Button>)}
 
 
 									{isAdmin && !isProfile && (<Button className="rounded" size="medium" danger>
@@ -272,7 +281,9 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									{(loginName == username) && (<Button className="rounded" size="medium">Create Project</Button>)}
+									{(loginName == username) && (
+										<Button className="rounded" size="medium">Create Project</Button>
+									)}
 								</div>
 								
 								

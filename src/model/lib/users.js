@@ -5,6 +5,26 @@ export default class User {
 		this.passward = passward; /* change passward to SHA-256 */
 		this.ownedProjectIds = ownedProjectIds || [];
 		this.joinedProjectIds = joinedProjectIds || [];
+		
+		// Hard-coded default values
+		this.experiences = [
+			{
+				company: "University of Toronto",
+				position: "Undergraduate",
+				start: "2018-09-10",
+				end: "2022-06-01",
+			},
+		];
+		this.skills = [
+			'JavaScript',
+		];
+		this.socialMedia = {
+			email: `${userName}@${userName}.com`,
+			linkedin: `linkedin.com/${userName}`,
+			github: `github.com/${userName}`,
+		};
+		this.userBio = `I am ${userName}.`;
+
 	}
 
 	static fromResponseBody(object) {
