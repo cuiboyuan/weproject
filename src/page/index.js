@@ -13,6 +13,7 @@ import Login from "./loggin_page";
 import Header from "../components/header";
 import TeammateBrowser from "./TeammateBrowser";
 import UserProfile from "./user_profile/UserProfile";
+import ProjectCreation from "./project_creation";
 
 const header = [
   {
