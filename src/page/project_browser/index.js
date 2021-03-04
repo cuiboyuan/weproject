@@ -49,6 +49,13 @@ const ProjectBrowser = props => {
 
 	}
 
+	const removeData = (project)=>{
+		setDisplayData(displayData.filter((item)=>{
+			return item.id != project.id;
+		}));
+	}
+
+
 	return (
 		<div>
 			<Layout>
@@ -64,6 +71,7 @@ const ProjectBrowser = props => {
 						data={displayData}
 						isProject={true}
 						sortFunction={sordData}
+						removeFunction = {removeData}
 					/>
 				</div>
 			</Layout>

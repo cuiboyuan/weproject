@@ -19,7 +19,7 @@ import TopDownIcon from "./TopDownIcon";
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
-const ProjectCard = ({isAdmin, data, pathname, sortFunction})=>{
+const ProjectCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 
 	const [ifTopped, setifTopped] = useState(data.topped);
 
@@ -61,14 +61,18 @@ const ProjectCard = ({isAdmin, data, pathname, sortFunction})=>{
 											<div className="simplecard-icon-admin" onClick={(e)=>{
 													e.preventDefault();
 													data.topped = !data.topped;
-													console.log("top value", data.topped)
 													setifTopped(data.topped);
 													sortFunction();
 													
 												}}>
 												<TopDownIcon ifTopped = {ifTopped} ></TopDownIcon>
 											</div>
-											<div className="simplecard-icon-admin">
+											<div className="simplecard-icon-admin"
+											onClick={(e)=>{
+												e.preventDefault();
+												removeFunction(data);
+											}}
+											>
 												<AiOutlineDelete />
 											</div>
 										</div>
