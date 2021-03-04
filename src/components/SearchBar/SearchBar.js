@@ -28,9 +28,6 @@ const SearchBar = ({filterFunction, pageName})=>{
 						Search
 					</Button>
 				</Col>
-				<Col>
-				{searchContent}
-				</Col>
 			</Form.Row>
 		</Form>
 	);
