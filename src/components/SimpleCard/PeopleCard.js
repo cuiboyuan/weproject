@@ -8,6 +8,7 @@ import {
 	AiOutlineLike,
 	AiOutlineDelete,
 	AiOutlineToTop,
+    AiOutlineUserAdd
 } from "react-icons/ai";
 import { UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
@@ -18,7 +19,7 @@ import "./style.css";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
 const PeopleCard = ({isAdmin, data, pathname})=>{
-            console.log(data)
+            console.log(pathname)
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -45,10 +46,10 @@ const PeopleCard = ({isAdmin, data, pathname})=>{
 									<div className="simplecard-info-left">
 										<div className="simplecard-icon">
 											<AiOutlineTeam />
-											<span>{data?.userIds?.length || 0}</span>
+											<span>{data.connections.length}</span>
 										</div>
 										<div className="simplecard-icon">
-											<AiOutlineLike /> <span>{data.userLiked?.length}</span>
+											<AiOutlineUserAdd />
 										</div>
 									</div>
 									{isAdmin && (

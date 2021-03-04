@@ -13,9 +13,11 @@ const data = [...Array(12).keys()].map((_, i) =>
 		password: `user${i}`,
 		ownedProjectIds: [],
 		joinedProjectIds: [],
+		connection:[]
 	})
 );
 
+console.log("user.js", data);
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 

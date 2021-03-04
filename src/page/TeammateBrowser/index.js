@@ -25,6 +25,8 @@ const TeammateBrowser = (props) => {
 		}
 	}
 
+	console.log("teammate data", displayData);
+
 	return (
 		<div>
 			<Layout>
@@ -36,7 +38,7 @@ const TeammateBrowser = (props) => {
 						/>
 					</div>
 					<SimpleList
-							pathname={"/teammates"}
+							pathname={"/user"}
 							data={displayData}
 							isProject={false}
 							isAdmin={props.isAdmin}
