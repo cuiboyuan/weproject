@@ -8,16 +8,18 @@ import {
 	LikeOutlined,
 	DeleteFilled,
 	PlusCircleFilled,
+	MailOutlined,
 } from "@ant-design/icons";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import TeamSvg from "../../assets/team.svg";
 
-import { Avatar, Button, Menu } from "antd";
+import { Avatar, Button, Menu, Input, notification } from "antd";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
+import TextArea from "antd/lib/input/TextArea";
 
 
 /**
@@ -108,6 +110,10 @@ class Profile extends Component {
 			);
 
 			this.props.allUsers.updateUsers(newUsers);
+
+			notification['success']({
+				message: 'Profile Updated!'
+			});
 		}
 		this.setState({isEditing: !this.state.isEditing})
 	};
@@ -139,18 +145,6 @@ class Profile extends Component {
 		this.setState({experiences: experiences});
 	}
 
-	editExperience = (exp, newCompany, newPosition, newStart, newEnd) => {
-		let experiences = this.state.experiences.map((item) => {
-			if (item === exp){
-				item.company = newCompany;
-				item.position = newPosition;
-				item.start = newStart;
-				item.end = newEnd;
-			}
-		})
-		this.setState({experiences: experiences});
-	}
-
 	addSkill = e => {
 		let skill = this.state.newSkill;
 		let skills = this.state.skills;
@@ -166,9 +160,32 @@ class Profile extends Component {
 		this.setState({skills: skills});
 	}
 
+	deleteUser = e => {
+		
+		// Phase 2: update this.state value to user data in server
+		//...
+		if (!this.state.isAdmin) {
+			return;
+		}
+		let newUsers = this.props.allUsers.users.filter(
+			(item) => {
+				return item.userName !== this.state.username
+			}
+		);
+
+		this.props.allUsers.updateUsers(newUsers);
+
+		notification['success']({
+			message: `${this.state.username} Deleted`
+		});
+
+		this.props.history.push('/teammates');
+
+	}
+
 	render() {
 		let {currentTab, username, ownedProjects, joinedProjects, userBio, experiences, github, linkedin, email, skills} = this.state;
-		let {isAdmin, isProfile, isEditing, loginName} = this.state
+		let {isAdmin, isProfile, isEditing, loginName} = this.state;
 		let {newSkill, newCompany, newPosition, newStart, newEnd} = this.state;
 		
 		return (
@@ -202,7 +219,8 @@ class Profile extends Component {
 										</Button>)}
 
 
-									{isAdmin && !isProfile && (<Button className="rounded" size="medium" danger>
+									{isAdmin && (loginName !== username) && (
+									<Button className="rounded" size="medium" danger onClick={this.deleteUser}>
 										Delete
 									</Button>)}
 								</div>
@@ -233,22 +251,25 @@ class Profile extends Component {
 									<span>User detail</span>
 								</div>
 
-								{isEditing ? <textarea id='bio' value={userBio} name='userBio' onChange={this.onEditChange}/> : <div id="bio"> {userBio} </div>}
+								{isEditing ? <TextArea id='bio' value={userBio} name='userBio' onChange={this.onEditChange}/> : <div id="bio"> {userBio} </div>}
 								
 								<ul id='socialMediaList'>
 									<li>
-										<Avatar icon={<AiOutlineMail/>}/> 
-										{isEditing ? <input value={email} name='email' onChange={this.onEditChange}/> : <span className='socialMedia'> {email} </span>}
+										
+										{isEditing ? <Input className="socialMedia" prefix={<AiOutlineMail/>} value={email} name='email' onChange={this.onEditChange}/> :
+										 (<div> <Avatar shape='square' size='small' icon={<AiOutlineMail/>}/>  <span className='socialMedia'> {email} </span></div>)}
 									</li>
 
 									<li>
-										<Avatar icon={<AiOutlineGithub/>}/> 
-										{isEditing ? <input value={github} name='github' onChange={this.onEditChange}/> : <span className='socialMedia'> {github} </span>}
+										 
+										{isEditing ? <Input className="socialMedia" prefix={<AiOutlineGithub/>} value={github} name='github' onChange={this.onEditChange}/> : 
+										<div><Avatar shape='square' size='small'  icon={<AiOutlineGithub/>}/><span className='socialMedia'> {github} </span></div>}
 									</li>
 									
 									<li>
-										<Avatar icon={<AiOutlineLinkedin/>}/>
-										{isEditing ? <input value={linkedin} name='linkedin' onChange={this.onEditChange}/> : <span className='socialMedia'> {linkedin} </span>}
+										
+										{isEditing ? <Input className="socialMedia" prefix={<AiOutlineLinkedin/>} value={linkedin} name='linkedin' onChange={this.onEditChange}/> : 
+										<div><Avatar  shape='square' size='small'  icon={<AiOutlineLinkedin/>}/><span className='socialMedia'> {linkedin} </span></div>}
 									</li>
 								</ul>
 
@@ -268,7 +289,7 @@ class Profile extends Component {
 
 								{isEditing && (
 									<div>
-										<input value={newSkill} name='newSkill' placeholder='New Skill' onChange={this.onEditChange}/>
+										<Input value={newSkill} name='newSkill' className='inputEntry' placeholder='New Skill' onChange={this.onEditChange}/>
 										<Button icon={<PlusCircleFilled/>} className='addSkill' onClick={this.addSkill}/>
 									</div>
 								)}
@@ -282,7 +303,9 @@ class Profile extends Component {
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
 									{(loginName == username) && (
-										<Button className="rounded" size="medium">Create Project</Button>
+										<Link to={{pathname: "/newProject"}}>
+											<Button className="rounded" size="medium">Create Project</Button>
+										</Link>
 									)}
 								</div>
 								
@@ -352,11 +375,11 @@ class Profile extends Component {
 								<div className="project-page-owner-name-span">
 									{" "}
 									<span>
-										<input placeholder="Company" value={newCompany} name='newCompany' onChange={this.onEditChange}/> <strong>|</strong> <input placeholder="Position" value={newPosition} name='newPosition' onChange={this.onEditChange}/>
+										<Input className='inputEntry' placeholder="Company" value={newCompany} name='newCompany' onChange={this.onEditChange}/> <strong>|</strong> <Input className='inputEntry' placeholder="Position" value={newPosition} name='newPosition' onChange={this.onEditChange}/>
 									</span>
 									<br/>
 									<span>
-										From <input type='date' value={newStart} name='newStart' onChange={this.onEditChange}/> to <input type='date' value={newEnd} name='newEnd' onChange={this.onEditChange}/> 
+										From <Input className='dateEntry' type='date' value={newStart} name='newStart' onChange={this.onEditChange}/> to <Input  className='dateEntry' type='date' value={newEnd} name='newEnd' onChange={this.onEditChange}/> 
 									</span>
 								</div>
 								<Button className="rounded" size="medium" onClick={this.addExperience}> Add </Button>

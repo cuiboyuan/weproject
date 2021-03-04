@@ -32,9 +32,19 @@
 	float: left;
 }
 
+
+.inputEntry {
+	width: 300px;
+}
+
+.dateEntry {
+	width: 160px;
+}
+
 .socialMedia {
 	color: grey;
 	font-size: small;
+	width: 300px;
 }
 
 #socialMediaList {
