@@ -20,6 +20,7 @@ import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
+import { uid } from "react-uid";
 
 
 /**
@@ -345,19 +346,6 @@ class Profile extends Component {
 											<br></br>
 											<span>From {exp.start} to {exp.end}</span>
 										</div>
-										{/* {!isEditing ? (
-											<div>
-												<span><strong>{exp.company} |</strong> {exp.position}</span>
-												<br></br>
-												<span>{exp.start} - {exp.end}</span>
-											</div>
-										) : (
-											<div>
-												<strong><input value={exp.company}/> |</strong> <input value={exp.position}/>
-												<br/>
-												<input type='date' value={exp.start}/> - <input type='date' value={exp.end}/>
-											</div>
-										)} */}
 									</div>
 									{isEditing && (
 									<Button onClick={(e) => this.deleteExperience(exp)} className="rounded" size="medium" danger> 

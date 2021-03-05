@@ -2,99 +2,72 @@ import React, { Component } from "react";
 import Layout from "../../components/layout";
 import {
 	ArrowLeftOutlined,
-	RiseOutlined,
-	ReadOutlined,
-	TeamOutlined,
-	LikeOutlined,
 	DeleteFilled,
 	PlusCircleFilled,
-	MailOutlined,
 } from "@ant-design/icons";
-import { Link, withRouter } from "react-router-dom";
-
+import { withRouter } from "react-router-dom";
 import TeamSvg from "../../assets/team.svg";
+import { Button } from "antd";
 
-import { Avatar, Button, Menu, Input, notification } from "antd";
+import {Link} from "react-router-dom";
 
 import "./style.css";
-import SimpleList from "../../components/SimpleList/SimpleList";
-import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
+import {Input, notification} from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import { Project } from "../../model";
 import uuid from "react-uuid";
-
-
-/**
- * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
- */
+import { Project } from "../../model";
 
 class ProjectCreation extends Component {
-
 	constructor(props) {
 		super(props);
-
-		const {auth, allUsers, allProjects, location} = this.props;
-
-		// Change to EXTERNAL CALL in phase 2:
+		const {auth, allUsers} = this.props;
 		const loginName = auth.userName;
-		const loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
-		
-        const currentName = loginName;
-        const currentUser = loginUser;
-		
-		// Need some modification
-		let ownedProjects = allProjects.projects.filter(item => item.owner.userName == currentName);
-		let joinedProjects = allProjects.projects.filter(item => currentUser.joinedProjectIds.includes(item.id));
+		const loginUser = allUsers.users.filter((item) => item.userName === loginName)[0];
 
 		this.state = {
-
 			loginName: loginName,
-            currentUser: currentUser,
-			
-			// Hard-coded data; Change to get information from server in phase 2
+			loginUser: loginUser,
+
             projectName: "",
-            projectDetail: "",
-            projectTags: [],
+			projectDetail: '',
+			projectTags: [],
+			newTag: "",
 		};
 	}
-	
-	saveNewProject = e => {
-        // Phase 2: update this.state value to user data in server
-        //...
-        const newProjectId = uuid();
-        this.state.currentUser.push(newProjectId);
-        let newProjects = this.props.allProjects.projects;
-        newProjects.push(
-            new Project(
-                newProjectId,
-                this.state.currentUser,
-                this.state.projectName,
-                this.state.projectDetail,
-                undefined,
-                undefined,
-                undefined,
-                this.state.projectTags
-            )
-        );
 
-        let newUsers = this.props.allUsers.users.map(
-            (item) => {
-                if (item.userName === this.state.loginName){
-                    return this.state.currentUser;
-                }
-                return item;
-            }
-        );
-
-        this.props.allProjects.setProjects(newProjects);
-        this.props.allUsers.setUsers(newUsers);
-
-        notification['success']({
-            message: 'Project Created!'
-        });
+	saveProject = e => {
+		const newProjectId = uuid();
+		this.state.loginUser.ownedProjectIds.push(newProjectId);
 		
-	};
+		let newUsers = this.props.allUsers.users.map((item) => {
+			if (item.userName === this.state.loginName){
+				return this.state.loginUser;
+			}
+			return item;
+		});
 
+		let newProjects = this.props.allProjects.projects;
+		newProjects.push(new Project(
+			newProjectId,
+			this.state.loginUser,
+			this.state.projectName,
+			this.state.projectDetail,
+			undefined,
+			undefined,
+			undefined,
+			this.state.projectTags
+		));
+
+		this.props.allUsers.setUsers(newUsers);
+		this.props.allProjects.setProjects(newProjects);
+		
+		notification['success']({
+			message: `Project Created!`
+		});
+
+		this.props.history.push('/');
+	}
+		
 	onEditChange = e => {
 		const target = e.target;
 		const value = target.value;
@@ -102,10 +75,30 @@ class ProjectCreation extends Component {
 		this.setState({[name]: value});
 	}
 
-    render(){
-        return (
-            <div>
-                <Layout>
+	removeTag = tag => {
+		let tags = this.state.projectTags.filter(item => item !== tag);
+		this.setState({projectTags: tags});
+	}
+
+	addTag = e => {
+		let tag = this.state.newTag;
+		let tags = this.state.projectTags;
+		if (!tags.includes(tag)){
+			tags.push(tag);
+			this.setState({projectTags: tags});
+			this.setState({newTag: ''})
+		}
+	}
+
+	
+    
+	render() {
+
+		const {projectName, projectDetail, projectTags, newTag} = this.state;
+        
+		return (
+			<div className="project-page-container">
+				<Layout>
 					<div className="project-page-content row-v-center">
 						<div className="project-page-carouel rounded shadow-cust">
 							<img src={TeamSvg} alt="team" className="project-page-image" />
@@ -116,18 +109,54 @@ class ProjectCreation extends Component {
 								<ArrowLeftOutlined />
 							</div>
 						</div>
-						<div className="user-page-info">
+						<div className="project-page-info">
 							<div className="project-admin-control">
-                                New Project
-                            </div>
-                        </div>
-                    </div>
-                </Layout>
-            </div>
-        )
-    }
+								<div className="project-page-name">New Project</div>
+								<div className="project-page-margin">
 
+                                    <Button className="rounded" size="medium" type="primary" onClick={this.saveProject}>
+                                        Create the project!
+                                    </Button>
+								</div>
+							</div>
+						</div>
 
+                        
+						<div className="project-page-info-block shadow-cust rounded">
+							<div className="project-page-info-block-title">
+								<span>Project Name</span>
+							</div>
+							<Input value={projectName} name='projectName' className='projectName' placeholder="Give your project a name!" onChange={this.onEditChange}/>
+
+							<div className="project-page-info-block-title">
+								<span>Project Detail</span>
+							</div>
+							<TextArea value={projectDetail} name='projectDetail' id='bio' placeholder='Describe your project!' onChange={this.onEditChange}/>
+
+							<div className="project-page-info-block-title">
+								<span>Project Tags</span>
+							</div>
+							
+							<div className="project-page-tags">
+								{projectTags.map(tag => (
+									<div className="project-page-tag">
+										<span>{tag}</span>
+										<span><Button className='removeSkill' icon={<DeleteFilled/>} onClick={e => this.removeTag(tag)}/></span>
+									</div>
+								))}
+							</div>
+
+							<div>
+								<Input value={newTag} name='newTag' placeholder='New Tag' className='inputEntry' onChange={this.onEditChange}/>
+								<Button icon={<PlusCircleFilled/>} className='addSkill' onClick={this.addTag}/>
+							</div>
+							
+						</div>
+					</div>
+				</Layout>
+			</div>
+		);
+	}
 }
 
 export default withRouter(ProjectCreation);
