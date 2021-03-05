@@ -308,10 +308,8 @@ class Profile extends Component {
 								
 								
 								<SimpleList
-									isAdmin={this.state.isAdmin}
+									isAdmin={false}
 									pathname={"/project"}
-									numCol={3}
-									numItem={ownedProjects.length}
 									data={ownedProjects}
 									isProject={true}
 								/>
@@ -322,10 +320,8 @@ class Profile extends Component {
 								</div>
 								
 								<SimpleList
-									isAdmin={this.state.isAdmin}
+									isAdmin={false}
 									pathname={"/project"}
-									numCol={3}
-									numItem={joinedProjects.length}
 									data={joinedProjects}
 									isProject={true}
 								/>
