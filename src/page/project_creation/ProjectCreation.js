@@ -62,7 +62,7 @@ class ProjectCreation extends Component {
 		this.props.allProjects.setProjects(newProjects);
 		
 		notification['success']({
-			message: `Project Created!`
+			message: `Project ${this.state.projectName} Created!`
 		});
 
 		this.props.history.push('/');
