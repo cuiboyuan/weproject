@@ -44,7 +44,7 @@ export const UsersProvider = props => {
 	const getValues = () => {
 		return {
 			users,
-			updateUsers
+			setUsers
 		};
 	};
 

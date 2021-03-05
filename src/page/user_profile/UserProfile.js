@@ -20,6 +20,7 @@ import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import { AiOutlineGithub, AiOutlineLinkedin, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
+import { uid } from "react-uid";
 
 
 /**
@@ -32,7 +33,6 @@ class Profile extends Component {
 		super(props);
 
 		let {auth, allUsers, allProjects, location} = this.props;
-
 		// Change to EXTERNAL CALL in phase 2:
 		let loginName = auth.userName;
 		let loginUser = allUsers.users.filter(item => item.userName == loginName)[0];
@@ -109,7 +109,7 @@ class Profile extends Component {
 				}
 			);
 
-			this.props.allUsers.updateUsers(newUsers);
+			this.props.allUsers.setUsers(newUsers);
 
 			notification['success']({
 				message: 'Profile Updated!'
@@ -173,7 +173,7 @@ class Profile extends Component {
 			}
 		);
 
-		this.props.allUsers.updateUsers(newUsers);
+		this.props.allUsers.setUsers(newUsers);
 
 		notification['success']({
 			message: `${this.state.username} Deleted`
@@ -210,9 +210,6 @@ class Profile extends Component {
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
 
-									{/* {isProfile && (<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
-										{isEditing ? 'Save Changes' : 'Edit Profile'}
-									</Button>)} */}
 									{isProfile && (
 										<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
 											{isEditing ? 'Save Changes' : 'Edit Profile'}
@@ -302,10 +299,11 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									{/* {(loginName == username) && (
-										
+									{(loginName == username) && (
+										<Link to={{pathname: "/newProject"}}>
 											<Button className="rounded" size="medium">Create Project</Button>
-										)} */}
+										</Link>
+									)}
 								</div>
 								
 								
@@ -348,19 +346,6 @@ class Profile extends Component {
 											<br></br>
 											<span>From {exp.start} to {exp.end}</span>
 										</div>
-										{/* {!isEditing ? (
-											<div>
-												<span><strong>{exp.company} |</strong> {exp.position}</span>
-												<br></br>
-												<span>{exp.start} - {exp.end}</span>
-											</div>
-										) : (
-											<div>
-												<strong><input value={exp.company}/> |</strong> <input value={exp.position}/>
-												<br/>
-												<input type='date' value={exp.start}/> - <input type='date' value={exp.end}/>
-											</div>
-										)} */}
 									</div>
 									{isEditing && (
 									<Button onClick={(e) => this.deleteExperience(exp)} className="rounded" size="medium" danger> 
