@@ -1,15 +1,17 @@
 import { User } from "../";
 
 export default class Project {
-	constructor(id, owner, name, description, members, status, userLiked, tags) {
+	constructor(id, owner, name, description, requirement, members, status, userLiked, tags, progress) {
 		this.id = id;
 		this.owner = User.fromResponseBody(owner);
 		this.name = name;
 		this.description = description;
+		this.requirement = requirement;
 		this.userIds = members || [];
 		this.status = status || "incomplete";
 		this.userLiked = userLiked || [];
 		this.tags = tags || [];
+		this.progress = progress || {}
 	}
 
 	static fromResponseBody(object) {

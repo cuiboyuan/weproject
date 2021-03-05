@@ -1,10 +1,20 @@
 export default class User {
-	constructor(userId, userName, passward, ownedProjectIds, joinedProjectIds) {
+	constructor(
+		userId,
+		userName,
+		passward,
+		ownedProjectIds,
+		joinedProjectIds,
+		appliedProj,
+		skills,
+	) {
 		this.id = userId;
 		this.userName = userName;
 		this.passward = passward; /* change passward to SHA-256 */
 		this.ownedProjectIds = ownedProjectIds || [];
 		this.joinedProjectIds = joinedProjectIds || [];
+		this.appliedProj = appliedProj || [];
+		this.skills = skills || [];
 	}
 
 	static fromResponseBody(object) {

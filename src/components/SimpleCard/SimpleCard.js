@@ -53,7 +53,7 @@ export default class SimpleCard extends Component {
 									<div className="simplecard-info-left">
 										<div className="simplecard-icon">
 											<AiOutlineTeam />
-											<span>{data?.userIds?.length || 0}</span>
+											<span>{data?.userIds?.length + 1|| 0}</span>
 										</div>
 										<div className="simplecard-icon">
 											<AiOutlineLike /> <span>{data.userLiked?.length}</span>

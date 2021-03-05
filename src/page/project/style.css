@@ -80,7 +80,9 @@
     width: 100%;
     padding: 20px;
 }
-
+.project-page-info-block p{
+    padding: 0px 20px;
+}
 .project-page-info-block-title {
     width: 100%;
     padding: 10px;
@@ -134,4 +136,88 @@
     color: var(--theme-color) !important;
     border-radius: 25px;
     font-size: 14px !important;
+}
+.project-page-progress-content {
+    padding: 10px;
+}
+
+.project-page-progress {
+    padding: 20px;
+    background: #66666610;
+    margin-bottom: 10px;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+}
+
+.project-step {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: transparent !important;
+    color: #66666670;
+    border: 2px solid #66666670;
+    border-radius: 50px;
+}
+
+.project-step-complete {
+    background-color: var(--theme-color) !important;
+    border: 2px solid var(--theme-color);
+    color: white;
+}
+
+.project-page-progress-step span{
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.project-step-complete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50px;
+}
+
+.project-page-progress-step {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-page-progress-item-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-step-status {
+    margin-top: 10px;
+    color: #66666670
+}
+
+.project-step-status-complete {
+    color: var(--theme-color);
+}
+
+.project-progress-subitem-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.project-progress-subitem-title {
+    color: var(--secondary-text);
+    font-weight: normal;
+}
+.project-progress-subitem {
+    padding: 0px 10px;
+    color: var(--secondary-text);
+    font-weight: light;
 }

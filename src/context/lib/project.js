@@ -19,6 +19,7 @@ const data = [...Array(9).keys()].map(
 			},
 			`project ${i}`,
 			`project ${i} description`,
+			`project requirement ${i}`,
 			undefined,
 			undefined,
 			[],

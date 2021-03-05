@@ -8,7 +8,10 @@ const Popup = props => {
 	return (
 		<div className="auth-popup">
 			<Link to={{ pathname: "/profile" }}>
-				<p>Profile</p>
+				<p>My profile</p>
+			</Link>
+			<Link to={{ pathname: "/project/create" }}>
+				<p>Create project</p>
 			</Link>
 			<p className="auth-loggout" onClick={props.onClick}>
 				Log out

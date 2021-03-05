@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Layout from "../../components/layout";
 import {
 	ArrowLeftOutlined,
 	UserOutlined,
@@ -10,10 +9,14 @@ import {
 	LikeOutlined,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import TeamSvg from "../../assets/team.svg";
-import { Avatar, Button, Menu } from "antd";
+import { Avatar, Button, Menu, Input } from "antd";
 
 import "./style.css";
+import Layout from "../../components/layout";
+import TeamSvg from "../../assets/team.svg";
+import Progress from "./progress";
+
+const { TextArea } = Input;
 
 const members = [...Array(3).keys()].map((_, i) => {
 	return { userName: `member ${i}` };
@@ -26,6 +29,7 @@ class Project extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			data: this.props.location.state.data,
 			currentTab: "detail",
 		};
 	}
@@ -33,7 +37,7 @@ class Project extends Component {
 		this.setState({ currentTab: e.key });
 	};
 	render() {
-		const data = this.props.location.state.data;
+		const data = this.state.data;
 		console.log(data);
 		return (
 			<div className="project-page-container">
@@ -63,8 +67,8 @@ class Project extends Component {
 								</div>
 							</div>
 							<div className="project-page-tags">
-								{data.tags?.map(tag => (
-									<div className="project-page-tag">{tag}</div>
+								{data.tags?.map((tag, index) => (
+									<div key={index} className="project-page-tag">{tag}</div>
 								))}
 							</div>
 						</div>
@@ -93,6 +97,10 @@ class Project extends Component {
 									<span>Project detail</span>
 								</div>
 								<p>{data.description}</p>
+								<div className="project-page-info-block-title">
+									<span>Project Requirement</span>
+								</div>
+								<p>{data.requirement}</p>
 								<div
 									style={{
 										width: "100%",
@@ -121,6 +129,21 @@ class Project extends Component {
 										{i === 0 && (
 											<span className="project-owner-badge">owner</span>
 										)}
+										{i !== 0 && (
+											<div className="project-page-margin">
+												{/* <Button
+													className="rounded"
+													size="medium"
+													type="primary"
+												>
+													Proceed
+												</Button> */}
+
+												<Button className="rounded" size="medium" danger>
+													Remove
+												</Button>
+											</div>
+										)}
 									</div>
 								))}
 							</div>
@@ -129,35 +152,84 @@ class Project extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Current Progress</span>
+									<div className="project-page-margin">
+										<Button className="rounded" size="medium" type="primary">
+											Proceed
+										</Button>
+										<Button className="rounded" size="medium" danger>
+											Withdraw
+										</Button>
+									</div>
 								</div>
+								<Progress
+									current={1}
+									items={[
+										{
+											title: "title 1",
+											subitems: ["step 1", "step 2", "step 3"],
+										},
+										{ title: "title 1", subitems: ["step 1", "step 2"] },
+									]}
+								/>
 							</div>
 						)}
 						{this.state.currentTab === "manage" && (
-							<div className="project-page-info-block shadow-cust rounded">
-								<div className="project-page-info-block-title">
-									<span>Project Applicants</span>
-								</div>
-
-								{applicants.map(member => (
-									<div className="project-page-owner">
-										<Avatar
-											className="simplecard-avatar"
-											size={40}
-											icon={<UserOutlined />}
-										/>
-										<div className="project-page-owner-name-span">
-											{" "}
-											<span>{member.userName}</span>
-										</div>
+							<>
+								{" "}
+								<div className="project-page-info-block shadow-cust rounded">
+									<div className="project-page-info-block-title">
+										<span>Project detail</span>
+										<div className="project-page-margin">
 										<Button className="rounded" size="medium">
-											Accept
-										</Button>
-										<Button className="rounded" size="medium" danger>
-											Reject
+											Update
 										</Button>
 									</div>
-								))}
-							</div>
+									</div>
+									<TextArea rows={4} value={data.description} onChange={(e) => {
+										
+										this.setState({ data: { ...this.state.data, description: e.target.value} })
+									}} />
+									<div className="project-page-info-block-title">
+										<span>Project Requirement</span>
+									</div>
+									<TextArea rows={4} value={data.requirement} onChange={(e) => {
+										
+										this.setState({ data: { ...this.state.data, requirement: e.target.value} })
+									}} />
+									{/* <div
+										style={{
+											width: "100%",
+											height: "150px",
+											backgroundColor: "#66666650",
+										}}
+									/> */}
+								</div>
+								<div className="project-page-info-block shadow-cust rounded">
+									<div className="project-page-info-block-title">
+										<span>Project Applicants</span>
+									</div>
+
+									{applicants.map(member => (
+										<div className="project-page-owner">
+											<Avatar
+												className="simplecard-avatar"
+												size={40}
+												icon={<UserOutlined />}
+											/>
+											<div className="project-page-owner-name-span">
+												{" "}
+												<span>{member.userName}</span>
+											</div>
+											<Button className="rounded" size="medium">
+												Accept
+											</Button>
+											<Button className="rounded" size="medium" danger>
+												Reject
+											</Button>
+										</div>
+									))}
+								</div>
+							</>
 						)}
 					</div>
 				</Layout>
