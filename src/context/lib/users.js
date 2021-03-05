@@ -39,12 +39,10 @@ data.push(User.fromResponseBody({
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 
-	const updateUsers = (newUsers) => {setUsers(newUsers)}
-
 	const getValues = () => {
 		return {
 			users,
-			updateUsers
+			setUsers
 		};
 	};
 

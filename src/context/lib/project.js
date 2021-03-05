@@ -33,6 +33,7 @@ export const ProjectProvider = props => {
 	const getValues = () => {
 		return {
 			projects,
+			setProjects,
 		};
 	};
 

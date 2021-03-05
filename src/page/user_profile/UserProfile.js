@@ -108,7 +108,7 @@ class Profile extends Component {
 				}
 			);
 
-			this.props.allUsers.updateUsers(newUsers);
+			this.props.allUsers.setUsers(newUsers);
 
 			notification['success']({
 				message: 'Profile Updated!'
@@ -172,7 +172,7 @@ class Profile extends Component {
 			}
 		);
 
-		this.props.allUsers.updateUsers(newUsers);
+		this.props.allUsers.setUsers(newUsers);
 
 		notification['success']({
 			message: `${this.state.username} Deleted`
@@ -209,9 +209,6 @@ class Profile extends Component {
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
 
-									{/* {isProfile && (<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
-										{isEditing ? 'Save Changes' : 'Edit Profile'}
-									</Button>)} */}
 									{isProfile && (
 										<Button onClick={this.editProfile} className="rounded" size="medium" type="primary">
 											{isEditing ? 'Save Changes' : 'Edit Profile'}
@@ -301,10 +298,11 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									{/* {(loginName == username) && (
-										
+									{(loginName == username) && (
+										<Link to={{pathname: "/newProject"}}>
 											<Button className="rounded" size="medium">Create Project</Button>
-										)} */}
+										</Link>
+									)}
 								</div>
 								
 								
