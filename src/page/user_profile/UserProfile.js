@@ -302,11 +302,10 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									{(loginName == username) && (
-										<Link to={{pathname: "/newProject"}}>
+									{/* {(loginName == username) && (
+										
 											<Button className="rounded" size="medium">Create Project</Button>
-										</Link>
-									)}
+										)} */}
 								</div>
 								
 								

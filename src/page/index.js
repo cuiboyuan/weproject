@@ -58,11 +58,6 @@ const Routes = props => {
 						{authContext.isLoggedIn ? <UserProfile allUsers={usersContext} allProjects={projectsContext} auth={authContext}/> : <Login />}
 					</Route>
 
-					<Route path="/newProject" exact>
-						{authContext.isLoggedIn ? <ProjectCreation allUsers={usersContext} allProjects={projectsContext} auth={authContext}/> : <Login />}
-					</Route>
-					
-
 				</Switch>
 			</div>
 		</Router>
