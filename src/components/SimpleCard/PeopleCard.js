@@ -14,14 +14,16 @@ import { UserOutlined } from "@ant-design/icons";
 
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
-
+import { useAuthState } from "../../context";
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
 const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 			
 	const [ifTopped, setifTopped] = useState(data.topped);
-	
+	const [numFriends, setNumFriends] = useState(data.connections.length)
+	const authContext = useAuthState();
+	const userName = authContext.userName;
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -48,9 +50,15 @@ const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 									<div className="simplecard-info-left">
 										<div className="simplecard-icon">
 											<AiOutlineTeam />
-											<span>{data.connections.length}</span>
+											<span>{numFriends}</span>
 										</div>
-										<div className="simplecard-icon">
+										<div className="simplecard-icon" onClick={(e)=>{
+											e.preventDefault();
+											if (!data.connections.includes(userName)){
+												data.connections.push(userName);	
+												setNumFriends(numFriends +1)
+											}
+										}}>
 											<AiOutlineUserAdd />
 										</div>
 									</div>
