@@ -19,9 +19,10 @@ const TeammateBrowser = (props) => {
 	// the function used to respind to search request, used in searchBar Component
 	const filterData = (searchContent)=>{
 		if (searchContent == ""){
-			setDisplayData(userContext.projects);
+			setDisplayData(userContext.users);
 		}else{
-			setDisplayData(userContext.projects.filter(user=>{return user.name.includes(searchContent)}));
+			console.log(userContext.users)
+			setDisplayData(userContext.users.filter(user=>{return user.userName.includes(searchContent)}));
 		}
 	}
 
