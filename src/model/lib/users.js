@@ -13,6 +13,25 @@ export default class User {
 		this.description = description;
 			//their connections (friends), an array of uID
 		this.connections = connections || [];
+		
+		// Hard-coded default values
+		this.experiences = [
+			{
+				company: "University of Toronto",
+				position: "Undergraduate",
+				start: "2018-09-10",
+				end: "2022-06-01",
+			},
+		];
+		this.skills = [
+			'JavaScript',
+		];
+		this.socialMedia = {
+			email: `${userName}@${userName}.com`,
+			linkedin: `linkedin.com/${userName}`,
+			github: `github.com/${userName}`,
+		};
+
 	}
 
 	static fromResponseBody(object) {

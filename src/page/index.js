@@ -27,6 +27,8 @@ const header = [
 
 const Routes = (props) => {
   const authContext = useAuthState();
+  const usersContext = useUsersState();
+  const projectsContext = useProjectState();
   return (
     <Router>
       <div className="App">
@@ -52,7 +54,15 @@ const Routes = (props) => {
 
           <Route path="/user" exact>
             {authContext.isLoggedIn ? (
-              <UserProfile auth={authContext} />
+              <UserProfile auth={authContext} allUsers={usersContext} allProjects={projectsContext}/>
+            ) : (
+              <Login />
+            )}
+          </Route>
+		  
+          <Route path="/profile" exact>
+            {authContext.isLoggedIn ? (
+              <UserProfile auth={authContext} allUsers={usersContext} allProjects={projectsContext}/>
             ) : (
               <Login />
             )}
