@@ -21,7 +21,6 @@ const TeammateBrowser = (props) => {
 		if (searchContent == ""){
 			setDisplayData(userContext.users);
 		}else{
-			console.log(userContext.users)
 			setDisplayData(userContext.users.filter(user=>{return user.userName.includes(searchContent)}));
 		}
 	}
