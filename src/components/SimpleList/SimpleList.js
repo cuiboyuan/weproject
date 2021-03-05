@@ -36,6 +36,8 @@ const SimpleList = ({isAdmin, pathname, data, isProject, sortFunction, removeFun
 							key={uid(item)}
 							data={item}
 							pathname={pathname}
+							sortFunction={sortFunction}
+							removeFunction={removeFunction}
 						/>
 					))}
 					</Row>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
 import { Avatar } from "antd";
 import { Link } from "react-router-dom";
@@ -13,12 +13,15 @@ import { UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
+import TopDownIcon from "./TopDownIcon";
 
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 	
-const PeopleCard = ({isAdmin, data, pathname})=>{
-            console.log(isAdmin);
+const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
+			
+	const [ifTopped, setifTopped] = useState(data.topped);
+	
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -53,10 +56,21 @@ const PeopleCard = ({isAdmin, data, pathname})=>{
 									</div>
 									{isAdmin && (
 										<div className="simplecard-info-left">
-											<div className="simplecard-icon-admin">
-												<AiOutlineToTop />
+											<div className="simplecard-icon-admin" onClick={(e)=>{
+													e.preventDefault();
+													data.topped = !data.topped;
+													setifTopped(data.topped);
+													sortFunction();
+													
+												}}>
+												<TopDownIcon ifTopped = {ifTopped} ></TopDownIcon>
 											</div>
-											<div className="simplecard-icon-admin">
+											<div className="simplecard-icon-admin"
+											onClick={(e)=>{
+												e.preventDefault();
+												removeFunction(data);
+											}}
+											>
 												<AiOutlineDelete />
 											</div>
 										</div>

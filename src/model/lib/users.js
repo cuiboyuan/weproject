@@ -13,6 +13,9 @@ export default class User {
 		this.description = description;
 			//their connections (friends), an array of uID
 		this.connections = connections || [];
+			//if it is topped by admin
+		this.topped = false;	
+		
 		
 		// Hard-coded default values
 		this.experiences = [
@@ -43,8 +46,8 @@ export default class User {
 			object.joinedProjectIds,
 			// added attributes:
 			object.description,
-			object.connections
-
+			object.connections,
+			object.topped
 		);
 	}
 
@@ -57,7 +60,8 @@ export default class User {
 			joinedProjectIds: this.joinedProjectIds,
 			//added attributes:
 			description: this.description,
-			connections: this.connections
+			connections: this.connections,
+			topped: this.topped
 		};
 	}
 }

@@ -8,6 +8,7 @@ import List from "../../components/list";
 import Card from "../../components/card";
 import { useUsersState } from "../../context";
 import { Link } from "react-router-dom";
+import { SortDescendingOutlined } from "@ant-design/icons";
 
 
 const TeammateBrowser = (props) => {
@@ -25,6 +26,37 @@ const TeammateBrowser = (props) => {
 		}
 	}
 
+
+	const compare = (p1, p2)=>{
+		if (p1.topped == p2.topped){
+			//if tie, sort by project id
+			return p1.id > p2.id?-1:1;
+		}else{
+			//if p1 is topped but p2 isn't
+			if (p1.topped){
+				return -1;
+			}else{
+				return 1;
+			}
+		}
+	}
+
+	const sortData = ()=>{
+
+		//TODO: I don't know why the following commented code doesn't work?????
+		// displayData.sort(compare)
+		// console.log("#########", displayData);
+		// setDisplayData(displayData);
+		setDisplayData([...displayData].sort(compare));
+
+	}
+
+	const removeData = (user)=>{
+		setDisplayData(displayData.filter((item)=>{
+			return item.id != user.id;
+		}));
+	}
+
 	return (
 		<div>
 			<Layout>
@@ -40,6 +72,8 @@ const TeammateBrowser = (props) => {
 							data={displayData}
 							isProject={false}
 							isAdmin={props.isAdmin}
+							sortFunction = {sortData}
+							removeFunction={removeData}
 						/>
 				</div>
 			</Layout>
