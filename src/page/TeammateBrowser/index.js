@@ -26,8 +26,6 @@ const TeammateBrowser = (props) => {
 
 
 
-	console.log("teammate isAdmin!@@@@@@@@@@@@", props.isAdmin);
-
 	return (
 		<div>
 			<Layout>

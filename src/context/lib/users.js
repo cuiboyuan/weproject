@@ -17,7 +17,6 @@ const data = [...Array(12).keys()].map((_, i) =>
 	})
 );
 
-console.log("user.js", data);
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 

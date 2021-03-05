@@ -10,11 +10,12 @@ import {
 	AiOutlineDelete,
 	AiOutlineToTop,
 } from "react-icons/ai";
-import { UserOutlined } from "@ant-design/icons";
+import { ConsoleSqlOutlined, UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
+import { useAuthState } from "../../context";
 
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,7 +23,10 @@ import TopDownIcon from "./TopDownIcon";
 const ProjectCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 
 	const [ifTopped, setifTopped] = useState(data.topped);
-
+	//TODO: modify it to userID
+	const authContext = useAuthState();
+	const userName = authContext.userName;
+	const [userLikedNum, setuserLikedNum] = useState(data.userLiked?.length||0)
 
 			return (
 				<Col lg="3" md="6" sm="12">
@@ -52,8 +56,16 @@ const ProjectCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 											<AiOutlineTeam />
 											<span>{data?.userIds?.length || 0}</span>
 										</div>
-										<div className="simplecard-icon">
-											<AiOutlineLike /> <span>{data.userLiked?.length}</span>
+										<div className="simplecard-icon"
+										onClick={(e)=>{
+											e.preventDefault();
+											if (!data.userLiked.includes(userName)){
+												data.userLiked.push(userName);
+												setuserLikedNum(data.userLiked.length)
+											}
+										}}
+										>
+											<AiOutlineLike /> <span>{userLikedNum}</span>
 										</div>
 									</div>
 									{isAdmin && (
