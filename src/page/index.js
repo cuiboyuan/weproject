@@ -46,7 +46,9 @@ const Routes = props => {
 					<Route path="/" exact>
 						<ProjectBrowserPage isAdmin={authContext.isAdmin} />
 					</Route>
-					<Route path="/teammates" exact component={TeammateBrowser} />
+					<Route path="/teammates" exact>
+						<TeammateBrowser isAdmin={authContext.isAdmin} />
+					</Route>
 					<Route path="/project" exact>
 						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
 					</Route>
