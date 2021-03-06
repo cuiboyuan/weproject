@@ -8,15 +8,19 @@ const UsersContext = createContext();
 const data = [...Array(12).keys()].map((_, i) =>
 	User.fromResponseBody({
 		id: uuid(),
+		description: `user${i} discription`,
 		userName: `user${i}`,
 		password: `user${i}`,
 		ownedProjectIds: [],
 		joinedProjectIds: [],
+		connection:[]
 	})
 );
 
+
 data.push(User.fromResponseBody({
 	id: uuid(),
+	description: `user discription`,
 	userName: `user`,
 	password: `user`,
 	ownedProjectIds: [],
@@ -25,6 +29,7 @@ data.push(User.fromResponseBody({
 
 data.push(User.fromResponseBody({
 	id: uuid(),
+	description: `admin discription`,
 	userName: `admin`,
 	password: `admin`,
 	ownedProjectIds: [],
@@ -34,9 +39,12 @@ data.push(User.fromResponseBody({
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 
+	const updateUsers = (newUsers) => {setUsers(newUsers)}
+
 	const getValues = () => {
 		return {
 			users,
+			setUsers
 		};
 	};
 

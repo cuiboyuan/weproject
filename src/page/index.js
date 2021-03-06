@@ -14,6 +14,7 @@ import Login from "./loggin_page";
 import Header from "../components/header";
 import TeammateBrowser from "./TeammateBrowser";
 import UserProfile from "./user_profile/UserProfile";
+import ProjectCreation from "./project_creation/ProjectCreation";
 
 const header = [
 	{
@@ -49,9 +50,9 @@ const Routes = props => {
 					<Route path="/project" exact>
 						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
 					</Route>
-					<Route path="/project/create" exact>
+					{/* <Route path="/project/create" exact>
 						{authContext.isLoggedIn ? <ProjectCreatePage /> : <Login />}
-					</Route>
+					</Route> */}
 					<Route path="/user" exact>
 						{authContext.isLoggedIn ? (
 							<UserProfile
@@ -70,6 +71,17 @@ const Routes = props => {
 								allUsers={usersContext}
 								allProjects={projectsContext}
 								auth={authContext}
+							/>
+						) : (
+							<Login />
+						)}
+					</Route>
+					<Route path="/newProject" exact>
+						{authContext.isLoggedIn ? (
+							<ProjectCreation
+								auth={authContext}
+								allUsers={usersContext}
+								allProjects={projectsContext}
 							/>
 						) : (
 							<Login />

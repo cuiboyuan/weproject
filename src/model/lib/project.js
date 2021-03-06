@@ -12,6 +12,9 @@ export default class Project {
 		this.userLiked = userLiked || [];
 		this.tags = tags || [];
 		this.progress = progress || {}
+		//added new attributes by Tian
+			// indicate whether the current project is topped by admin
+		this.topped = false;
 	}
 
 	static fromResponseBody(object) {
@@ -24,6 +27,8 @@ export default class Project {
 			object.status,
 			object.userLiked,
 			object.tags,
+			//added new attributes by Tian
+			object.topped
 		);
 	}
 
@@ -37,6 +42,9 @@ export default class Project {
 			status: this.status,
 			userLiked: this.userLiked,
 			tags: this.tags,
+
+			//added new attributes by Tian
+			topped: this.topped
 		};
 	}
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
@@ -8,35 +8,73 @@ import List from "../../components/list";
 import Card from "../../components/card";
 import { useUsersState } from "../../context";
 import { Link } from "react-router-dom";
+import { SortDescendingOutlined } from "@ant-design/icons";
 
-const TeammateBrowser = () => {
+
+const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
-	const numCol = 2;
-	const isProject = false;
-	const numItem = 3;
+
+	//the data that is actually displayed on the teambrowing page
+	const [displayData, setDisplayData] = useState(userContext.users);
+
+	// the function used to respind to search request, used in searchBar Component
+	const filterData = (searchContent)=>{
+		if (searchContent == ""){
+			setDisplayData(userContext.users);
+		}else{
+			setDisplayData(userContext.users.filter(user=>{return user.userName.includes(searchContent)}));
+		}
+	}
+
+
+	const compare = (p1, p2)=>{
+		if (p1.topped == p2.topped){
+			//if tie, sort by project id
+			return p1.id > p2.id?-1:1;
+		}else{
+			//if p1 is topped but p2 isn't
+			if (p1.topped){
+				return -1;
+			}else{
+				return 1;
+			}
+		}
+	}
+
+	const sortData = ()=>{
+
+		//TODO: I don't know why the following commented code doesn't work?????
+		// displayData.sort(compare)
+		// console.log("#########", displayData);
+		// setDisplayData(displayData);
+		setDisplayData([...displayData].sort(compare));
+
+	}
+
+	const removeData = (user)=>{
+		setDisplayData(displayData.filter((item)=>{
+			return item.id != user.id;
+		}));
+	}
 
 	return (
 		<div>
 			<Layout>
 				<div className="project-brw-container">
 					<div className="project-brw-search-container">
-						<SearchBar />
+						<SearchBar 
+						filterFunction = {filterData}
+						pageName={"people"}	
+						/>
 					</div>
-					<List
-						grid={{ space: 10, column: 4 }}
-						dataSource={userContext.users}
-            renderItem={item => 
-				<Link to={{pathname:"/user", state: {username: item.userName}}}>
-					<Card>{ item.userName}</Card>
-				</Link>}
-					/>
-					{/* <SimpleList
-							pathname={"/teammates"}
-							numCol={numCol}
-							numItem={numItem}
-							data={data}
-							isProject={isProject}
-						/> */}
+					<SimpleList
+							pathname={'/user'}
+							data={displayData}
+							isProject={false}
+							isAdmin={props.isAdmin}
+							sortFunction = {sortData}
+							removeFunction={removeData}
+						/>
 				</div>
 			</Layout>
 		</div>

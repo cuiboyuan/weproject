@@ -1,5 +1,5 @@
 .project-c-container {
-    padding: 30px;
+    padding: 10px 30px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -7,7 +7,7 @@
     /* align-items: center; */
 }
 .project-create-container{
-    width: 70%;
+    width: 100%;
     padding: 20px;
 }
 
@@ -22,8 +22,8 @@
 }
 
 .project-create-sub-container {
-    width: 50%;
-    padding: 20px;
+    width: 100%;
+    padding: 10px 0px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -59,8 +59,7 @@
 
 .project-create-sub-tag-close {
     color: #66666660;
-    
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -74,7 +73,7 @@
 }
 
 .project-create-progress-item {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
@@ -87,7 +86,58 @@
     color: #fff;
     font-size: 20px;
     font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .project-create-progress-subitem {
     padding: 1px 40px;
+}
+
+.project-create-sub-border {
+    padding: 20px;
+    border: 1px solid var(--theme-color);
+    width: 100%;
+}
+
+.project-create-sub-border span {
+    margin: 5px 0px;
+}
+.project-create-sub-border input {
+    margin: 5px 0px;
+}
+
+.project-create-button {
+    margin: 10px 0px;
+    padding: 5px;
+    border: none !important;
+    background-color: var(--theme-color);
+    color: white;
+}
+
+.project-create-button:disabled {
+    background-color: #66666660;
+}
+
+.project-create-editable {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.project-create-editable span{
+    padding: 0px 5px;
+    font-size: 14px;
+}
+
+.project-create-editable-icon{
+    font-size: 20px;
+    color: #66666670;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.project-create-editable-icon:hover{
+    color: var(--theme-color);
 }

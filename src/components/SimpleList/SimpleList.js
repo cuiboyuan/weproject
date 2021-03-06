@@ -1,40 +1,49 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Row} from "react-bootstrap";
 
 import "./style.css";
 import SimpleRow from "./SimpleRow";
 import { uid } from "react-uid";
-export default class SimpleList extends Component {
-	render() {
-		//isProject is an indicator, whether it is used for people / project view
-		//uncomment the code after the project browsing view implementation
-		const { numCol, numItem, data, isProject } = this.props;
-		if (data.length % numCol != 0) {
-			let i = 0;
-			while (i < numItem % numCol) {
-				data.push({});
-				i += 1;
-			}
-		}
+import SimpleCard from "../SimpleCard/SimpleCard";
+import PeopleCard from "../SimpleCard/PeopleCard"
+import ProjectCard from "../SimpleCard/ProjectCard";
 
-		let acc = [];
-		for (let i = 0; i < data.length; i = i + numCol) {
-			acc.push(data.slice(i, i + numCol));
-		}
+
+const SimpleList = ({isAdmin, pathname, data, isProject, sortFunction, removeFunction})=>{
+		if (isProject){
 		return (
-			// <div className="scard-container">
 				<Container fluid>
-					{acc.map(item => (
-						<SimpleRow
-							isAdmin={this.props.isAdmin}
+					<Row>
+					{data.map(item => (
+						<ProjectCard
+							isAdmin={isAdmin}
 							key={uid(item)}
-							isProject={isProject}
 							data={item}
-							pathname={this.props.pathname}
+							pathname={pathname}
+							sortFunction={sortFunction}
+							removeFunction={removeFunction}
 						/>
 					))}
+					</Row>
 				</Container>
-			// </div>
-		);
-	}
+		);}else{
+			return(
+				<Container fluid>
+					<Row>
+					{data.map(item => (
+						<PeopleCard
+							isAdmin={isAdmin}
+							key={uid(item)}
+							data={item}
+							pathname={pathname}
+							sortFunction={sortFunction}
+							removeFunction={removeFunction}
+						/>
+					))}
+					</Row>
+				</Container>
+			)
+		}
 }
+
+export default SimpleList
