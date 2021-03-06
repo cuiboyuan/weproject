@@ -56,8 +56,8 @@ const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 										<div className="simplecard-icon" onClick={(e)=>{
 											e.preventDefault();
 											if (!data.connections.includes(userName) && isLoggedIn){
-												data.connections.push(userName);	
-												setNumFriends(numFriends +1)
+												data.pending.push(userName);	
+												// setNumFriends(numFriends +1)
 											}
 										}}>
 											<AiOutlineUserAdd />
