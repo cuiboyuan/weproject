@@ -31,7 +31,7 @@ const ProjectCard = ({
 	const authContext = useAuthState();
 	const userName = authContext.userName;
 	const [userLikedNum, setuserLikedNum] = useState(data.userLiked?.length || 0);
-
+	const isLoggedIn = authContext.isLoggedIn;
 	return (
 		<Col lg="3" md="6" sm="12">
 			<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -60,7 +60,7 @@ const ProjectCard = ({
 									className="simplecard-icon"
 									onClick={e => {
 										e.preventDefault();
-										if (!data.userLiked.includes(userName)) {
+										if (!data.userLiked.includes(userName) && isLoggedIn) {
 											data.userLiked.push(userName);
 											setuserLikedNum(data.userLiked.length);
 										}

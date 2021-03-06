@@ -24,6 +24,7 @@ const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 	const [numFriends, setNumFriends] = useState(data.connections.length)
 	const authContext = useAuthState();
 	const userName = authContext.userName;
+	const isLoggedIn = authContext.isLoggedIn;
 			return (
 				<Col lg="3" md="6" sm="12">
 					<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -54,7 +55,7 @@ const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
 										</div>
 										<div className="simplecard-icon" onClick={(e)=>{
 											e.preventDefault();
-											if (!data.connections.includes(userName)){
+											if (!data.connections.includes(userName) && isLoggedIn){
 												data.connections.push(userName);	
 												setNumFriends(numFriends +1)
 											}
