@@ -95,3 +95,26 @@
 	min-height: 100px;
 	width: 100%;
 }
+
+.user-profile-avatar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-profile-avatar > *{
+	margin-right: 20px;
+}
+
+.user-profile-avatar input{
+	display: none;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.user-profile-avatar-input-label {
+	cursor: pointer;
+}
+
+

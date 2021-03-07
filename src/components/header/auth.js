@@ -4,6 +4,7 @@ import { Popover, Avatar } from "antd";
 import { AiOutlineUser } from "react-icons/ai";
 
 import "./style.css";
+import { useUsersState } from '../../context';
 
 const Popup = props => {
 	return (
@@ -22,6 +23,9 @@ const Popup = props => {
 };
 
 const Auth = props => {
+	const usersContext = useUsersState();
+	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
+	const user = index >= 0 ? usersContext.users[index] : undefined;
 	return (
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (
@@ -31,7 +35,7 @@ const Auth = props => {
 						placement="bottomRight"
 						title=""
 					>
-						<Avatar icon={<AiOutlineUser />} src={""}/>
+						{user.avatar?.url ? <Avatar icon={<AiOutlineUser />} src={user.avatar.url}/> : <Avatar icon={<AiOutlineUser />} />}
 						<span>{props.authInfo.userName}</span>
 					</Popover>
 				</div>

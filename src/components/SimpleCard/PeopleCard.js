@@ -7,89 +7,103 @@ import {
 	AiOutlineTeam,
 	AiOutlineDelete,
 	AiOutlineToTop,
-    AiOutlineUserAdd
+	AiOutlineUserAdd,
 } from "react-icons/ai";
 import { UserOutlined } from "@ant-design/icons";
 // credit: https://react-icons.github.io/react-icons/;
 
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
-import { useAuthState } from "../../context";
+import { useAuthState, useUsersState } from "../../context";
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
-	
-const PeopleCard = ({isAdmin, data, pathname, sortFunction, removeFunction})=>{
-			
+
+const PeopleCard = ({
+	isAdmin,
+	data,
+	pathname,
+	sortFunction,
+	removeFunction,
+}) => {
 	const [ifTopped, setifTopped] = useState(data.topped);
-	const [numFriends, setNumFriends] = useState(data.connections.length)
+	const [numFriends, setNumFriends] = useState(data.connections.length);
 	const authContext = useAuthState();
+	const usersContext = useUsersState();
 	const userName = authContext.userName;
 	const isLoggedIn = authContext.isLoggedIn;
-			return (
-				<Col lg="3" md="6" sm="12">
-					<Link to={{ pathname: pathname, state: { data: data } }}>
-						{/* <span className="simplecard-see-more"> See more</span>{" "} */}
+	const user = usersContext.users.find(u => u.userName === data.userName);
+	return (
+		<Col lg="3" md="6" sm="12">
+			<Link to={{ pathname: pathname, state: { data: data } }}>
+				{/* <span className="simplecard-see-more"> See more</span>{" "} */}
 
-						<Card 
-                        style={{"marginTop":"15px"}}>
-							<div className="simplecard-img-container rounded">
-								<AiOutlineFileImage />
-							</div>
-							<div className="simplecard-name">
-								<Card.Title>{data.userName}</Card.Title>
-							</div>
-							<Card.Body className="simplecard-description">
-								<div className="simplecard-username-container">
-									<Avatar
-										className="simplecard-avatar"
-										icon={<UserOutlined />}
-									/>
-									{/* <span>{data.owner.userName}</span> */}
+				<Card style={{ marginTop: "15px" }}>
+					<Card.Body className="simplecard-description">
+						<div className="simplecard-username-container">
+							{user.avatar?.url ? (
+								<Avatar size={70} src={user.avatar.url} />
+							) : (
+								<Avatar
+									size={70}
+									className="project-card-avatar"
+									icon={
+										<UserOutlined className="project-card-avatar-content" />
+									}
+								/>
+							)}
+							{/* <span>{data.owner.userName}</span> */}
+						</div>
+						<span className="project-card-name">{data.userName}</span>
+						<p>{data.description}</p>
+						<div className="simplecard-info-container">
+							<div className="simplecard-info-left">
+								<div className="simplecard-icon">
+									<AiOutlineTeam />
+									<span>{numFriends}</span>
 								</div>
-								<p>{data.description}</p>
-								<div className="simplecard-info-container">
-									<div className="simplecard-info-left">
-										<div className="simplecard-icon">
-											<AiOutlineTeam />
-											<span>{numFriends}</span>
-										</div>
-										<div className="simplecard-icon" onClick={(e)=>{
+								<div
+									className="simplecard-icon"
+									onClick={e => {
+										e.preventDefault();
+										if (!data.connections.includes(userName) && isLoggedIn) {
+											data.pending.push(userName);
+											// setNumFriends(numFriends +1)
+										}
+									}}
+								>
+									<AiOutlineUserAdd />
+								</div>
+							</div>
+							{isAdmin && (
+								<div className="simplecard-info-left">
+									<div
+										className="simplecard-icon-admin"
+										onClick={e => {
 											e.preventDefault();
-											if (!data.connections.includes(userName) && isLoggedIn){
-												data.pending.push(userName);	
-												// setNumFriends(numFriends +1)
-											}
-										}}>
-											<AiOutlineUserAdd />
-										</div>
+											data.topped = !data.topped;
+											setifTopped(data.topped);
+											sortFunction();
+										}}
+									>
+										<TopDownIcon ifTopped={ifTopped}></TopDownIcon>
 									</div>
-									{isAdmin && (
-										<div className="simplecard-info-left">
-											<div className="simplecard-icon-admin" onClick={(e)=>{
-													e.preventDefault();
-													data.topped = !data.topped;
-													setifTopped(data.topped);
-													sortFunction();
-													
-												}}>
-												<TopDownIcon ifTopped = {ifTopped} ></TopDownIcon>
-											</div>
-											<div className="simplecard-icon-admin"
-											onClick={(e)=>{
-												e.preventDefault();
-												removeFunction(data);
-											}}
-											>
-												<AiOutlineDelete />
-											</div>
-										</div>
-									)}
+									<div
+										className="simplecard-icon-admin"
+										onClick={e => {
+											e.preventDefault();
+											removeFunction(data);
+										}}
+									>
+										<AiOutlineDelete />
+									</div>
 								</div>
-							</Card.Body>
-						</Card>
-					</Link>
-				</Col>
-			);
-}
+							)}
+						</div>
+					</Card.Body>
+				</Card>
+			</Link>
+		</Col>
+	);
+};
 
 export default PeopleCard;

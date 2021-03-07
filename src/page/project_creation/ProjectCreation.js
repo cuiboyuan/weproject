@@ -49,7 +49,7 @@ class ProjectCreation extends Component {
 		});
 
 		let newProjects = this.props.allProjects.projects;
-		newProjects.push(new Project(
+		let newProj = new Project(
 			newProjectId,
 			this.state.loginUser,
 			e.name,
@@ -60,7 +60,13 @@ class ProjectCreation extends Component {
 			undefined,
 			e.tags,
 			{ current: 0, steps: e.steps },
-		));
+		)
+		//TODO: Delete ===========
+		newProj.applicants = ["user1", "user2"];
+		newProj.members = ["user3", "user4"];
+		//=======================
+
+		newProjects.push(newProj);
 
 		this.props.allUsers.setUsers(newUsers);
 		this.props.allProjects.setProjects(newProjects);

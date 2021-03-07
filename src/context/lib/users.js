@@ -8,7 +8,7 @@ const UsersContext = createContext();
 const data = [...Array(12).keys()].map((_, i) =>
 	User.fromResponseBody({
 		id: uuid(),
-		description: `user${i} discription`,
+		description: `user${i} description`,
 		userName: `user${i}`,
 		password: `user${i}`,
 		ownedProjectIds: [],
@@ -20,7 +20,7 @@ const data = [...Array(12).keys()].map((_, i) =>
 data.push(
 	User.fromResponseBody({
 		id: uuid(),
-		description: `user discription`,
+		description: `user description`,
 		userName: `user`,
 		password: `user`,
 		ownedProjectIds: [],
@@ -31,7 +31,7 @@ data.push(
 data.push(
 	User.fromResponseBody({
 		id: uuid(),
-		description: `admin discription`,
+		description: `admin description`,
 		userName: `admin`,
 		password: `admin`,
 		ownedProjectIds: [],
@@ -42,8 +42,13 @@ data.push(
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 
-	const updateUsers = newUsers => {
-		setUsers(newUsers);
+	const updateUser = user => {
+		let newUsers = users;
+		let index = newUsers.findIndex(u => u.id === user.id);
+		if (index >= 0) {
+			newUsers.splice(index, 1, user);
+			setUsers(newUsers);
+		}
 	};
 
 	const removeProject = (userName, projectId) => {
@@ -61,6 +66,7 @@ export const UsersProvider = props => {
 			users,
 			setUsers,
 			removeProject,
+			updateUser,
 		};
 	};
 

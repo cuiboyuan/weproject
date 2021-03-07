@@ -74,6 +74,30 @@ class Project extends Component {
 		this.setState({ data:  newData})
 		this.props.projectsContext.updateProject(newData);
 	};
+	
+
+	removeMember = (userName) => {
+		let project = this.state.data;
+		project.members = project.members.filter(a => a !== userName);
+		this.setState({ data: project });
+		this.props.projectsContext.updateProject(project);
+	}
+
+	removeApplicant = (userName) => {
+		let project = this.state.data;
+		project.applicants = project.applicants.filter(a => a !== userName);
+		this.setState({ data: project });
+		this.props.projectsContext.updateProject(project);
+	}
+
+	acceptApplicant = (userName) => {
+		let project = this.state.data;
+		project.applicants = project.applicants.filter(a => a !== userName);
+		project.members = [...(project.members || []), userName];
+		this.setState({ data: project });
+		this.props.projectsContext.updateProject(project);
+	}
+
 	render() {
 		const data = this.state.data;
 
@@ -230,15 +254,15 @@ class Project extends Component {
 											<span>Team members</span>
 										</div>
 
-										{[data.owner, ...(data.members || [])].map((member, i) => (
-											<div className="project-page-owner">
+										{[data.owner.userName, ...(data.members || [])].map((member, i) => (
+											<div key={ i} className="project-page-owner">
 												<Avatar
 													className="simplecard-avatar"
 													size={40}
 													icon={<UserOutlined />}
 												/>
 												<div className="project-page-owner-name-span">
-													<span>{member.userName}</span>
+													<span>{member}</span>
 												</div>
 												{i === 0 && (
 													<span className="project-owner-badge">owner</span>
@@ -254,7 +278,7 @@ class Project extends Component {
 												</Button> */}
 
 														{this.state.admin && (
-															<Button className="rounded" size="medium" danger>
+															<Button className="rounded" size="medium" danger onClick={() => this.removeMember(member)}>
 																Remove
 															</Button>
 														)}
@@ -295,20 +319,20 @@ class Project extends Component {
 											<div className="project-page-info-block-title">
 												<span>Project Applicants</span>
 											</div>
-											{(data.applicants || []).map(member => (
-												<div className="project-page-owner">
+											{(data.applicants || []).map((member, index) => (
+												<div key={ index} className="project-page-owner">
 													<Avatar
 														className="simplecard-avatar"
 														size={40}
 														icon={<UserOutlined />}
 													/>
 													<div className="project-page-owner-name-span">
-														<span>{member.userName}</span>
+														<span>{member}</span>
 													</div>
-													<Button className="rounded" size="medium">
+													<Button className="rounded" size="medium" onClick={() => this.acceptApplicant(member)}>
 														Accept
 													</Button>
-													<Button className="rounded" size="medium" danger>
+													<Button className="rounded" size="medium" danger onClick={() => this.removeApplicant(member)}>
 														Reject
 													</Button>
 												</div>

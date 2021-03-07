@@ -14,7 +14,7 @@ import { ConsoleSqlOutlined, UserOutlined } from "@ant-design/icons";
 
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
-import { useAuthState } from "../../context";
+import { useAuthState, useUsersState } from "../../context";
 
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -29,9 +29,13 @@ const ProjectCard = ({
 	const [ifTopped, setifTopped] = useState(data.topped);
 	//TODO: modify it to userID
 	const authContext = useAuthState();
+	const usersContext = useUsersState();
 	const userName = authContext.userName;
 	const [userLikedNum, setuserLikedNum] = useState(data.userLiked?.length || 0);
 	const isLoggedIn = authContext.isLoggedIn;
+	const user = usersContext.users.find(
+		user => user.userName === data.owner.userName
+	);
 	return (
 		<Col lg="3" md="6" sm="12">
 			<Link to={{ pathname: pathname, state: { data: data } }}>
@@ -43,14 +47,22 @@ const ProjectCard = ({
 							<AiOutlineFileImage />
 						</div>
 					) : (
-						<img className="project-card-image" src={data.images[0].url} alt={data.images[0].name} />
+						<img
+							className="project-card-image"
+							src={data.images[0].url}
+							alt={data.images[0].name}
+						/>
 					)}
 					<div className="simplecard-name">
 						<Card.Title>{data.name}</Card.Title>
 					</div>
 					<Card.Body className="simplecard-description">
 						<div className="simplecard-username-container">
-							<Avatar className="simplecard-avatar" icon={<UserOutlined />} />
+							{user.avatar?.url ? (
+								<Avatar className="simplecard-avatar" src={user.avatar.url} />
+							) : (
+								<Avatar className="simplecard-avatar" icon={<UserOutlined />} />
+							)}
 							<span>{data.owner.userName}</span>
 						</div>
 						<p>{data.description}</p>
