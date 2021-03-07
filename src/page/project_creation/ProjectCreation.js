@@ -9,7 +9,7 @@ import { withRouter } from "react-router-dom";
 import TeamSvg from "../../assets/team.svg";
 import { Button } from "antd";
 
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 import "./style.css";
 import {Input, notification} from "antd";
@@ -57,8 +57,9 @@ class ProjectCreation extends Component {
 			e.requirement,
 			undefined,
 			undefined,
+			undefined,
 			e.tags,
-			e.steps,
+			{ current: 0, steps: e.steps },
 		));
 
 		this.props.allUsers.setUsers(newUsers);
@@ -68,6 +69,7 @@ class ProjectCreation extends Component {
 			message: `Project ${this.state.projectName} Created!`
 		});
 
+		// return <Redirect to="/" />
 		this.props.history.push('/');
 	}
 		
@@ -155,7 +157,7 @@ class ProjectCreation extends Component {
 							</div>
 							
 						</div> */}
-						<ProjectCreate onCreate={project => this.saveProject(project)}/>
+						<ProjectCreate onCreate={project => this.saveProject(project)} />
 					</div>
 				</Layout>
 			</div>

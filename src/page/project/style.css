@@ -221,3 +221,51 @@
     color: var(--secondary-text);
     font-weight: light;
 }
+
+.project-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 150px;
+    border: 1.5px dashed #66666650;
+    color:#66666650;
+    font-size: 30px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.project-upload-container-active {
+    border: 1.5px dashed var(--theme-color);
+    color:var(--theme-color);
+}
+
+.project-upload-container span{
+    font-size: 14px;
+}
+
+.project-upload-container input[type="file"] {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: yellow;
+}
+
+.project-page-image-container {
+    padding: 10px;
+    background-color: rgba(190, 255, 190, 0.1);
+    width: 100%;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.project-page-image-container img{
+    width: 45%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

@@ -38,9 +38,13 @@ const ProjectCard = ({
 				{/* <span className="simplecard-see-more"> See more</span>{" "} */}
 
 				<Card style={{ marginTop: "15px" }}>
-					<div className="simplecard-img-container rounded">
-						<AiOutlineFileImage />
-					</div>
+					{(data.images || []).length === 0 ? (
+						<div className="simplecard-img-container rounded">
+							<AiOutlineFileImage />
+						</div>
+					) : (
+						<img className="project-card-image" src={data.images[0].url} alt={data.images[0].name} />
+					)}
 					<div className="simplecard-name">
 						<Card.Title>{data.name}</Card.Title>
 					</div>

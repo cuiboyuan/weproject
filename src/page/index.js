@@ -44,11 +44,11 @@ const Routes = props => {
 						{authContext.isLoggedIn ? <Redirect to="/" /> : <Login />}
 					</Route>
 					<Route path="/" exact>
-						<ProjectBrowserPage isAdmin={authContext.isAdmin} />
+						<ProjectBrowserPage isAdmin={authContext.isAdmin} projects={projectsContext.projects} />
 					</Route>
 					<Route path="/teammates" exact component={TeammateBrowser} />
 					<Route path="/project" exact>
-						{authContext.isLoggedIn ? <ProjectDetailPage /> : <Login />}
+						{authContext.isLoggedIn ? <ProjectDetailPage authContext={authContext} projectsContext={projectsContext} usersContext={usersContext}/> : <Login />}
 					</Route>
 					{/* <Route path="/project/create" exact>
 						{authContext.isLoggedIn ? <ProjectCreatePage /> : <Login />}

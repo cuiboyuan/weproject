@@ -13,38 +13,54 @@ const data = [...Array(12).keys()].map((_, i) =>
 		password: `user${i}`,
 		ownedProjectIds: [],
 		joinedProjectIds: [],
-		connection:[]
+		connection: [],
 	})
 );
 
+data.push(
+	User.fromResponseBody({
+		id: uuid(),
+		description: `user discription`,
+		userName: `user`,
+		password: `user`,
+		ownedProjectIds: [],
+		joinedProjectIds: [],
+	})
+);
 
-data.push(User.fromResponseBody({
-	id: uuid(),
-	description: `user discription`,
-	userName: `user`,
-	password: `user`,
-	ownedProjectIds: [],
-	joinedProjectIds: [],
-}))
-
-data.push(User.fromResponseBody({
-	id: uuid(),
-	description: `admin discription`,
-	userName: `admin`,
-	password: `admin`,
-	ownedProjectIds: [],
-	joinedProjectIds: [],
-}))
+data.push(
+	User.fromResponseBody({
+		id: uuid(),
+		description: `admin discription`,
+		userName: `admin`,
+		password: `admin`,
+		ownedProjectIds: [],
+		joinedProjectIds: [],
+	})
+);
 
 export const UsersProvider = props => {
 	const [users, setUsers] = useState(data);
 
-	const updateUsers = (newUsers) => {setUsers(newUsers)}
+	const updateUsers = newUsers => {
+		setUsers(newUsers);
+	};
+
+	const removeProject = (userName, projectId) => {
+		let index = users.findIndex(u => u.userName === userName);
+		if (index >= 0) {
+			let owned = users[index].ownedProjectIds
+			owned.filter(o => o === projectId);
+			users[index].ownedProjectIds = owned;
+			setUsers(users);
+		}
+	}
 
 	const getValues = () => {
 		return {
 			users,
-			setUsers
+			setUsers,
+			removeProject,
 		};
 	};
 

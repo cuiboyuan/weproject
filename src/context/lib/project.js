@@ -31,10 +31,41 @@ const data = [...Array(9).keys()].map(
 export const ProjectProvider = props => {
 	const [projects, setProjects] = useState(data);
 
+	const updateProject = (project) => {
+		let index = projects.findIndex(p => p.id === project.id);
+		if (index >= 0) {
+			let newProjects = projects;
+			newProjects.splice(index, 1, project);
+			setProjects(newProjects);
+		}
+	}
+
+	const joinProject = (projectId, userName) => {
+		let index = projects.findIndex(p => p.id === projectId);
+		if (index >= 0) {
+			let exist = (projects[index].applicants || []).findIndex(a => a === userName);
+			if (exist >= 0) return;
+			projects[index].applicants = [...(projects[index].applicants || []), userName];
+			setProjects(projects);
+		}
+	}
+
+	const deleteProject = (projectId) => {
+		let index = projects.findIndex(p => p.id === projectId);
+		console.log(index);
+		if (index >= 0) {
+			projects.splice(index, 1);
+			setProjects(projects);
+		}
+	}
+
 	const getValues = () => {
 		return {
 			projects,
 			setProjects,
+			updateProject,
+			joinProject,
+			deleteProject,
 		};
 	};
 

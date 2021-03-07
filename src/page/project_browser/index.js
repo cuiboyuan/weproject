@@ -25,15 +25,15 @@ const ProjectBrowser = props => {
 		}
 	}
 	//the data that is actually displayed on the browsing page
-	const [displayData, setDisplayData] = useState(projectContext.projects.sort(compare));
+	const [displayData, setDisplayData] = useState(props.projects.sort(compare));
 	
 
 	//the function used to respond to search request, used in SearchBar Component
 	const filterData = (searchContent)=>{
 		if (searchContent === ""){
-			setDisplayData(projectContext.projects);
+			setDisplayData(props.projects);
 		}else{
-			setDisplayData(projectContext.projects.filter(project=>{return project.name.includes(searchContent)}));
+			setDisplayData(props.projects.filter(project=>{return project.name.includes(searchContent)}));
 
 		}
 	}
@@ -51,7 +51,7 @@ const ProjectBrowser = props => {
 
 	const removeData = (project)=>{
 		setDisplayData(displayData.filter((item)=>{
-			return item.id != project.id;
+			return item.id !== project.id;
 		}));
 	}
 

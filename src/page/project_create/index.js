@@ -17,12 +17,12 @@ import { BsX, BsPencilSquare, BsXSquare } from "react-icons/bs";
 import "./style.css";
 import Layout from "../../components/layout";
 
-const InputItem = ({ title, placeholder, type, onChange }) => {
+const InputItem = ({ title, placeholder, type, onChange, value }) => {
 	return (
 		<div className="project-create-sub-container">
 			<span>{title}</span>
-			{type === "input" && <Input placeholder={placeholder} onChange={onChange}/>}
-			{type === "text" && <Input.TextArea placeholder={placeholder} onChange={onChange}/>}
+			{type === "input" && <Input placeholder={placeholder} value={value} onChange={onChange}/>}
+			{type === "text" && <Input.TextArea placeholder={placeholder} value={value} onChange={onChange}/>}
 		</div>
 	);
 };
@@ -98,8 +98,8 @@ const ProgressItem = ({ step, onDelete, onEdit }) => {
 				)}
 			</span>
 			<span>{step.title}</span>
-			{step.subitems.map(t => (
-				<span className="project-create-progress-subitem">{t}</span>
+			{step.subitems.map((t, index) => (
+				<span key={index} className="project-create-progress-subitem">{t}</span>
 			))}
 		</div>
 	);
@@ -136,6 +136,7 @@ const ProgressAdd = ({ item, onAdd, buttonText }) => {
 			<span>Sub-steps</span>
 			{step.subitems?.map((t, index) => (
 				<EditableText
+					key={index}
 					value={t}
 					onPressEnter={value => onCompleteSubitem(index, value)}
 					onDelete={() => {
@@ -229,7 +230,7 @@ const Progress = ({ steps, onAdd, onDelete, onEdit }) => {
 };
 
 const Create = props => {
-	const [project, setProject] = useState({});
+	const [project, setProject] = useState(props.data ? { ...props.data, steps: props.data.progress?.steps || [] } : {});
 	const addTag = value => {
 		setProject({ ...project, tags: [...(project.tags || []), value] });
 	};
@@ -275,6 +276,7 @@ const Create = props => {
 			<InputItem
 				type="input"
 				title="Project Name"
+				value={project.name}
 				onChange={e => setProject({ ...project, name: e.target.value })}
 				placeholder={"Super cool project"}
 			/>
@@ -282,17 +284,19 @@ const Create = props => {
 			<InputItem
 				type="text"
 				title="Description"
+				value={project.description}
 				onChange={e => setProject({ ...project, description: e.target.value })}
 				placeholder={"Describe your project and the expectation."}
 			/>
 			<InputItem
 				type="text"
 				title="Member Requirement"
+				value={project.requirement}
 				onChange={e => setProject({ ...project, requirement: e.target.value })}
 				placeholder={"Describe your recruit requirement."}
 			/>
 			<Progress
-				steps={project.steps}
+				steps={project?.steps || []}
 				onAdd={step =>
 					setProject({ ...project, steps: [...(project.steps || []), step] })
 				}
@@ -308,7 +312,7 @@ const Create = props => {
 					setProject({ ...project, steps: steps });
 				}}
 			/>
-			<Button size="large" onClick={onSubmit} type="primary">Create</Button>
+			<Button size="large" onClick={onSubmit} type="primary">{props.data ? "Edit" : "Create"}</Button>
 		</div>
 	);
 };

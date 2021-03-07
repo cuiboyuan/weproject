@@ -90,3 +90,7 @@
 .auth-loggout {
     color: rgb(255, 107, 107);
 }
+
+.auth-avatar-container span{
+    margin-left: 20px;
+}

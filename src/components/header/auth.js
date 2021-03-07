@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Popover } from "antd";
+import { Popover, Avatar } from "antd";
+import { AiOutlineUser } from "react-icons/ai";
 
 import "./style.css";
 
@@ -24,15 +25,16 @@ const Auth = props => {
 	return (
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (
-				<>
+				<div className="auth-avatar-container">
 					<Popover
 						content={() => <Popup onClick={props.logout} />}
 						placement="bottomRight"
 						title=""
 					>
+						<Avatar icon={<AiOutlineUser />} src={""}/>
 						<span>{props.authInfo.userName}</span>
 					</Popover>
-				</>
+				</div>
 			) : (
 				<div className="auth-sign-in">
 					<span>
