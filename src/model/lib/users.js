@@ -8,7 +8,8 @@ export default class User {
 		description,
 		connections,
 		appliedProj,
-		skills
+		skills,
+		pending
 	) {
 		this.id = userId;
 		this.userName = userName;
@@ -24,6 +25,8 @@ export default class User {
 		this.connections = connections || [];
 		//if it is topped by admin
 		this.topped = false;
+		//the applicants 
+		this.pending = pending || []
 
 		// Hard-coded default values
 		this.experiences = [
@@ -52,7 +55,8 @@ export default class User {
 			// added attributes:
 			object.description,
 			object.connections,
-			object.topped
+			object.topped,
+			object.pending
 		);
 	}
 
@@ -67,6 +71,7 @@ export default class User {
 			description: this.description,
 			connections: this.connections,
 			topped: this.topped,
+			pending:this.pending
 		};
 	}
 }
