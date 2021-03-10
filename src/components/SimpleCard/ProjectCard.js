@@ -31,12 +31,18 @@ const ProjectCard = ({
 	return (
 		<Col lg="3" md="6" sm="12">
 			<Link to={{ pathname: pathname, state: { data: data } }}>
-				{/* <span className="simplecard-see-more"> See more</span>{" "} */}
-
 				<Card style={{ marginTop: "15px" }}>
-					<div className="simplecard-img-container rounded">
-						<AiOutlineFileImage />
-					</div>
+					{(data.images || []).length > 0 ? (
+						<img
+							className="project-card-image"
+							alt={data.images[0].name}
+							src={data.images[0].url}
+						/>
+					) : (
+						<div className="simplecard-img-container rounded">
+							<AiOutlineFileImage />
+						</div>
+					)}
 					<div className="simplecard-name">
 						<Card.Title>{data.name}</Card.Title>
 					</div>

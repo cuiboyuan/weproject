@@ -64,39 +64,41 @@ class Project extends Component {
 	};
 	onFileUpload = files => {
 		// var filesArr = Array.prototype.slice.call(files);
-		let _files = files
+		let _files = files;
 		console.log(files);
 		// if (Array.isArray(files)) _files = [files];
 		let fileObjects = _files.map(file => {
 			return { name: file.name, url: URL.createObjectURL(file) };
 		});
-		let newData = { ...this.state.data, images: [...(this.state.data.images || []), ...fileObjects] }
-		this.setState({ data:  newData})
+		let newData = {
+			...this.state.data,
+			images: [...(this.state.data.images || []), ...fileObjects],
+		};
+		this.setState({ data: newData });
 		this.props.projectsContext.updateProject(newData);
 	};
-	
 
-	removeMember = (userName) => {
+	removeMember = userName => {
 		let project = this.state.data;
 		project.members = project.members.filter(a => a !== userName);
 		this.setState({ data: project });
 		this.props.projectsContext.updateProject(project);
-	}
+	};
 
-	removeApplicant = (userName) => {
+	removeApplicant = userName => {
 		let project = this.state.data;
 		project.applicants = project.applicants.filter(a => a !== userName);
 		this.setState({ data: project });
 		this.props.projectsContext.updateProject(project);
-	}
+	};
 
-	acceptApplicant = (userName) => {
+	acceptApplicant = userName => {
 		let project = this.state.data;
 		project.applicants = project.applicants.filter(a => a !== userName);
 		project.members = [...(project.members || []), userName];
 		this.setState({ data: project });
 		this.props.projectsContext.updateProject(project);
-	}
+	};
 
 	render() {
 		const data = this.state.data;
@@ -242,9 +244,16 @@ class Project extends Component {
 										<div className="project-page-info-block-title">
 											<span>Project Images</span>
 										</div>
-										{this.state.admin && <FileUpload onDrop={this.onFileUpload} accept={"image/*"} />}
+										{this.state.admin && (
+											<FileUpload
+												onDrop={this.onFileUpload}
+												accept={"image/*"}
+											/>
+										)}
 										<div className="project-page-image-container">
-											{(data.images || []).map((img, index) => <img key={index} src={img.url} alt={img.name} />)}
+											{(data.images || []).map((img, index) => (
+												<img key={index} src={img.url} alt={img.name} />
+											))}
 										</div>
 									</div>
 								)}
@@ -254,38 +263,37 @@ class Project extends Component {
 											<span>Team members</span>
 										</div>
 
-										{[data.owner.userName, ...(data.members || [])].map((member, i) => (
-											<div key={ i} className="project-page-owner">
-												<Avatar
-													className="simplecard-avatar"
-													size={40}
-													icon={<UserOutlined />}
-												/>
-												<div className="project-page-owner-name-span">
-													<span>{member}</span>
-												</div>
-												{i === 0 && (
-													<span className="project-owner-badge">owner</span>
-												)}
-												{i !== 0 && (
-													<div className="project-page-margin">
-														{/* <Button
-													className="rounded"
-													size="medium"
-													type="primary"
-												>
-													Proceed
-												</Button> */}
-
-														{this.state.admin && (
-															<Button className="rounded" size="medium" danger onClick={() => this.removeMember(member)}>
-																Remove
-															</Button>
-														)}
+										{[data.owner.userName, ...(data.members || [])].map(
+											(member, i) => (
+												<div key={i} className="project-page-owner">
+													<Avatar
+														className="simplecard-avatar"
+														size={40}
+														icon={<UserOutlined />}
+													/>
+													<div className="project-page-owner-name-span">
+														<span>{member}</span>
 													</div>
-												)}
-											</div>
-										))}
+													{i === 0 && (
+														<span className="project-owner-badge">owner</span>
+													)}
+													{i !== 0 && (
+														<div className="project-page-margin">
+															{this.state.admin && (
+																<Button
+																	className="rounded"
+																	size="medium"
+																	danger
+																	onClick={() => this.removeMember(member)}
+																>
+																	Remove
+																</Button>
+															)}
+														</div>
+													)}
+												</div>
+											)
+										)}
 									</div>
 								)}
 								{this.state.currentTab === "progress" && (
@@ -298,10 +306,44 @@ class Project extends Component {
 														className="rounded"
 														size="medium"
 														type="primary"
+														disabled={
+															(data.progress?.current || 0) >=
+															(data.progress?.steps || []).length
+														}
+														onClick={() => {
+															console.log(data.progress);
+															this.props.projectsContext.proceedStep(data.id);
+															this.setState({
+																data: {
+																	...data,
+																	progress: {
+																		...data.progress,
+																		current: (data.progress.current || 0) + 1,
+																	},
+																},
+															});
+														}}
 													>
 														Proceed
 													</Button>
-													<Button className="rounded" size="medium" danger>
+													<Button
+														className="rounded"
+														size="medium"
+														danger
+														disabled={data.progress?.current <= 0}
+														onClick={() => {
+															this.props.projectsContext.withdralStep(data.id);
+															this.setState({
+																data: {
+																	...data,
+																	progress: {
+																		...data.progress,
+																		current: data.progress.current - 1,
+																	},
+																},
+															});
+														}}
+													>
 														Withdraw
 													</Button>
 												</div>
@@ -320,7 +362,7 @@ class Project extends Component {
 												<span>Project Applicants</span>
 											</div>
 											{(data.applicants || []).map((member, index) => (
-												<div key={ index} className="project-page-owner">
+												<div key={index} className="project-page-owner">
 													<Avatar
 														className="simplecard-avatar"
 														size={40}
@@ -329,10 +371,19 @@ class Project extends Component {
 													<div className="project-page-owner-name-span">
 														<span>{member}</span>
 													</div>
-													<Button className="rounded" size="medium" onClick={() => this.acceptApplicant(member)}>
+													<Button
+														className="rounded"
+														size="medium"
+														onClick={() => this.acceptApplicant(member)}
+													>
 														Accept
 													</Button>
-													<Button className="rounded" size="medium" danger onClick={() => this.removeApplicant(member)}>
+													<Button
+														className="rounded"
+														size="medium"
+														danger
+														onClick={() => this.removeApplicant(member)}
+													>
 														Reject
 													</Button>
 												</div>
@@ -358,7 +409,7 @@ class Project extends Component {
 										data: newProject,
 										editing: false,
 									});
-									this.props.updateProject(newProject);
+									this.props.projectsContext.updateProject(newProject);
 									console.log(newProject);
 								}}
 							/>

@@ -37,12 +37,12 @@
   - search bar: you could search project by name
   - project card: detailed info about the project, you could press the card to see the detail.
 
-  - admin functionality of the page: <img src="./admin_functionality_project_browsing.png" width="300" style="float:right"/>
+  - admin functionality of the page: <img src="misc/admin_functionality_project_browsing.png" width="300" style="float:right"/>
 
     - stick/unstick a specific project to the top
     - delete a project 
 
-![project browsing page detail](project_browsing_readme.png)
+![project browsing page detail](misc/project_browsing_readme.png)
 
  
   
@@ -73,4 +73,20 @@
    
     <img width="892" alt="admin" src="https://user-images.githubusercontent.com/41752876/110662359-6cc5a580-8193-11eb-946b-1c2668db7148.PNG">
 
+  - **Create Project**
+    - click the `creat new project` under the user avatar
+    <img width="300" alt="create-project" src="misc/create-project.png">
+    - fill all the fields in the `create project page`, and then press `CREATE`
+    <img width="600" alt="new-project" src="misc/new-project.png">
+
+  - **Project Detail**
+    - owner can upload project image by "drag and drop"
+    <img width="400" alt="upload" src="misc/upload.png">
+    <img width="400" alt="display" src="misc/display.png">
+    - owner can remove members or applicants under `Team` or `Manage` tab
+    <img width="400" alt="team" src="misc/team.png">
+    <img width="400" alt="manage" src="misc/manage.png">
+    - owner can also manage the progress with `proceed` or `withdral`
+    <img width="400" alt="progress" src="misc/progress.png">
+    
 
