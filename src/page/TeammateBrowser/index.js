@@ -1,31 +1,14 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Layout from "../../components/layout";
-import List from "../../components/list";
-import Card from "../../components/card";
 import { useUsersState } from "../../context";
-import { Link } from "react-router-dom";
-import { SortDescendingOutlined } from "@ant-design/icons";
 
 
 const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
-
-	//the data that is actually displayed on the teambrowing page
-	const [displayData, setDisplayData] = useState(userContext.users);
-
-	// the function used to respind to search request, used in searchBar Component
-	const filterData = (searchContent)=>{
-		if (searchContent == ""){
-			setDisplayData(userContext.users);
-		}else{
-			setDisplayData(userContext.users.filter(user=>{return user.userName.includes(searchContent)}));
-		}
-	}
-
 
 	const compare = (p1, p2)=>{
 		if (p1.topped == p2.topped){
@@ -41,12 +24,23 @@ const TeammateBrowser = (props) => {
 		}
 	}
 
+
+	//the data that is actually displayed on the teambrowing page
+	const [displayData, setDisplayData] = useState([...userContext.users].sort(compare));
+
+	// the function used to respind to search request, used in searchBar Component
+	const filterData = (searchContent)=>{
+		if (searchContent == ""){
+			setDisplayData([...userContext.users].sort(compare));
+		}else{
+			setDisplayData(userContext.users.filter(user=>{return user.userName.includes(searchContent)}));
+		}
+	}
+
+
+
 	const sortData = ()=>{
 
-		//TODO: I don't know why the following commented code doesn't work?????
-		// displayData.sort(compare)
-		// console.log("#########", displayData);
-		// setDisplayData(displayData);
 		setDisplayData([...displayData].sort(compare));
 
 	}

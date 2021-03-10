@@ -11,7 +11,7 @@
 - React
 - React Router Dom
 - Ant Design (Avatar, Icons)
-- React Bootstrap (Card)
+- React Bootstrap (SimpleCard, SimpleList)
 
 ## Current Features
 - Header

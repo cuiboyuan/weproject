@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { Container, Row} from "react-bootstrap";
 
 import "./style.css";
-import SimpleRow from "./SimpleRow";
 import { uid } from "react-uid";
-import SimpleCard from "../SimpleCard/SimpleCard";
 import PeopleCard from "../SimpleCard/PeopleCard"
 import ProjectCard from "../SimpleCard/ProjectCard";
 
