@@ -2,18 +2,12 @@ import React, { Component } from "react";
 import Layout from "../../components/layout";
 import {
 	ArrowLeftOutlined,
-	DeleteFilled,
-	PlusCircleFilled,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import TeamSvg from "../../assets/team.svg";
-import { Button } from "antd";
-
-import {Link, Redirect} from "react-router-dom";
 
 import "./style.css";
-import {Input, notification} from "antd";
-import TextArea from "antd/lib/input/TextArea";
+import {notification} from "antd";
 import uuid from "react-uuid";
 import { Project } from "../../model";
 import ProjectCreate from '../project_create';
@@ -104,9 +98,6 @@ class ProjectCreation extends Component {
 	
     
 	render() {
-
-		const {projectName, projectDetail, projectTags, newTag} = this.state;
-        
 		return (
 			<div className="project-page-container">
 				<Layout>

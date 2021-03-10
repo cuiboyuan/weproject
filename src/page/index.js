@@ -9,7 +9,6 @@ import { useAuthState, useProjectState, useUsersState } from "./../context";
 
 import ProjectBrowserPage from "./project_browser";
 import ProjectDetailPage from "./project";
-import ProjectCreatePage from "./project_create";
 import Login from "./loggin_page";
 import Header from "../components/header";
 import TeammateBrowser from "./TeammateBrowser";
