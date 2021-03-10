@@ -10,6 +10,7 @@
 ## Third party libraries:
 - React
 - React Router Dom
+- React uuid (creating unique id for new objects)
 - react-dropzone (image upload)
 - Ant Design (Avatar, Icons)
 - React Bootstrap (SimpleCard, SimpleList)
