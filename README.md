@@ -10,6 +10,7 @@
 ## Third party libraries:
 - React
 - React Router Dom
+- react-dropzone (image upload)
 - Ant Design (Avatar, Icons)
 - React Bootstrap (SimpleCard, SimpleList)
 
