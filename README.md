@@ -55,9 +55,11 @@
     <img width="994" alt="profile" src="https://user-images.githubusercontent.com/41752876/110662020-1d7f7500-8193-11eb-94c7-87d7cbece67a.PNG">
 
     - Click 'Edit Profile' button to change profile information: self introduction, add/remove skills, update social media information, add/remove experiences, etc.
-    <img width="905" alt="prof detail" src="https://user-images.githubusercontent.com/41752876/110662140-37b95300-8193-11eb-88e5-55eb5ae4d9b3.PNG">
+      <img width="905" alt="prof detail" src="https://user-images.githubusercontent.com/41752876/110662140-37b95300-8193-11eb-88e5-55eb5ae4d9b3.PNG">
+    
+      <img width="916" alt="my proj" src="https://user-images.githubusercontent.com/41752876/110663358-566c1980-8194-11eb-97b6-5c46d5f0c507.PNG">
    
-    <img width="938" alt="exp" src="https://user-images.githubusercontent.com/41752876/110662303-5e778980-8193-11eb-801e-53ae7120d34f.PNG">
+      <img width="938" alt="exp" src="https://user-images.githubusercontent.com/41752876/110662303-5e778980-8193-11eb-801e-53ae7120d34f.PNG">
     
     - Click on 'Save Changes' button to save changes
       <img width="915" alt="edit detail" src="https://user-images.githubusercontent.com/41752876/110662163-3f78f780-8193-11eb-85f5-49e36e1ba60e.PNG">
@@ -68,7 +70,7 @@
     - After logging in, access user detail page by clicking on the card in the teammate browsing page
     - Similar to profile page, but there is no 'Edit Profile' button
     - If logged in as admin, there will be a delete button, which will remove the user permanently.
-    - 
+   
     <img width="892" alt="admin" src="https://user-images.githubusercontent.com/41752876/110662359-6cc5a580-8193-11eb-946b-1c2668db7148.PNG">
 
 
