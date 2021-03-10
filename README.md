@@ -75,18 +75,26 @@
 
   - **Create Project**
     - click the `creat new project` under the user avatar
+
     <img width="300" alt="create-project" src="misc/create-project.png">
+
     - fill all the fields in the `create project page`, and then press `CREATE`
-    <img width="600" alt="new-project" src="misc/new-project.png">
+
+    <img width="800" alt="new-project" src="misc/new-project.png">
 
   - **Project Detail**
     - owner can upload project image by "drag and drop"
-    <img width="400" alt="upload" src="misc/upload.png">
-    <img width="400" alt="display" src="misc/display.png">
+
+    <img width="600" alt="upload" src="misc/upload.png">
+    <img width="600" alt="display" src="misc/display.png">
+
     - owner can remove members or applicants under `Team` or `Manage` tab
-    <img width="400" alt="team" src="misc/team.png">
-    <img width="400" alt="manage" src="misc/manage.png">
+
+    <img width="600" alt="team" src="misc/team.png">
+    <img width="600" alt="manage" src="misc/manage.png">
+
     - owner can also manage the progress with `proceed` or `withdral`
-    <img width="400" alt="progress" src="misc/progress.png">
+
+    <img width="600" alt="progress" src="misc/progress.png">
     
 
