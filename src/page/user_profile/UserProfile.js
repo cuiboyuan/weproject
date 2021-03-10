@@ -61,8 +61,8 @@ class Profile extends Component {
 		let ownedProjects = allProjects.projects.filter(
 			item => item.owner.userName == currentName
 		);
-		let joinedProjects = allProjects.projects.filter(item =>
-			currentUser.joinedProjectIds.includes(item.id)
+		let joinedProjects = allProjects.projects.filter(
+			item => item.userIds.includes(currentUser.id)
 		);
 
 		this.state = {
