@@ -32,5 +32,19 @@
 - Teammate Details
 - Admin Previliges (In progress)
 
+## User Cases
+- **project browsing** page (see the pricture below for detailed reference)
+  - search bar: you could search project by name
+  - project card: detailed info about the project, you could press the card to see the detail.
 
+  - admin functionality of the page: <img src="./admin_functionality_project_browsing.png" width="300" style="float:right"/>
 
+    - stick/unstick a specific project to the top
+    - delete a project 
+
+![project browsing page detail](project_browsing_readme.png)
+
+ 
+  
+  - **Teammate Browsing** page
+    - similar layout, admin functionality. See project browsing page for reference.
