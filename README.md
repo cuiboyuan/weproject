@@ -23,7 +23,7 @@
 - Project Browsing
     - title
     - owner avatar, username
-    - descrption
+    - description
     - number of views/team membesr/likes
 - Teammate Browsing
     - User info
@@ -48,3 +48,17 @@
   
   - **Teammate Browsing** page
     - similar layout, admin functionality. See project browsing page for reference.
+  
+  - **User Profile** page
+    - After logging in, access the profile page through 'Profile' tab on the upper right corner
+    - Click 'Edit Profile' button to change profile information:
+      - Self introduction
+      - Social media information
+      - Add or remove skills
+      - Add or remove experiences
+    - Click on 'Save Changes' button to save changes
+    
+  - **User Detail** page
+    - After logging in, access user detail page by clicking on the card in the teammate browsing page
+    - Similar to profile page, but there is no 'Edit Profile' button
+    - If logged in as admin, there will be a delete button, which will remove the user permanently.
