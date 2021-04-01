@@ -70,9 +70,9 @@ class Profile extends Component {
 		getProfile(this)
 		.then((res) => {
 			
-			if (!res){
+			if (res !== 200){
 				notification["error"]({
-					message: "Something went wrong",
+					message: `Something went wrong (Error code:${res})`,
 				});
 				
 				this.props.history.push("/teammates");
@@ -93,15 +93,16 @@ class Profile extends Component {
 		if (this.state.isEditing){
 			updateProfile(this)
 			.then(res => {
-				if (!res){
+				if (res !== 200){
 					notification["error"]({
-						message: "Fail to update. Something went wrong",
+						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
 					return;
 				}
 				notification["success"]({
 					message: "Profile Updated!",
 				});
+
 				this.setState({ isEditing: !this.state.isEditing });
 				return;
 			}).catch(err => {
@@ -119,9 +120,9 @@ class Profile extends Component {
 
 		deleteProfile(this)
 		.then((res) => {
-			if (!res){
+			if (res !== 200){
 				notification["error"]({
-					message: `Fail to delete ${this.state.userName}. Something went wrong`,
+					message: `Fail to delete ${this.state.userName}. Something went wrong (Error code:${res})`,
 				});
 			} else {
 				notification["success"]({
@@ -204,6 +205,8 @@ class Profile extends Component {
 		this.props.allUsers.updateUser(user);
 		this.setState({ avatar: img });
 	}
+
+	/* render function */
 
 	render() {
 		let {

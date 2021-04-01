@@ -16,7 +16,7 @@ export const getProfile = async (app) => {
         const res = await fetch(`${url}/${loginName}`);
   
         if (res.status !== 200){
-            return false;
+            return res.status;
         }
         const login = await res.json()
 
@@ -35,7 +35,7 @@ export const getProfile = async (app) => {
             const response = await fetch(`${url}/${currentName}`)
 
             if (response.status !== 200){
-                return false;
+                return response.status;
             }
             const user = await response.json();
 
@@ -71,10 +71,10 @@ export const getProfile = async (app) => {
             isAdmin: loginUser.isAdmin,
             isProfile: isProfile,
         });
-        return true;
+        return 200;
 
     } catch (error) {
-        return false;
+        return 500;
     }
 };
 
@@ -99,15 +99,15 @@ export const updateProfile = async (app) => {
         });
   
         if (res.status !== 200){
-            return false;
+            return res.status;
         }
 
         console.log(await res.json())
 
-        return true;
+        return 200;
         
     } catch (error) {
-        return false;
+        return 500;
     }
 };
 
@@ -116,12 +116,10 @@ export const deleteProfile = async (app) => {
     
     const url = `${API_HOST}/api/deleteUser`;
 
-    let { auth, allUsers, allProjects, location } = app.props;
-
     // TODO: change this to check session afterwards
     const isAdmin = app.state.isAdmin;
     if (!isAdmin){
-        return false;
+        return 403;
     }
     
     const username = app.state.userName;
@@ -132,14 +130,14 @@ export const deleteProfile = async (app) => {
         });
   
         if (res.status !== 200){
-            return false;
+            return res.status;
         }
 
         console.log(await res.json())
 
-        return true;
+        return 200;
         
     } catch (error) {
-        return false;
+        return 500;
     }
 }
