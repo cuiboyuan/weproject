@@ -61,6 +61,31 @@ app.post("/api/newUser", (req, res) => {
 	})
 })
 
+// route to delete a user
+app.delete("/api/deleteUser/:username", (req, res) => {
+    // TODO: add a middleware to check for admin
+
+    if (mongoose.connection.readyState != 1){
+		res.status(500).send('Internal server error')
+		return;
+	}
+
+    const username = req.params.username;
+	
+	User.deleteOne({userName: username})
+    .then((result) => {
+        if (result.n === 0){
+            res.status(404).send("user not found")
+        } else if (result.ok){
+            res.send(result);
+        } else {
+		    res.status(500).send("Internal server error")
+        }
+	}).catch((error) => {
+		res.status(500).send("Internal server error")
+	})
+})
+
 // route to update user profile
 app.patch("/api/updateProfile/:username", async (req, res) => {
     // TODO: Add session checks

@@ -1,8 +1,9 @@
 
 
+const API_HOST = "http://localhost:5000"// change it afterwards
+
 export const getProfile = async (app) => {
     
-    const API_HOST = "http://localhost:5000"// change it afterwards
     const url = `${API_HOST}/api/user`;
 
     let { auth, allUsers, allProjects, location } = app.props;
@@ -81,7 +82,6 @@ export const getProfile = async (app) => {
 
 export const updateProfile = async (app) => {
     
-    const API_HOST = "http://localhost:5000"// change it afterwards
     const url = `${API_HOST}/api/updateProfile`;
 
     let { auth, allUsers, allProjects, location } = app.props;
@@ -110,3 +110,36 @@ export const updateProfile = async (app) => {
         return false;
     }
 };
+
+
+export const deleteProfile = async (app) => {
+    
+    const url = `${API_HOST}/api/deleteUser`;
+
+    let { auth, allUsers, allProjects, location } = app.props;
+
+    // TODO: change this to check session afterwards
+    const isAdmin = app.state.isAdmin;
+    if (!isAdmin){
+        return false;
+    }
+    
+    const username = app.state.userName;
+    
+    try {
+        const res = await fetch(`${url}/${username}`, {
+            method: "DELETE",
+        });
+  
+        if (res.status !== 200){
+            return false;
+        }
+
+        console.log(await res.json())
+
+        return true;
+        
+    } catch (error) {
+        return false;
+    }
+}

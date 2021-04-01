@@ -26,7 +26,7 @@ import {
 } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
 
-import {getProfile, updateProfile} from "../../actions/user_profile";
+import {getProfile, updateProfile, deleteProfile} from "../../actions/user_profile";
 
 /**
  * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
@@ -34,6 +34,37 @@ import {getProfile, updateProfile} from "../../actions/user_profile";
 
 class Profile extends Component {
 	
+	state = {
+		currentTab: "detail",
+		userName: null,
+		loginName: null,
+		
+		avatar: null,
+		description: null,
+		email: null,
+		linkedin: null,
+		github: null,
+		skills: null,
+
+		experiences: null,
+
+		newSkill: "",
+		newCompany: "",
+		newPosition: "",
+		newStart: "",
+		newEnd: "",
+
+		isEditing: false,
+
+		ownedProjects: null,
+		joinedProjects: null,
+
+		isAdmin: null,
+		isProfile: null,
+	}
+
+	/* Function calls that involve server */
+
 	componentDidMount() {
 
 		getProfile(this)
@@ -55,40 +86,6 @@ class Profile extends Component {
 			this.props.history.push("/teammates");
 		})
 			
-	};
-	
-	state = {
-		currentTab: "detail",
-		userName: null,
-		loginName: null,
-		
-		avatar: null,
-		description: null,
-		email:null,
-		linkedin: null,
-		github: null,
-		skills: null,
-
-		experiences: null,
-
-		newSkill: "",
-		newCompany: "",
-		newPosition: "",
-		newStart: "",
-		newEnd: "",
-
-		isEditing: false,
-
-		ownedProjects: null,
-		joinedProjects: null,
-
-		isAdmin: null,
-		isProfile: null,
-	}
-	
-
-	handleClick = e => {
-		this.setState({ currentTab: e.key });
 	};
 
 	editProfile = e => {
@@ -116,6 +113,42 @@ class Profile extends Component {
 		} else {
 			this.setState({ isEditing: !this.state.isEditing });
 		}
+	};
+
+	deleteUser = e => {
+
+		deleteProfile(this)
+		.then((res) => {
+			if (!res){
+				notification["error"]({
+					message: `Fail to delete ${this.state.userName}. Something went wrong`,
+				});
+			} else {
+				notification["success"]({
+					message: `${this.state.userName} Deleted`,
+				});
+
+				this.props.history.push("/teammates");
+			}
+		}).catch(err => {
+			notification["error"]({
+				message: `Fail to delete ${this.state.userName}. Something went wrong`,
+			});
+		})
+
+		// remove it afterwards
+		let newUsers = this.props.allUsers.users.filter(item => {
+			return item.userName !== this.state.userName;
+		});
+
+		this.props.allUsers.setUsers(newUsers);
+	};
+
+
+	/* Front-end and state management function calls */
+
+	handleClick = e => {
+		this.setState({ currentTab: e.key });
 	};
 
 	onEditChange = e => {
@@ -159,24 +192,6 @@ class Profile extends Component {
 		this.setState({ skills: skills });
 	};
 
-	deleteUser = e => {
-		// Phase 2: update this.state value to user data in server
-		//...
-		if (!this.state.isAdmin) {
-			return;
-		}
-		let newUsers = this.props.allUsers.users.filter(item => {
-			return item.userName !== this.state.userName;
-		});
-
-		this.props.allUsers.setUsers(newUsers);
-
-		notification["success"]({
-			message: `${this.state.userName} Deleted`,
-		});
-
-		this.props.history.push("/teammates");
-	};
 
 	onUploadAvatar = e => {
 		console.log(e);
