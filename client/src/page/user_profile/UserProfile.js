@@ -25,107 +25,97 @@ import {
 	AiOutlineUser,
 } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
-import { uid } from "react-uid";
+
+import {getProfile, updateProfile} from "../../actions/user_profile";
 
 /**
  * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
  */
 
 class Profile extends Component {
-	constructor(props) {
-		super(props);
+	
+	componentDidMount() {
 
-		let { auth, allUsers, allProjects, location } = this.props;
-		// Change to EXTERNAL CALL in phase 2:
-		let loginName = auth.userName;
-		let loginUser = allUsers.users.filter(
-			item => item.userName === loginName
-		)[0];
-
-		let currentName, currentUser;
-		console.log(this.props);
-
-		let isProfile = false;
-		if (location.pathname === "/profile") {
-			currentName = loginName;
-			currentUser = loginUser;
-			isProfile = true;
-		} else {
-			currentName = location.state.data.userName;
-			currentUser = allUsers.users.filter(
-				item => item.userName == currentName
-			)[0];
-		}
-
-		// Need some modification
-		let ownedProjects = allProjects.projects.filter(
-			item => item.owner.userName == currentName
-		);
-		let joinedProjects = allProjects.projects.filter(
-			item => item.userIds.includes(currentUser.id)
-		);
-
-		this.state = {
-			currentTab: "detail",
-			username: currentName,
-			loginName: loginName,
+		getProfile(this)
+		.then((res) => {
 			
+			if (!res){
+				notification["error"]({
+					message: "Something went wrong",
+				});
+				
+				this.props.history.push("/teammates");
+			}
+		}).catch(err => {
+			
+			notification["error"]({
+				message: "Something went wrong",
+			});
+			
+			this.props.history.push("/teammates");
+		})
+			
+	};
+	
+	state = {
+		currentTab: "detail",
+		userName: null,
+		loginName: null,
+		
+		avatar: null,
+		description: null,
+		email:null,
+		linkedin: null,
+		github: null,
+		skills: null,
 
-			// Hard-coded data; Change to get information from server in phase 2
-			avatar: currentUser.avatar,
-			userBio: currentUser.description,
-			email: currentUser.socialMedia.email,
-			linkedin: currentUser.socialMedia.linkedin,
-			github: currentUser.socialMedia.github,
-			skills: currentUser.skills,
+		experiences: null,
 
-			experiences: currentUser.experiences,
+		newSkill: "",
+		newCompany: "",
+		newPosition: "",
+		newStart: "",
+		newEnd: "",
 
-			newSkill: "",
-			newCompany: "",
-			newPosition: "",
-			newStart: "",
-			newEnd: "",
+		isEditing: false,
 
-			isEditing: false,
+		ownedProjects: null,
+		joinedProjects: null,
 
-			ownedProjects: ownedProjects,
-			joinedProjects: joinedProjects,
-
-			isAdmin: auth.isAdmin,
-			isProfile: isProfile,
-		};
+		isAdmin: null,
+		isProfile: null,
 	}
+	
+
 	handleClick = e => {
 		this.setState({ currentTab: e.key });
 	};
 
 	editProfile = e => {
-		if (this.state.isEditing) {
-			// Phase 2: update this.state value to user data in server
-			//...
-			let newUsers = this.props.allUsers.users.map(item => {
-				let updatedUser = item;
-				if (updatedUser.userName === this.state.username) {
-					updatedUser.description = this.state.userBio;
-					updatedUser.socialMedia = {
-						email: this.state.email,
-						linkedin: this.state.linkedin,
-						github: this.state.github,
-					};
-					updatedUser.experiences = this.state.experiences;
-					updatedUser.skills = this.state.skills;
+		
+		if (this.state.isEditing){
+			updateProfile(this)
+			.then(res => {
+				if (!res){
+					notification["error"]({
+						message: "Fail to update. Something went wrong",
+					});
+					return;
 				}
-				return updatedUser;
-			});
-
-			this.props.allUsers.setUsers(newUsers);
-
-			notification["success"]({
-				message: "Profile Updated!",
-			});
+				notification["success"]({
+					message: "Profile Updated!",
+				});
+				this.setState({ isEditing: !this.state.isEditing });
+				return;
+			}).catch(err => {
+				notification["error"]({
+					message: "Fail to update. Something went wrong",
+				});
+				return;
+			})
+		} else {
+			this.setState({ isEditing: !this.state.isEditing });
 		}
-		this.setState({ isEditing: !this.state.isEditing });
 	};
 
 	onEditChange = e => {
@@ -176,13 +166,13 @@ class Profile extends Component {
 			return;
 		}
 		let newUsers = this.props.allUsers.users.filter(item => {
-			return item.userName !== this.state.username;
+			return item.userName !== this.state.userName;
 		});
 
 		this.props.allUsers.setUsers(newUsers);
 
 		notification["success"]({
-			message: `${this.state.username} Deleted`,
+			message: `${this.state.userName} Deleted`,
 		});
 
 		this.props.history.push("/teammates");
@@ -191,7 +181,7 @@ class Profile extends Component {
 	onUploadAvatar = e => {
 		console.log(e);
 		if (e.target.files.length === 0) return;
-		let userName = this.state.username;
+		let userName = this.state.userName;
 		let index = this.props.allUsers.users.findIndex(u => u.userName === userName);
 		let user = this.props.allUsers.users[index];
 		let img = {name: e.target.files[0].name, url: URL.createObjectURL(e.target.files[0])};
@@ -203,10 +193,10 @@ class Profile extends Component {
 	render() {
 		let {
 			currentTab,
-			username,
+			userName,
 			ownedProjects,
 			joinedProjects,
-			userBio,
+			description,
 			experiences,
 			github,
 			linkedin,
@@ -236,7 +226,7 @@ class Profile extends Component {
 										<input type="file" onChange={ this.onUploadAvatar}/>
 										{this.state.avatar?.url ? <Avatar className="user-profile-avatar-input-label" size={70} src={this.state.avatar.url} /> : <Avatar className="user-profile-avatar-input-label" size={70} icon={<AiOutlineUser />} />}
 									</label>
-									<div className="project-page-name">{username}</div>
+									<div className="project-page-name">{userName}</div>
 								</div>
 								<div className="project-page-margin">
 									<Button type="text" icon={<LikeOutlined />} />
@@ -252,7 +242,7 @@ class Profile extends Component {
 										</Button>
 									)}
 
-									{isAdmin && loginName !== username && (
+									{isAdmin && loginName !== userName && (
 										<Button
 											className="rounded"
 											size="medium"
@@ -293,12 +283,12 @@ class Profile extends Component {
 								{isEditing ? (
 									<TextArea
 										id="bio"
-										value={userBio}
-										name="userBio"
+										value={description}
+										name="description"
 										onChange={this.onEditChange}
 									/>
 								) : (
-									<div id="bio"> {userBio} </div>
+									<div id="bio"> {description} </div>
 								)}
 
 								<ul id="socialMediaList">
@@ -309,7 +299,7 @@ class Profile extends Component {
 												prefix={<AiOutlineMail />}
 												value={email}
 												name="email"
-												onChange={(e) => this.onEditChange(e).bind(this)}
+												onChange={this.onEditChange}
 											/>
 										) : (
 											<div>
@@ -410,7 +400,7 @@ class Profile extends Component {
 							<div className="project-page-info-block shadow-cust rounded">
 								<div className="project-page-info-block-title">
 									<span>Owned Projects</span>
-									{loginName === username && (
+									{loginName === userName && (
 										<Link to={{ pathname: "/newProject" }}>
 											<Button className="rounded" size="medium">
 												Create Project
