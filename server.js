@@ -87,7 +87,7 @@ app.delete("/api/deleteUser/:username", (req, res) => {
 })
 
 // route to update user profile
-app.patch("/api/updateProfile/:username", async (req, res) => {
+app.patch("/api/updateProfile/:username", (req, res) => {
     // TODO: Add session checks
 	if (mongoose.connection.readyState != 1){
 		res.status(500).send('Internal server error')

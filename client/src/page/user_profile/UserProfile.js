@@ -8,7 +8,7 @@ import {
 	LikeOutlined,
 	DeleteFilled,
 	PlusCircleFilled,
-	MailOutlined,
+	ControlOutlined,
 } from "@ant-design/icons";
 import { Link, withRouter } from "react-router-dom";
 
@@ -288,9 +288,9 @@ class Profile extends Component {
 							<Menu.Item key="experiences" icon={<RiseOutlined />}>
 								Experiences & Education
 							</Menu.Item>
-							{/* <Menu.Item key="manage" icon={<ControlOutlined />}>
+							<Menu.Item key="manage" icon={<ControlOutlined />}>
 								Manage
-							</Menu.Item> */}
+							</Menu.Item>
 						</Menu>
 						{currentTab === "detail" && (
 							<div className="project-page-info-block shadow-cust rounded">
