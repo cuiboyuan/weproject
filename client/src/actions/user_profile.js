@@ -8,7 +8,18 @@ export const getProfile = async (app) => {
     let { auth, allUsers, allProjects, location } = app.props;
     console.log(app.props);
     // Change to EXTERNAL CALL in phase 2:
-    const loginName = auth.userName;
+    // const loginName = auth.userName;
+    let loginName;
+    try {
+        const res = await fetch(`${API_HOST}/api/check-session`);
+        if (res.status !== 200){
+            return res.status;
+        }
+        const body = await res.json();
+        loginName = body.currentUser;
+    } catch (error) {
+        return 500;
+    }
 
     let currentName,
         currentUser,
@@ -28,9 +39,11 @@ export const getProfile = async (app) => {
         loginUser = login;
 
         if (location.pathname === "/profile") {
-            currentName = loginName;
+            currentName = loginUser.userName;
             currentUser = loginUser;
             isProfile = true;
+            isFriend = true;
+            requested = false;
         } else {
             // need some change
             currentName = location.state.data.userName;
@@ -43,6 +56,7 @@ export const getProfile = async (app) => {
             const user = await response.json();
 
             currentUser = user;
+            currentName = user.userName;
 
             console.log(currentUser);
         }
@@ -54,7 +68,44 @@ export const getProfile = async (app) => {
         joinedProjects = allProjects.projects.filter((item) =>
             item.userIds.includes(currentUser._id)
         );
+        
+        let friends = [];
+        let pendings = [];
+
+        for (let name of currentUser.connections) {
+            try {
+                const res = await fetch(`${url}/${name}`);
+                if (res.status === 200){
+                    const friend = await res.json();
+                    friends.push(friend);
+                } else if (res.status === 404){
+                    continue;
+                } else {
+                    return res.status;
+                }
+            } catch (error) {
+                return 500;
+            }
+        }
+        
+        for (let name of currentUser.pending) {
+            try {
+                const res = await fetch(`${url}/${name}`);
+                if (res.status === 200){
+                    const friend = await res.json();
+                    pendings.push(friend);
+                } else if (res.status === 404){
+                    continue;
+                } else {
+                    return res.status;
+                }
+            } catch (error) {
+                return 500;
+            }
+        }
+
         app.setState({
+            id: currentUser._id,
             userName: currentName,
             loginName: loginName,
 
@@ -72,6 +123,12 @@ export const getProfile = async (app) => {
 
             isAdmin: loginUser.isAdmin,
             isProfile: isProfile,
+
+            pending: pendings,
+            connections: friends,
+
+            isFriend : isFriend,
+            requested: requested,
         });
         return 200;
     } catch (error) {
@@ -88,7 +145,7 @@ export const updateProfile = async (app) => {
     const loginName = auth.userName;
 
     try {
-        const res = await fetch(`${url}/${loginName}`, {
+        const res = await fetch(`${url}`, {
             method: "PATCH",
             body: JSON.stringify(app.state),
             headers: {

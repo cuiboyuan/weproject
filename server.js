@@ -100,6 +100,66 @@ app.use(
     })
 );
 
+// Middleware for authentication of resources
+const authenticate = (req, res, next) => {
+    
+
+    if (req.session.userId) {
+        User.findById(req.session.userId).then((user) => {
+            if (!user) {
+                return Promise.reject()
+            } else {
+                next()
+            }
+        }).catch((error) => {
+            res.status(401).send("Unauthorized")
+        })
+    } else {
+        res.status(401).send("Unauthorized")
+    }
+}
+
+
+// Middleware to check whether user is a admin
+const adminCheck = (req, res, next) => {
+ 
+    if (req.session.userId) {
+        User.findById(req.session.userId).then((user) => {
+            if (!user) {
+                return Promise.reject()
+            } else {
+                if (user.isAdmin){
+                    next()
+                } else {
+                    res.status(403).send("Forbidden")
+                }
+            }
+        }).catch((error) => {
+            res.status(401).send("Unauthorized")
+        })
+    } else {
+        res.status(401).send("Unauthorized")
+    }
+}
+
+const env = process.env.NODE_ENV
+
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || "our hardcoded secret", // make a SESSION_SECRET environment variable when deploying (for example, on heroku)
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            expires: 60000,
+            httpOnly: true
+        },
+        // store the sessions on the database in production
+        // store: env === 'production' ? MongoStore.create({
+        //                                         mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/WeProjectAPI'
+        //                          }) : null
+    })
+);
+
 /* API Routes */
 
 // A route to login and create a session
@@ -183,7 +243,7 @@ app.post("/api/newUser", (req, res) => {
 });
 
 // route to delete a user
-app.delete("/api/deleteUser/:username", (req, res) => {
+app.delete("/api/deleteUser/:username", adminCheck, (req, res) => {
     // TODO: add a middleware to check for admin
 
     if (mongoose.connection.readyState != 1) {
@@ -209,7 +269,7 @@ app.delete("/api/deleteUser/:username", (req, res) => {
 });
 
 // route to update user profile
-app.patch("/api/updateProfile/:username", (req, res) => {
+app.patch("/api/updateProfile", authenticate, (req, res) => {
     // TODO: Add session checks
     if (mongoose.connection.readyState != 1) {
         res.status(500).send("Internal server error");
