@@ -7,6 +7,10 @@ import Office from "../../assets/office.svg";
 import { useAuthState } from "../../context";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
 
+import { simpleCheck } from '../../actions/user_profile.js'
+
+
+
 const InputField = props => {
 	return (
 		<div className="loggin-input-field">
@@ -36,7 +40,7 @@ const Loggin = props => {
 
 	const onSubmit = () => {
 		console.log(username, password);
-		auth.simpleCheck(username, password);
+		simpleCheck(username, password);
 	};
 
 	return (
