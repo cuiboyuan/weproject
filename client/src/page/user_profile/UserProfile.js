@@ -9,8 +9,9 @@ import {
 	DeleteFilled,
 	PlusCircleFilled,
 	ControlOutlined,
+	UserOutlined,
 } from "@ant-design/icons";
-import { Link, withRouter } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 
 import TeamSvg from "../../assets/team.svg";
 
@@ -26,7 +27,7 @@ import {
 } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
 
-import {getProfile, updateProfile, deleteProfile} from "../../actions/user_profile";
+import {getProfile, updateProfile, deleteProfile, reply, connect, removeFriend} from "../../actions/user_profile";
 
 /**
  * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
@@ -36,6 +37,7 @@ class Profile extends Component {
 	
 	state = {
 		currentTab: "detail",
+		id: null,
 		userName: null,
 		loginName: null,
 		
@@ -61,6 +63,12 @@ class Profile extends Component {
 
 		isAdmin: null,
 		isProfile: null,
+
+		pending: null,
+		connections: null,
+
+		isFriend: null,
+		requested: null,
 	}
 
 	/* Function calls that involve server */
@@ -70,13 +78,22 @@ class Profile extends Component {
 		getProfile(this)
 		.then((res) => {
 			
-			if (res !== 200){
+			if (res === 401) {
+				notification["error"]({
+					message: `Session Timeout`,
+				});
+				
+				this.props.history.push("/");
+				return;
+
+			} else if (res !== 200){
 				notification["error"]({
 					message: `Something went wrong (Error code:${res})`,
 				});
 				
 				this.props.history.push("/teammates");
 			}
+
 		}).catch(err => {
 			
 			notification["error"]({
@@ -98,6 +115,14 @@ class Profile extends Component {
 						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
 					return;
+				} else if (res === 401) {
+					notification["error"]({
+						message: `Session Timeout`,
+					});
+					
+					this.props.history.push("/");
+					return;
+	
 				}
 				notification["success"]({
 					message: "Profile Updated!",
@@ -120,7 +145,15 @@ class Profile extends Component {
 
 		deleteProfile(this)
 		.then((res) => {
-			if (res !== 200){
+			if (res === 401) {
+				notification["error"]({
+					message: `Session Timeout`,
+				});
+				
+				this.props.history.push("/");
+				return;
+
+			} else if (res !== 200){
 				notification["error"]({
 					message: `Fail to delete ${this.state.userName}. Something went wrong (Error code:${res})`,
 				});
@@ -144,6 +177,116 @@ class Profile extends Component {
 
 		this.props.allUsers.setUsers(newUsers);
 	};
+
+	replyFriendRequest = (member, accept) => {
+		reply(this, member, accept)
+		.then(res => {
+			if (res === 401) {
+				notification["error"]({
+					message: `Session Timeout`,
+				});
+				
+				this.props.history.push("/");
+				return;
+
+			} else if (res !== 200){
+				notification["error"]({
+					message: `Fail to update. Something went wrong (Error code:${res})`,
+				});
+			} else {
+				const newPendings = this.state.pending.filter(
+					item => item.userName !== member.userName
+				);
+
+				let newConn = this.state.connections;
+				if (accept){
+					newConn.push(member);
+				}
+				this.setState({
+					pending: newPendings,
+					connections: newConn,	
+				})
+
+				notification["success"]({
+					message: accept ? `${member.userName} accepted!`: `${member.userName} rejected`,
+				});
+
+			}
+
+		}).catch(err => {
+			notification["error"]({
+				message: `Something went wrong`,
+			});
+		})
+	}
+
+	deleteFriend = member => {
+		removeFriend(this, member)
+		.then(res => {
+			if (res === 401) {
+				notification["error"]({
+					message: `Session Timeout`,
+				});
+				
+				this.props.history.push("/");
+				return;
+
+			} else if (res !== 200){
+				notification["error"]({
+					message: `Fail to update. Something went wrong (Error code:${res})`,
+				});
+			} else {
+				const newConn = this.state.connections.filter(
+					item => item.userName !== member.userName
+				);
+				
+				this.setState({
+					connections: newConn,
+				})
+
+				notification["success"]({
+					message: `${member.userName} removed`,
+				});
+
+			}
+
+
+		}).catch(err => {
+			notification["error"]({
+				message: `Something went wrong`,
+			});
+		})
+	}
+
+	friendRequest = e => {
+		if (!this.state.isFriend){
+			connect(this)
+			.then(res => {
+				if (res === 401) {
+					notification["error"]({
+						message: `Session Timeout`,
+					});
+					
+					this.props.history.push("/");
+					return;
+
+				} else if (res !== 200){
+					notification["error"]({
+						message: `Fail to update. Something went wrong (Error code:${res})`,
+					});
+				} else {
+					notification["success"]({
+						message: `Request send!`,
+					});
+					this.setState({requested: true})
+				}
+			}).catch(err => {
+				notification["error"]({
+					message: `Something went wrong`,
+				});
+			})
+		}
+	}
 
 
 	/* Front-end and state management function calls */
@@ -269,6 +412,20 @@ class Profile extends Component {
 										>
 											Delete
 										</Button>
+									)}
+
+									
+									{!this.state.isFriend && loginName !== userName && (
+										!this.state.requested ? (<Button
+											className="rounded"
+											size="medium"
+											type="primary"
+											onClick={this.friendRequest}
+										>
+											Connect
+										</Button>) : (<div type="primary" className='project-owner-badge'>
+											Requested
+										</div>)
 									)}
 								</div>
 							</div>
@@ -531,7 +688,81 @@ class Profile extends Component {
 							</div>
 						)}
 
-						{this.state.currentTab === "manage"}
+						{this.state.currentTab === "manage" && (
+							<div className="project-page-info-block shadow-cust rounded">
+								<div className="project-page-info-block-title">
+									<span>Connections</span>
+								</div>
+								{this.state.connections.map(
+									(member, i) => (
+										<div key={i} className="project-page-owner">
+											<Avatar
+												className="simplecard-avatar"
+												size={40}
+												icon={<UserOutlined />}
+											/>
+											<div className="project-page-owner-name-span">
+													<span>{member.userName}</span>
+											</div>
+											{ isProfile && (<Button
+												className="rounded"
+												size="medium"
+												danger
+												onClick={() => this.deleteFriend(member)}
+											>
+												Remove
+											</Button>)}
+										</div>
+									)
+								)}
+
+								{this.state.isProfile && (
+									<div>
+										<div className="project-page-info-block-title">
+											<span>Requests</span>
+										</div>
+										{this.state.pending.map(
+											(member, i) => (
+												<div key={i} className="project-page-owner">
+													<Avatar
+														className="simplecard-avatar"
+														size={40}
+														icon={<UserOutlined />}
+													/>
+													<div className="project-page-owner-name-span">
+														
+															<span>{member.userName}</span>
+													</div>
+													
+													<div className="project-page-margin">
+														<Button
+																className="rounded"
+																size="medium"
+																onClick={() => this.replyFriendRequest(member, true)}
+															>
+															Accept
+														</Button>
+													</div>
+													
+													<div className="project-page-margin">
+														<Button
+																className="rounded"
+																size="medium"
+																danger
+																onClick={() => this.replyFriendRequest(member, false)}
+															>
+															Reject
+														</Button>
+													</div>
+
+													
+												</div>
+											)
+										)}
+									</div>
+								)}
+							</div>
+						)}
 					</div>
 				</Layout>
 			</div>

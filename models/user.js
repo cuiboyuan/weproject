@@ -74,13 +74,13 @@ const UserSchema = new mongoose.Schema({
 
 
     connections:  {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         default: []
     },
 
     //the applicants 
     pending:  {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         default: []
     },
 

@@ -35,8 +35,21 @@ const Loggin = props => {
 	const [confirmPwd, setConfirmPwd] = useState("");
 
 	const onSubmit = () => {
-		console.log(username, password);
-		auth.simpleCheck(username, password);
+		// console.log(username, password);
+		
+        fetch(`http://localhost:5000/api/login`, {
+            method: "POST",
+            body: JSON.stringify({
+				userName: username,
+				password: password
+			}),
+            headers: {
+                'Content-Type': "application/json"
+            }
+        }).then( res => auth.simpleCheck(username, password))
+		.catch(err => {
+			
+		})
 	};
 
 	return (
