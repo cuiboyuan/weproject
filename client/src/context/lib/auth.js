@@ -16,23 +16,27 @@ export const AuthProvider = props => {
 		);
 	});
 
-	const simpleCheck = (username, pwd) => {
-		if (
-			(username === USER && pwd === USER) ||
-			(username === ADMIN && pwd === ADMIN)
-		) {
-			if (username === ADMIN) setIsAdmin(true);
-			setIsLoggedIn(true);
-			setUserName(username);
-			localStorage.setItem("username", username);
-			localStorage.setItem(
-				"password",
-				pwd
-			); /* change to backend api in phase 2 */
-			console.log("login sucessful: ", username, pwd);
-		}
-		return false;
-	};
+	// const simpleCheck = (username, pwd) => {
+	// 	if (
+	// 		(username === USER && pwd === USER) ||
+	// 		(username === ADMIN && pwd === ADMIN)
+	// 	) {
+	// 		if (username === ADMIN) setIsAdmin(true);
+	// 		setIsLoggedIn(true);
+	// 		setUserName(username);
+	// 		localStorage.setItem("username", username);
+	// 		localStorage.setItem(
+	// 			"password",
+	// 			pwd
+	// 		); /* change to backend api in phase 2 */
+	// 		console.log("login sucessful: ", username, pwd);
+	// 	}
+	// 	return false;
+	// };
+
+	const simpleCheck = (username, pwd)=>{
+		
+	}
 
 	const logout = () => {
 		localStorage.removeItem("username");
