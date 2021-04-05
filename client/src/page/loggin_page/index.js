@@ -5,6 +5,7 @@ import { GoArrowSmallLeft } from "react-icons/go";
 import "./style.css";
 import Office from "../../assets/office.svg";
 import { useAuthState } from "../../context";
+import { useIsLoggedIn } from "../../actions/user_profile";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
 
 const InputField = props => {
@@ -34,9 +35,17 @@ const Loggin = props => {
 	const [password, setPassword] = useState("");
 	const [confirmPwd, setConfirmPwd] = useState("");
 
+
+	
+	const [logInCheck, setLogInCheck] = useState(false);
+	const [{loggedIn, user}, setInputs] = useIsLoggedIn();
+
 	const onSubmit = () => {
 		console.log(username, password);
-		auth.simpleCheck(username, password);
+		setInputs(username, password);
+		console.log(loggedIn, user);
+		// auth.simpleCheck(username, password);
+		// setLogInCheck(true);
 	};
 
 	return (

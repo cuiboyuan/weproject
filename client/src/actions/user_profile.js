@@ -1,6 +1,8 @@
+import React, { createContext, useContext, useState, useEffect } from "react";
+import ENV from "../config.js";
+const API_HOST = ENV.api_host;
 
 
-const API_HOST = "http://localhost:5000"// change it afterwards
 
 export const getProfile = async (app) => {
     
@@ -140,4 +142,62 @@ export const deleteProfile = async (app) => {
     } catch (error) {
         return 500;
     }
+}
+
+
+/**
+ * Customized hook for checking if the user has logged in, used
+ * in auth page
+ * @param {string} userName 
+ * @param {string} password 
+ * @returns 
+ */
+export const useIsLoggedIn = () => {
+    //used in the effect hook, for update
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+
+    //for update, used in the caller function
+    const [userName, setuserName] = useState("");
+    const [password, setpassword] = useState("");
+    const setInputs = function(userName, password){
+        setuserName(userName);
+        setpassword(password);
+    }
+    
+    useEffect(() => {
+        console.log("hook call!!!!!!")
+        const url = `${API_HOST}/api/login`;
+        const request = new Request(url, {
+            method: "post",
+            body: JSON.stringify({ userName: userName, password: password }),
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+            },
+        });
+
+        console.log("the request is:", request)
+        const makeRequest = async () => {
+            try {
+                console.log("we are making request")
+                const res = await fetch(request);
+                if (res.status === 200) {
+                    
+                    // setUser(res.json);
+                    setLoggedIn(true);
+                    const json = await res.json()
+                    setUser(json);
+                    console.log("hook call success!!!, respond is :", json);
+                }
+            } catch (err) {
+                console.log("hook call fail!!!, err is:", err);
+            }
+        };
+        makeRequest();
+
+    }, [userName, password]
+    );
+
+    return [{loggedIn: loggedIn,user: user}, setInputs];
 }

@@ -99,8 +99,10 @@ app.use(
 
 // A route to login and create a session
 app.post("/api/login", (req, res) => {
+
     const userName = req.body.userName;
     const password = req.body.password;
+ 
 
     // log(email, password);
     // Use the static method on the User model to find a user
