@@ -137,10 +137,12 @@ export const deleteProfile = async (app) => {
 };
 
 /**
- * TODO: currently, the userContext is not updated, there is bug with the
+ * TODO1: currently, the userContext is not updated, there is bug with the
  * "header" component, inside, the "auth.js" file has bug. The current log in
- * info is still hard coded
+ * info is still hard coded there. But the auth pages are working now :)
  *
+ * TODO2: not utlizing the client/src/model/lib/users.js functions, the backend API
+ * and front end API should be updated to make sure the consistency of json attributes
  */
 
 /**
@@ -195,6 +197,10 @@ export const useIsLoggedIn = () => {
     return [{ loggedIn: loggedIn, user: user }, setInputs];
 };
 
+
+/**
+ * user info register, used in loggin_page/index.js
+ */
 export const useRegister = () => {
 
     const [user, setUser] = useState(null);
@@ -242,3 +248,36 @@ export const useRegister = () => {
     }, [userName, password]);
     return [{regSuccess: regSuccess, newUser:user}, setInputs];
 };
+
+
+// export const useLoadAllUsers = ()=>{
+//     //the array of all user objects
+//     const [users, setusers] = useState([])
+    
+//     const [success, setsuccess] = useState(false)
+
+//     useeffect(()=>{
+//         const url = `${api_host}/api/users`
+//         const makerequest = async ()=>{
+//             try{
+//                 const res = await fetch(url)
+//                 if (res.status === 200){
+//                     setusers(res.body)
+//                     setsuccess(true)
+//                 }
+//             }catch(err){
+//                 console.log(err)
+//                 setsuccess(false)
+//             }
+//         }
+
+//         makerequest()
+//     }, [])
+
+//     return {data:users, success: success}
+
+
+
+
+
+// }
