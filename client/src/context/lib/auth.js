@@ -8,7 +8,8 @@ export const AuthProvider = (props) => {
     const [userName, setUserName] = useState("user");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-
+	
+	//moved to login_page/index.js, since the async call there
     // useEffect(() => {
     //     simpleCheck(
     //         localStorage.getItem("username"),

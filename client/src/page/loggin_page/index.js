@@ -5,7 +5,7 @@ import { GoArrowSmallLeft } from "react-icons/go";
 import "./style.css";
 import Office from "../../assets/office.svg";
 import { useAuthState } from "../../context";
-import { useIsLoggedIn } from "../../actions/user_profile";
+import { useIsLoggedIn, useRegister } from "../../actions/user_profile";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
 
 const InputField = (props) => {
@@ -26,7 +26,6 @@ const InputField = (props) => {
         </div>
     );
 };
-
 const Loggin = (props) => {
     const auth = useAuthState();
     const [type, setType] = useState(props.location?.state?.type || "SIGNIN");
@@ -34,7 +33,10 @@ const Loggin = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
-    const [{ loggedIn, user }, setInputs] = useIsLoggedIn();
+
+//===============log in logic ===================
+    const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
+
 
 	//when loggedIn, (returned by the async function), we 
 	//call the simpleCheck function, which writes the username
@@ -49,8 +51,24 @@ const Loggin = (props) => {
 	//user_profile.js to update check if the user is logged in, 
 	//setInputs is the trigger function for that hook
     const onSubmit = () => {
-        setInputs(username, password);
+        setLoginInputs(username, password);
     };
+
+//================ register logic ==================
+	const [{regSuccess, newUser}, setRegInputs]  = useRegister();
+
+	useEffect(()=>{
+		if (regSuccess){
+			auth.simpleCheck(username);
+		}
+	})
+
+	const onCreate = ()=>{
+		if (password === confirmPwd){
+			setRegInputs(username, password);
+		}
+
+	}
 
     return (
         <div className="loggin-view">
@@ -97,7 +115,8 @@ const Loggin = (props) => {
                                     Sign In
                                 </div>
                             </div>
-                            <div className="loggin-input-submit rounded shadow-cust">
+                            <div className="loggin-input-submit rounded shadow-cust"
+							onClick={onCreate}>
                                 Create an account
                             </div>
                         </>

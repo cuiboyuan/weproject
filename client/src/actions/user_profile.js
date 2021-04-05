@@ -2,30 +2,31 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../config.js";
 const API_HOST = ENV.api_host;
 
-
-
 export const getProfile = async (app) => {
-    
     const url = `${API_HOST}/api/user`;
 
     let { auth, allUsers, allProjects, location } = app.props;
-    console.log(app.props)
+    console.log(app.props);
     // Change to EXTERNAL CALL in phase 2:
     const loginName = auth.userName;
 
-    let currentName, currentUser, loginUser,isProfile,ownedProjects,joinedProjects;
+    let currentName,
+        currentUser,
+        loginUser,
+        isProfile,
+        ownedProjects,
+        joinedProjects;
     try {
         const res = await fetch(`${url}/${loginName}`);
-  
-        if (res.status !== 200){
+
+        if (res.status !== 200) {
             return res.status;
         }
-        const login = await res.json()
+        const login = await res.json();
 
         isProfile = false;
         loginUser = login;
-        
-        
+
         if (location.pathname === "/profile") {
             currentName = loginName;
             currentUser = loginUser;
@@ -33,31 +34,30 @@ export const getProfile = async (app) => {
         } else {
             // need some change
             currentName = location.state.data.userName;
-            
-            const response = await fetch(`${url}/${currentName}`)
 
-            if (response.status !== 200){
+            const response = await fetch(`${url}/${currentName}`);
+
+            if (response.status !== 200) {
                 return response.status;
             }
             const user = await response.json();
 
             currentUser = user;
 
-
-            console.log(currentUser)
+            console.log(currentUser);
         }
 
         // change afterwards
         ownedProjects = allProjects.projects.filter(
-            item => item.owner.userName == currentName
+            (item) => item.owner.userName == currentName
         );
-        joinedProjects = allProjects.projects.filter(
-            item => item.userIds.includes(currentUser._id)
+        joinedProjects = allProjects.projects.filter((item) =>
+            item.userIds.includes(currentUser._id)
         );
         app.setState({
             userName: currentName,
             loginName: loginName,
-            
+
             // avatar: currentUser.avatar,
             description: currentUser.description,
             email: currentUser.email,
@@ -74,83 +74,81 @@ export const getProfile = async (app) => {
             isProfile: isProfile,
         });
         return 200;
-
     } catch (error) {
         return 500;
     }
 };
 
-
-
 export const updateProfile = async (app) => {
-    
     const url = `${API_HOST}/api/updateProfile`;
 
     let { auth, allUsers, allProjects, location } = app.props;
 
     // Change to EXTERNAL CALL in phase 2:
     const loginName = auth.userName;
-    
+
     try {
         const res = await fetch(`${url}/${loginName}`, {
             method: "PATCH",
             body: JSON.stringify(app.state),
             headers: {
-                'Content-Type': "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         });
-  
-        if (res.status !== 200){
+
+        if (res.status !== 200) {
             return res.status;
         }
 
-        console.log(await res.json())
+        console.log(await res.json());
 
         return 200;
-        
     } catch (error) {
         return 500;
     }
 };
 
-
 export const deleteProfile = async (app) => {
-    
     const url = `${API_HOST}/api/deleteUser`;
 
     // TODO: change this to check session afterwards
     const isAdmin = app.state.isAdmin;
-    if (!isAdmin){
+    if (!isAdmin) {
         return 403;
     }
-    
+
     const username = app.state.userName;
-    
+
     try {
         const res = await fetch(`${url}/${username}`, {
             method: "DELETE",
         });
-  
-        if (res.status !== 200){
+
+        if (res.status !== 200) {
             return res.status;
         }
 
-        console.log(await res.json())
+        console.log(await res.json());
 
         return 200;
-        
     } catch (error) {
         return 500;
     }
-}
+};
 
+/**
+ * TODO: currently, the userContext is not updated, there is bug with the
+ * "header" component, inside, the "auth.js" file has bug. The current log in
+ * info is still hard coded
+ *
+ */
 
 /**
  * Customized hook for checking if the user has logged in, used
- * in auth page, 
- * @param {string} userName 
- * @param {string} password 
- * @returns 
+ * in auth page,
+ * @param {string} userName
+ * @param {string} password
+ * @returns
  * @loggedin {bool} whether the username, password is correct
  * @user {Object} the user info in the DB
  */
@@ -162,11 +160,11 @@ export const useIsLoggedIn = () => {
     //for update, used in the caller function
     const [userName, setuserName] = useState("");
     const [password, setpassword] = useState("");
-    const setInputs = function(userName, password){
+    const setInputs = function (userName, password) {
         setuserName(userName);
         setpassword(password);
-    }
-    
+    };
+
     useEffect(() => {
         const url = `${API_HOST}/api/login`;
         const request = new Request(url, {
@@ -182,10 +180,9 @@ export const useIsLoggedIn = () => {
             try {
                 const res = await fetch(request);
                 if (res.status === 200) {
-                    
                     // setUser(res.json);
                     setLoggedIn(true);
-                    const json = await res.json()
+                    const json = await res.json();
                     setUser(json);
                 }
             } catch (err) {
@@ -194,7 +191,54 @@ export const useIsLoggedIn = () => {
         };
         //if the userName is not "", we make the request to the server
         if (userName) makeRequest();
-    }, [userName, password]
-    );
-    return [{loggedIn: loggedIn,user: user}, setInputs];
-}
+    }, [userName, password]);
+    return [{ loggedIn: loggedIn, user: user }, setInputs];
+};
+
+export const useRegister = () => {
+
+    const [user, setUser] = useState(null);
+
+
+    const [userName, setuserName] = useState("");
+    const [password, setpassword] = useState("");
+    const [regSuccess, setregSuccess] = useState(false)
+    // const [isAdmin, setisAdmin] = useState(initialState)
+    const setInputs = function (userName, password) {
+        setuserName(userName);
+        setpassword(password);
+    };
+
+    useEffect(() => {
+        const url = `${API_HOST}/api/newUser`;
+        const request = new Request(url, {
+            method: "post",
+            //TODO: isAdmin might not be neccessary
+            body: JSON.stringify({
+                userName: userName,
+                password: password,
+                isAdmin: false,
+            }),
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+            },
+        });
+        const makeRequest = async () => {
+            try {
+                const res = await fetch(request);
+                if (res.status === 200) {
+                    // setUser(res.json);
+                    const json = await res.json();
+                    setUser(json);
+                    setregSuccess(true)
+                }
+            } catch (err) {
+                console.log("hook call fail!!!, err is:", err);
+                setregSuccess(false)
+            }
+        };
+        if (userName) makeRequest();
+    }, [userName, password]);
+    return [{regSuccess: regSuccess, newUser:user}, setInputs];
+};
