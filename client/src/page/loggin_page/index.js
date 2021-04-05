@@ -4,9 +4,10 @@ import { GoArrowSmallLeft } from "react-icons/go";
 
 import "./style.css";
 import Office from "../../assets/office.svg";
-import { useAuthState } from "../../context";
+import { useAuthState, useUsersState } from "../../context";
 import { useIsLoggedIn, useRegister } from "../../actions/user_profile";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
+
 
 const InputField = (props) => {
     return (
@@ -33,6 +34,7 @@ const Loggin = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
+	const usersContext = useUsersState()
 
 //===============log in logic ===================
     const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
@@ -55,17 +57,18 @@ const Loggin = (props) => {
     };
 
 //================ register logic ==================
-	const [{regSuccess, newUser}, setRegInputs]  = useRegister();
+	// const [{regSuccess, newUser}, setRegInputs]  = useRegister();
 
-	useEffect(()=>{
-		if (regSuccess){
-			auth.simpleCheck(username);
-		}
-	})
+	// useEffect(()=>{
+	// 	if (regSuccess){
+	// 		auth.simpleCheck(username);
+	// 	}
+	// }, [regSuccess])
 
 	const onCreate = ()=>{
 		if (password === confirmPwd){
-			setRegInputs(username, password);
+			// setRegInputs(username, password);
+			usersContext.addUser(username, password)
 		}
 
 	}

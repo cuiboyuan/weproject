@@ -137,12 +137,10 @@ export const deleteProfile = async (app) => {
 };
 
 /**
- * TODO1: currently, the userContext is not updated, there is bug with the
- * "header" component, inside, the "auth.js" file has bug. The current log in
- * info is still hard coded there. But the auth pages are working now :)
- *
  * TODO2: not utlizing the client/src/model/lib/users.js functions, the backend API
  * and front end API should be updated to make sure the consistency of json attributes
+ * 
+ * TODO3: error checking ?
  */
 
 /**

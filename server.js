@@ -149,7 +149,6 @@ app.get("/api/users", mongoChecker, async (req, res) => {
     try {
         const users = await User.find({})
         const json = JSON.stringify(users)
-        console.log(json)
         res.send(json)
     }catch(err){
         log(error)
@@ -164,6 +163,7 @@ app.post("/api/newUser", (req, res) => {
         return;
     }
 
+    console.log(req.body)
     const newUser = new User({
         userName: req.body.userName,
         password: req.body.password,
@@ -177,6 +177,7 @@ app.post("/api/newUser", (req, res) => {
         })
         .catch((error) => {
             res.status(400).send("Bad Request");
+            console.log(error)
         });
 });
 

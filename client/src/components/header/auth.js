@@ -24,6 +24,7 @@ const Popup = props => {
 
 const Auth = props => {
 	const usersContext = useUsersState();
+	console.log(usersContext.users)
 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
 	const user = index >= 0 ? usersContext.users[index] : undefined;
 	return (

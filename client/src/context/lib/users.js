@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import uuid from "react-uuid";
-import { useLoadAllUsers } from "../../actions/user_profile";
-
+import { useLoadAllUsers, useRegister } from "../../actions/user_profile";
+import { useAuthState } from "../../context";
 import { User } from "../../model";
 
 import ENV from "../../config.js";
@@ -55,8 +55,14 @@ const UsersContext = createContext();
 //     })
 // );
 
+
+//TODO: implement the folowing in the order:
+	//1 server on success
+	//2 update the context 
 export const UsersProvider = (props) => {
+	//part for initializing the data
     const [users, setUsers] = useState([]);
+    const [update, setUpdate] = useState(false);
     useEffect(() => {
         const url = `${API_HOST}/api/users`;
         const makerequest = async () => {
@@ -74,6 +80,31 @@ export const UsersProvider = (props) => {
 
         makerequest();
     }, []);
+
+
+	//part for adding new user
+    const auth = useAuthState();
+    const [newUserName, setnewUserName] = useState("");
+    const [{ regSuccess, newUser }, setRegInputs] = useRegister();
+    useEffect(() => {
+        if (regSuccess) {
+			users.push(User.fromResponseBody({userName:newUserName}))
+            auth.simpleCheck(newUserName);
+            setUpdate(!update);
+        }
+    }, [regSuccess]);
+    const addUser = (userName, password) => {
+        setRegInputs(userName, password);
+        setnewUserName(userName);
+    };
+
+
+
+
+
+
+
+
 
     const updateUser = (user) => {
         let newUsers = users;
@@ -97,6 +128,7 @@ export const UsersProvider = (props) => {
     const getValues = () => {
         return {
             users,
+            addUser,
             setUsers,
             removeProject,
             updateUser,
