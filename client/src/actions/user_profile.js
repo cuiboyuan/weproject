@@ -1,5 +1,6 @@
 import { json } from "express";
 import ENV from "../config.js";
+import React, { createContext, useContext, useState, useEffect } from "react";
 const API_HOST = ENV.api_host;
 
 export const getProfile = async (app) => {
@@ -144,25 +145,58 @@ export const deleteProfile = async (app) => {
  * @param {string} pwd
  */
 
-export const simpleCheck = async (userName, password) => {
-    console.log("simpleCheckFunction");
-    const url = `${API_HOST}/api/login`;
-    const request = new Request(url, {
-        method: "post",
-        body: JSON.stringify({ userName: userName, password: password }),
-        headers: {
-            Accept: "application/json, text/plain, */*",
-            "Content-Type": "application/json",
-        },
+// export const simpleCheck = async (userName, password) => {
+//     console.log("simpleCheckFunction");
+//     const url = `${API_HOST}/api/login`;
+//     const request = new Request(url, {
+//         method: "post",
+//         body: JSON.stringify({ userName: userName, password: password }),
+//         headers: {
+//             Accept: "application/json, text/plain, */*",
+//             "Content-Type": "application/json",
+//         },
+//     });
+
+//     try {
+//         const res = await fetch(request);
+//         console.log(res.json);
+//         if (res.status === 200){
+//             return res.json
+//         }
+//     } catch (error) {
+//         console.log(error)
+//     }
+// };
+
+export function useIsLoggedIn(userName, password) {
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+    console.log("hook call")
+    useEffect(() => {
+        const url = `${API_HOST}/api/login`;
+        const request = new Request(url, {
+            method: "post",
+            body: JSON.stringify({ userName: userName, password: password }),
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                "Content-Type": "application/json",
+            },
+        });
+        const fetch = async () => {
+            try {
+                const res = await fetch(request);
+                console.log(res.json);
+                if (res.status === 200) {
+                    setUser(res.json);
+                    setLoggedIn(true);
+                    console.log("hook call", res);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetch();
     });
 
-    try {
-        const res = await fetch(request);
-        console.log(res.json);
-        if (res.status === 200){
-            return res.json
-        }
-    } catch (error) {
-        console.log(error)
-    }
-};
+    return [loggedIn, user];
+}

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-import { simpleCheck } from "../../actions/user_profile.js";
+// import { simpleCheck } from "../../actions/user_profile.js";
 
 const AuthContext = createContext();
 const ADMIN = "admin";
@@ -18,23 +18,23 @@ export const AuthProvider = (props) => {
         );
     });
 
-    // const simpleCheck = (username, pwd) => {
-    // 	if (
-    // 		(username === USER && pwd === USER) ||
-    // 		(username === ADMIN && pwd === ADMIN)
-    // 	) {
-    // 		if (username === ADMIN) setIsAdmin(true);
-    // 		setIsLoggedIn(true);
-    // 		setUserName(username);
-    // 		localStorage.setItem("username", username);
-    // 		localStorage.setItem(
-    // 			"password",
-    // 			pwd
-    // 		); /* change to backend api in phase 2 */
-    // 		console.log("login sucessful: ", username, pwd);
-    // 	}
-    // 	return false;
-    // };
+    const simpleCheck = (username, pwd) => {
+    	if (
+    		(username === USER && pwd === USER) ||
+    		(username === ADMIN && pwd === ADMIN)
+    	) {
+    		if (username === ADMIN) setIsAdmin(true);
+    		setIsLoggedIn(true);
+    		setUserName(username);
+    		localStorage.setItem("username", username);
+    		localStorage.setItem(
+    			"password",
+    			pwd
+    		); /* change to backend api in phase 2 */
+    		console.log("login sucessful: ", username, pwd);
+    	}
+    	return false;
+    };
 
     const logout = () => {
         localStorage.removeItem("username");
