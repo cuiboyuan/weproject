@@ -147,10 +147,12 @@ export const deleteProfile = async (app) => {
 
 /**
  * Customized hook for checking if the user has logged in, used
- * in auth page
+ * in auth page, 
  * @param {string} userName 
  * @param {string} password 
  * @returns 
+ * @loggedin {bool} whether the username, password is correct
+ * @user {Object} the user info in the DB
  */
 export const useIsLoggedIn = () => {
     //used in the effect hook, for update

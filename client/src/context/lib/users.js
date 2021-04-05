@@ -17,6 +17,16 @@ const data = [...Array(12).keys()].map((_, i) =>
 	})
 );
 
+data.push(User.fromResponseBody({
+	id:uuid(),
+	description:"",
+	userName:"testName",
+	password:"abcd",
+	ownedProjectIds: [],
+	joinedProjectIds: [],
+	connection: []
+}))
+
 data.push(
 	User.fromResponseBody({
 		id: uuid(),
