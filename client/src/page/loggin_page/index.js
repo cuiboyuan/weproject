@@ -34,27 +34,22 @@ const Loggin = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
-
-    const [logInCheck, setLogInCheck] = useState(false);
     const [{ loggedIn, user }, setInputs] = useIsLoggedIn();
 
+	//when loggedIn, (returned by the async function), we 
+	//call the simpleCheck function, which writes the username
+	//to the context
     useEffect(() => {
         if (loggedIn) {
             auth.simpleCheck(username);
         }
     }, [loggedIn]);
 
+	//on submitting the form, we use the "useIsLoggedIn" hook in
+	//user_profile.js to update check if the user is logged in, 
+	//setInputs is the trigger function for that hook
     const onSubmit = () => {
-        console.log("=============on submit call starts=============");
-        console.log(username, password);
         setInputs(username, password);
-        console.log(loggedIn, user);
-
-        if (loggedIn) {
-            auth.simpleCheck(username, password);
-        }
-        // setLogInCheck(true);
-        console.log("========= on submit call ends ===============");
     };
 
     return (

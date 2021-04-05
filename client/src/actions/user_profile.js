@@ -168,7 +168,6 @@ export const useIsLoggedIn = () => {
     }
     
     useEffect(() => {
-        console.log("hook call!!!!!!")
         const url = `${API_HOST}/api/login`;
         const request = new Request(url, {
             method: "post",
@@ -179,10 +178,8 @@ export const useIsLoggedIn = () => {
             },
         });
 
-        console.log("the request is:", request)
         const makeRequest = async () => {
             try {
-                console.log("we are making request")
                 const res = await fetch(request);
                 if (res.status === 200) {
                     
@@ -190,16 +187,14 @@ export const useIsLoggedIn = () => {
                     setLoggedIn(true);
                     const json = await res.json()
                     setUser(json);
-                    console.log("hook call success!!!, respond is :", json);
                 }
             } catch (err) {
                 console.log("hook call fail!!!, err is:", err);
             }
         };
-        makeRequest();
-
+        //if the userName is not "", we make the request to the server
+        if (userName) makeRequest();
     }, [userName, password]
     );
-
     return [{loggedIn: loggedIn,user: user}, setInputs];
 }
