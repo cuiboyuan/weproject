@@ -73,25 +73,14 @@ const UserSchema = new mongoose.Schema({
         default: false,
     },
 
-    // connections: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     default: [],
-    // },
-
-    // //the applicants
-    // pending: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     default: [],
-    // },
-    
     connections: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
         default: [],
     },
 
     //the applicants
     pending: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
         default: [],
     },
 });

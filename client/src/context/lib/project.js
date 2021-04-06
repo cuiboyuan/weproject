@@ -29,10 +29,6 @@ const data = [...Array(9).keys()].map((_, i) => {
 export const ProjectProvider = props => {
 	const [projects, setProjects] = useState(data);
 
-	const addProject = project => {
-		setProjects([...projects, project]);
-	}
-
 	const updateProject = project => {
 		let index = projects.findIndex(p => p.id === project.id);
 		if (index >= 0) {
@@ -103,7 +99,6 @@ export const ProjectProvider = props => {
 			deleteProject,
 			proceedStep,
 			withdralStep,
-			addProject,
 		};
 	};
 

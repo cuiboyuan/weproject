@@ -9,7 +9,6 @@ import {
 	DeleteFilled,
 	PlusCircleFilled,
 	ControlOutlined,
-	UserOutlined,
 } from "@ant-design/icons";
 import { Link, withRouter } from "react-router-dom";
 
@@ -27,9 +26,10 @@ import {
 } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
 
+import {getProfile, updateProfile, deleteProfile} from "../../actions/user_profile";
 
 /**
- * To link to this page: <Link to={{pathname: '/user', state:{ data: {username: `username`} }}></Link>
+ * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
  */
 
 class Profile extends Component {
@@ -59,264 +59,91 @@ class Profile extends Component {
 		ownedProjects: null,
 		joinedProjects: null,
 
-		adminLogin: null,
+		isAdmin: null,
 		isProfile: null,
-		
-		
-		friendRequests: null,
-		friends: null,
-
-		isFriend: null,
-		requested: null,
 	}
 
 	/* Function calls that involve server */
 
 	componentDidMount() {
-		
-		const {allUsers, auth, allProjects, location} = this.props;
-		let loginName = auth.userName;
-		let loginUser = allUsers.getUser(loginName);
-		
-		/** Basic user info */
-		this.setState({loginName: loginName});
-		this.setState({adminLogin: loginUser.isAdmin});
 
-		let currentName, currentUser;
-		if (location.pathname === "/profile"){
-			currentName = loginName;
-			currentUser = loginUser;
-			this.setState({isProfile: true});
-		} else {
-			currentName = location.state.data.userName;
-			currentUser = allUsers.getUser(currentName);
-			this.setState({isProfile: false});
-		}
-		this.setState(currentUser);
-
-		/** Project info */
-		let ownedProjects = allProjects.projects.filter(
-			item => item.owner.userName == currentName
-		);
-		let joinedProjects = allProjects.projects.filter(
-			item => item.userIds.includes(currentUser.id)
-		);
-
-		this.setState({
-			ownedProjects: ownedProjects,
-			joinedProjects: joinedProjects,
+		getProfile(this)
+		.then((res) => {
+			
+			if (res !== 200){
+				notification["error"]({
+					message: `Something went wrong (Error code:${res})`,
+				});
+				
+				this.props.history.push("/teammates");
+			}
+		}).catch(err => {
+			
+			notification["error"]({
+				message: "Something went wrong",
+			});
+			
+			this.props.history.push("/teammates");
 		})
-
-		/** Friends info */
-		
-		const isFriend = loginUser.connections.includes(currentName);
-		const requested = currentUser.pending.includes(loginName);
-
-		this.setState({
-			isFriend: isFriend,
-			requested: requested,
-		})
-
-        let friends = [];
-        let pendings = [];
-
-		for (let name of currentUser.connections) {
-			const friend = allUsers.getUser(name);
-			friends.push(friend);
-        }
-        
-        for (let name of currentUser.pending) {
-			const friend = allUsers.getUser(name);
-			pendings.push(friend);
-        }
-
-		this.setState({
-			friendRequests: pendings,
-			friends: friends,
-		})
-
-
 			
 	};
 
-	editProfile = async (e) => {
+	editProfile = e => {
 		
-		const {allUsers} = this.props;
 		if (this.state.isEditing){
-			try {
-				const res = await allUsers.updateUserProfile(this.state);
-				if (res === 200){
-					notification["success"]({
-						message: "Profile Updated!",
-					});
-				} else {
+			updateProfile(this)
+			.then(res => {
+				if (res !== 200){
 					notification["error"]({
 						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
 					return;
 				}
-				this.setState({ isEditing: false });
-			} catch (error) {
-				
+				notification["success"]({
+					message: "Profile Updated!",
+				});
+
+				this.setState({ isEditing: !this.state.isEditing });
+				return;
+			}).catch(err => {
 				notification["error"]({
-					message: `Fail to update. Something went wrong`,
+					message: "Fail to update. Something went wrong",
 				});
 				return;
-			}
+			})
 		} else {
-			this.setState({ isEditing: true });
+			this.setState({ isEditing: !this.state.isEditing });
 		}
 	};
 
-	deleteUser = async (e) => {
+	deleteUser = e => {
 
-		const {allUsers} = this.props;
-		try {
-			const res = await allUsers.deleteUserProfile(this.state.userName);
-			if (res === 200){
+		deleteProfile(this)
+		.then((res) => {
+			if (res !== 200){
+				notification["error"]({
+					message: `Fail to delete ${this.state.userName}. Something went wrong (Error code:${res})`,
+				});
+			} else {
 				notification["success"]({
 					message: `${this.state.userName} Deleted`,
 				});
-				this.props.history.push("/");
-			} else {
-				notification["error"]({
-					message: `Fail to delete ${this.state.userName} (Error code:${res}).`,
-				});
+
+				this.props.history.push("/teammates");
 			}
-			
-		} catch (error) {
-			
+		}).catch(err => {
 			notification["error"]({
-				message: `Fail to delete ${this.state.userName} Something went wrong.`,
+				message: `Fail to delete ${this.state.userName}. Something went wrong`,
 			});
-		}
-		
+		})
+
+		// remove it afterwards
+		let newUsers = this.props.allUsers.users.filter(item => {
+			return item.userName !== this.state.userName;
+		});
+
+		this.props.allUsers.setUsers(newUsers);
 	};
-
-	connectUser = async e => {
-		const {allUsers} = this.props;
-
-		if (!this.state.isFriend){
-			try {
-				const res = await allUsers.addFriend(this.state.userName);
-				if (res === 401) {
-					notification["error"]({
-						message: `Session Timeout`,
-					});
-					
-					this.props.history.push("/");
-					return;
-
-				} else if (res !== 200){
-					notification["error"]({
-						message: `Fail to update. Something went wrong (Error code:${res})`,
-					});
-				} else {
-					notification["success"]({
-						message: `Request send!`,
-					});
-					this.setState({requested: true})
-				}
-			} catch (error) {
-				console.log(error)
-				notification["error"]({
-					message: `Something went wrong`,
-				});
-			}
-		}
-	}
-
-	replyFriendRequest = async (member, accept) => {
-
-		const {allUsers} = this.props;
-
-		try {
-			const res = await allUsers.replyRequests(member.userName, accept);
-
-			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				this.props.history.push("/");
-				return;
-
-			} else if (res !== 200){
-				notification["error"]({
-					message: `Fail to update. Something went wrong (Error code:${res})`,
-				});
-			} else {
-				const newPendings = this.state.friendRequests.filter(
-					item => item.userName !== member.userName
-				);
-
-				let newConn = this.state.friends;
-				if (accept){
-					newConn.push(member);
-				}
-				this.setState({
-					friendRequests: newPendings,
-					friends: newConn,	
-				})
-
-				notification["success"]({
-					message: accept ? `${member.userName} accepted!`: `${member.userName} rejected`,
-				});
-
-			}
-		} catch (error) {
-			console.log(error)
-			notification["error"]({
-				message: `Something went wrong`,
-			});
-			
-		}
-
-	}
-
-	deleteFriend = async (member) => {
-		
-		const {allUsers} = this.props;
-
-		try {
-			const res = await allUsers.deleteFriend(member.userName)
-
-			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				this.props.history.push("/");
-				return;
-
-			} else if (res !== 200){
-				notification["error"]({
-					message: `Fail to update. Something went wrong (Error code:${res})`,
-				});
-			} else {
-				const newConn = this.state.friends.filter(
-					item => item.userName !== member.userName
-				);
-				
-				this.setState({
-					friends: newConn,
-				})
-
-				notification["success"]({
-					message: `${member.userName} removed`,
-				});
-
-			}
-			
-		} catch (error) {
-			console.log(error)
-			notification["error"]({
-				message: `Something went wrong`,
-			});
-			
-		}
-
-	}
 
 
 	/* Front-end and state management function calls */
@@ -394,7 +221,7 @@ class Profile extends Component {
 			email,
 			skills,
 		} = this.state;
-		let { adminLogin, isProfile, isEditing, loginName } = this.state;
+		let { isAdmin, isProfile, isEditing, loginName } = this.state;
 		let { newSkill, newCompany, newPosition, newStart, newEnd } = this.state;
 
 		return (
@@ -433,7 +260,7 @@ class Profile extends Component {
 										</Button>
 									)}
 
-									{adminLogin && loginName !== userName && (
+									{isAdmin && loginName !== userName && (
 										<Button
 											className="rounded"
 											size="medium"
@@ -442,19 +269,6 @@ class Profile extends Component {
 										>
 											Delete
 										</Button>
-									)}
-
-									{!this.state.isFriend && loginName !== userName && (
-										!this.state.requested ? (<Button
-											className="rounded"
-											size="medium"
-											type="primary"
-											onClick={this.connectUser}
-										>
-											Connect
-										</Button>) : (<div type="primary" className='project-owner-badge'>
-											Requested
-										</div>)
 									)}
 								</div>
 							</div>
@@ -717,81 +531,7 @@ class Profile extends Component {
 							</div>
 						)}
 
-						{this.state.currentTab === "manage" && (
-							<div className="project-page-info-block shadow-cust rounded">
-								<div className="project-page-info-block-title">
-									<span>Connections</span>
-								</div>
-								{this.state.friends.map(
-									(member, i) => (
-										<div key={i} className="project-page-owner">
-											<Avatar
-												className="simplecard-avatar"
-												size={40}
-												icon={<UserOutlined />}
-											/>
-											<div className="project-page-owner-name-span">
-													<span>{member.userName}</span>
-											</div>
-											{ isProfile && (<Button
-												className="rounded"
-												size="medium"
-												danger
-												onClick={() => this.deleteFriend(member)}
-											>
-												Remove
-											</Button>)}
-										</div>
-									)
-								)}
-
-								{isProfile && (
-									<div>
-										<div className="project-page-info-block-title">
-											<span>Requests</span>
-										</div>
-										{this.state.friendRequests.map(
-											(member, i) => (
-												<div key={i} className="project-page-owner">
-													<Avatar
-														className="simplecard-avatar"
-														size={40}
-														icon={<UserOutlined />}
-													/>
-													<div className="project-page-owner-name-span">
-														
-															<span>{member.userName}</span>
-													</div>
-													
-													<div className="project-page-margin">
-														<Button
-																className="rounded"
-																size="medium"
-																onClick={() => this.replyFriendRequest(member, true)}
-															>
-															Accept
-														</Button>
-													</div>
-													
-													<div className="project-page-margin">
-														<Button
-																className="rounded"
-																size="medium"
-																danger
-																onClick={() => this.replyFriendRequest(member, false)}
-															>
-															Reject
-														</Button>
-													</div>
-
-													
-												</div>
-											)
-										)}
-									</div>
-								)}
-							</div>
-						)}
+						{this.state.currentTab === "manage"}
 					</div>
 				</Layout>
 			</div>

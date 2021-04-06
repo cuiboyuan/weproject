@@ -27,7 +27,6 @@ const Auth = props => {
 	console.log(usersContext.users)
 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
 	const user = index >= 0 ? usersContext.users[index] : undefined;
-	console.log(user)
 	return (
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (

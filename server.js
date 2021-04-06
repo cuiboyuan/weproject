@@ -15,7 +15,7 @@ const path = require("path");
 const express = require("express");
 
 const app = express();
-const log = console.log
+
 // enable CORS if in development, for React local development server to connect to the web server.
 const cors = require("cors");
 if (env !== "production") {
@@ -28,7 +28,6 @@ app.use(bodyParser.json());
 const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
 const { User } = require("./models/user");
-const { Project } = require("./models/project");
 
 const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
@@ -66,6 +65,7 @@ const authenticate = (req, res, next) => {
                 if (!user) {
                     return Promise.reject();
                 } else {
+                    req.user = user;
                     next();
                 }
             })
@@ -150,7 +150,7 @@ app.get("/api/users", mongoChecker, async (req, res) => {
         const users = await User.find({})
         const json = JSON.stringify(users)
         res.send(json)
-    } catch(err){
+    }catch(err){
         log(error)
         res.status(500).send("Internal Server Error")
     }
@@ -208,7 +208,7 @@ app.delete("/api/deleteUser/:username", (req, res) => {
 });
 
 // route to update user profile
-app.patch("/api/updateProfile", (req, res) => {
+app.patch("/api/updateProfile/:username", (req, res) => {
     // TODO: Add session checks
     if (mongoose.connection.readyState != 1) {
         res.status(500).send("Internal server error");
@@ -224,7 +224,7 @@ app.patch("/api/updateProfile", (req, res) => {
         "github",
     ];
 
-    User.findOne({ userName: req.session.userName })
+    User.findOne({ userName: req.params.username })
         .then((user) => {
             if (!user) {
                 res.status(404).send("User not found");
@@ -254,226 +254,7 @@ app.patch("/api/updateProfile", (req, res) => {
         });
 });
 
-
-// project api
-app.get("/api/projects", async (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    try {
-        const result = await Project.find();
-        res.status(200).send(result);
-    } catch (err) {
-        log(err);
-        res.status(500).send("Internal Server error");
-        return;
-    }
-
-})
-
-app.post("/api/project", async (req, res) => {
-    console.log(req.body.id)
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    try {
-        const newProject = new Project(req.body);
-        const result = await newProject.save();
-        res.status(200).send(result);
-    } catch (err) {
-        log(err);
-        res.status(500).send("Internal Server error");
-        return;
-    }
-})
-
-app.delete("/api/project/:id", (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    Project.deleteOne({ id: req.params.id })
-        .then((result) => {
-            if (result.n === 0) {
-                res.status(404).send("Project not found");
-            } else if (result.ok) {
-                res.send(result);
-            } else {
-                res.status(500).send("Internal server error");
-            }
-        })
-        .catch((error) => {
-            res.status(500).send("Internal server error");
-        });
-});
-
-
-
-
-
-
-
-
-app.patch("/connections/reply/:username", async (req,res) => {
-    // TODO: Add session checks
-	if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
-
-    const username = req.session.userName;
-    const friendName = req.params.username;
-    try {
-        const user = await User.findOne({userName: username});
-        if (!user){
-            res.status(404).send('User not found')
-            return;
-        }
-        if (!user.pending.includes(friendName)){
-            res.status(404).send('User not found')
-            return;
-        } else {
-            user.pending.remove(friendName);
-        }
-        if (req.body.accept){
-            if (!user.connections.includes(friendName)){
-                user.connections.push(friendName);
-
-
-                const friend = await User.findOne({userName: friendName})
-
-                if (!friend){
-                    res.status(404).send('User not found')
-                    return;
-                }
-                friend.connections.push(username);
-                await friend.save();
-            }
-        }
-        await user.save();
-        console.log(`connection accepted`)
-        res.send(friendName)
-        
-    } catch (error) {
-		res.status(500).send("Internal Server error")
-        return;
-        
-    }
-    
-})
-
-
-app.post("/connections/request/:username", (req,res) => {
-    // TODO: Add session checks
-	if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
-
-    const username = req.session.userName;
-    const friendName = req.params.username;
-
-    User.findOne({userName: friendName})
-    .then((user) => {
-        if (!user){
-            res.status(404).send('User not found')
-            return;
-        }
-
-        if (!user.pending.includes(username)){
-            user.pending.push(username);
-        }
-
-        user.save()
-        .then(result => {
-            res.send(result);
-        }).catch(err => {
-            res.status(400).send("bad request")
-            return;
-        })
-        
-        
-    }).catch((err) => {
-		res.status(500).send("Internal Server error")
-        return;
-    })
-})
-
-app.delete("/connections/remove/:username", async (req, res) => {
-    
-    if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
-
-    const username = req.session.userName;
-    const friendName = req.params.username;
-    try {
-        const user = await User.findOne({userName: username});
-        if (!user){
-            res.status(404).send('User not found')
-            return;
-        }
-
-        if (user.connections.includes(friendName)){
-            user.connections.remove(friendName);
-
-
-            const friend = await User.findOne({userName: friendName})
-
-            if (!friend){
-                res.status(404).send('User not found')
-                return;
-            }
-            friend.connections.remove(username);
-
-            await friend.save();
-            await user.save();
-            
-            console.log(`connection accepted`)
-        } else {
-            res.status(404).send('User not found')
-        }
-        res.send(friendName)
-
-        
-    } catch (error) {
-		res.status(500).send("Internal Server error")
-        return;
-        
-    }
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.use(express.static(path.join(__dirname, "/client/build")));
-
-
-// All routes other than above will go to index.html
-app.get("*", (req, res) => {
-    // check for page routes that we expect in the frontend to provide correct status code.
-    const goodPageRoutes = ["/", "/loggin", "/teammates", "/project", "/user","/profile","/newProject"];
-    if (!goodPageRoutes.includes(req.url)) {
-        // if url not in expected page routes, set status to 404.
-        res.status(404);
-    }
-
-    // send index.html
-    res.sendFile(path.join(__dirname, "/client/build/index.html"));
-});
-
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
