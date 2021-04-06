@@ -4,6 +4,8 @@ import { useLoadAllUsers, useRegister } from "../../actions/user_profile";
 import { useAuthState } from "../../context";
 import { User } from "../../model";
 
+import { updateProfile, deleteProfile, replyRequest, connectFriend, removeFriend } from "../../actions/user_profile";
+
 import ENV from "../../config.js";
 const API_HOST = ENV.api_host;
 
@@ -77,7 +79,7 @@ export const UsersProvider = (props) => {
                 console.log(err);
             }
         };
-
+        console.log(users)
         makerequest();
     }, []);
 
@@ -102,10 +104,7 @@ export const UsersProvider = (props) => {
 
 
 
-
-
-
-
+    
     const updateUser = (user) => {
         let newUsers = users;
         let index = newUsers.findIndex((u) => u.id === user.id);
@@ -114,6 +113,7 @@ export const UsersProvider = (props) => {
             setUsers(newUsers);
         }
     };
+
 
     const removeProject = (userName, projectId) => {
         let index = users.findIndex((u) => u.userName === userName);
@@ -125,6 +125,125 @@ export const UsersProvider = (props) => {
         }
     };
 
+
+
+    /** API call for UserProfile page */
+    const FRONTEND_ERR = 500;
+    const getUser = username => {
+        const user = users.filter(u => u.userName === username)[0];
+        console.log(user);
+        if (user){
+            return user;
+        } else {
+            return 404;
+        }
+    }
+
+    const updateUserProfile = async (updateInfo) => {
+        const login = auth.userName;
+        try {
+            const res = await updateProfile(updateInfo);
+            const updatedUsers = users.map(u => {
+                if (u.userName !== login){
+                    return u;
+                } else {
+                    let update = u;
+                    for (let attr of Object.keys(updateInfo)){
+                        
+                        if (update[attr]){
+                            update[attr] = updateInfo[attr]
+                        }
+                    }
+                    return update;
+                }
+            })
+            setUsers(updatedUsers);
+            return res.status;
+        } catch (error) {
+            console.log(error)
+            return FRONTEND_ERR;
+        }
+    }
+
+    const deleteUserProfile = async (username) => {
+        try {
+            const res = await deleteProfile(username);
+            if (res.ok){
+                const user = await res.json();
+                const updatedUsers = users.filter(u => u.userName !== user.userName);
+                setUsers(updatedUsers);
+                return 200;
+            }
+            return 500;
+        } catch (error) {
+            console.log(error)
+            return FRONTEND_ERR;
+        }
+    }
+
+
+
+    /** Functionality for connecting with other users */
+    const addFriend = async (friendName) => {
+        try {
+            const res = await connectFriend(friendName);
+            if (res.status === 200){
+                const user = getUser(friendName);
+                user.pending.push(friendName);
+                updateUser(user);
+            }
+            return res.status;
+        } catch (error) {
+            console.log(error)
+            return FRONTEND_ERR;
+        }
+    }
+    
+    const deleteFriend = async (friendName) => {
+        try {
+            const res = await removeFriend(friendName);
+            if (res.status === 200){
+                const login = auth.userName;
+                const user = getUser(login);
+
+                const idx = user.connections.indexOf(friendName)
+                user.connections.splice(idx, 1);
+                updateUser(user);
+            }
+            return res.status;
+        } catch (error) {
+            console.log(error)
+            return FRONTEND_ERR;
+        }
+    }
+
+    
+    const replyRequests = async (friendName, accept) => {
+        try {
+            const res = await replyRequest(friendName, accept);
+            if (res.status === 200){
+                const login = auth.userName;
+                const user = getUser(login);
+
+                const idx = user.connections.indexOf(friendName)
+                user.pending.splice(idx, 1);
+                if (accept){
+                    user.connections.push(friendName);
+                }
+                updateUser(user);
+            }
+            return res.status;
+        } catch (error) {
+            console.log(error)
+            return FRONTEND_ERR;
+        }
+    }
+
+
+
+
+
+
     const getValues = () => {
         return {
             users,
@@ -132,6 +251,16 @@ export const UsersProvider = (props) => {
             setUsers,
             removeProject,
             updateUser,
+
+            getUser,
+            updateUserProfile,
+            deleteUserProfile,
+            
+            addFriend,
+            deleteFriend,
+            replyRequests,
+
+
         };
     };
 
