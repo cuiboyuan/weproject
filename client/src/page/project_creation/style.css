@@ -1,0 +1,17 @@
+.projectName {
+	width: 100%;
+    border-color: lightgray;
+}
+
+.projectName:hover {
+    border-color: lightskyblue;
+}
+
+.projectName:focus {
+    border-color: skyblue;
+}
+
+
+.inputEntry {
+	width: 300px;
+}

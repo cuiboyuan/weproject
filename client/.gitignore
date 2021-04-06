@@ -8,7 +8,6 @@
 
 # testing
 /coverage
-/mongo-data
 
 # production
 /build

@@ -1,0 +1,143 @@
+.project-c-container {
+    padding: 10px 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+.project-create-container{
+    width: 100%;
+    padding: 20px;
+}
+
+.project-create-row-spread {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.project-create-title {
+    font-size: 20px;
+}
+
+.project-create-sub-container {
+    width: 100%;
+    padding: 10px 0px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-create-sub-container span{
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+
+.project-create-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.project-create-sub-tag-container {
+    display: flex;
+    flex-direction: row;
+    padding: 1px 5px;
+    background-color: #66666620;
+    border: 1px solid #666;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.project-create-sub-tag-value {
+    font-size: 14px !important;
+    margin: 0px 5px !important;
+}
+
+.project-create-sub-tag-close {
+    color: #66666660;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.project-create-steps-container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.project-create-progress-item {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+}
+
+.project-create-progress-step {
+    background: linear-gradient(to right, rgb(3, 173, 131), white );
+    padding: 5px 20px;
+    width: auto !important;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.project-create-progress-subitem {
+    padding: 1px 40px;
+}
+
+.project-create-sub-border {
+    padding: 20px;
+    border: 1px solid var(--theme-color);
+    width: 100%;
+}
+
+.project-create-sub-border span {
+    margin: 5px 0px;
+}
+.project-create-sub-border input {
+    margin: 5px 0px;
+}
+
+.project-create-button {
+    margin: 10px 0px;
+    padding: 5px;
+    border: none !important;
+    background-color: var(--theme-color);
+    color: white;
+}
+
+.project-create-button:disabled {
+    background-color: #66666660;
+}
+
+.project-create-editable {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.project-create-editable span{
+    padding: 0px 5px;
+    font-size: 14px;
+}
+
+.project-create-editable-icon{
+    font-size: 20px;
+    color: #66666670;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.project-create-editable-icon:hover{
+    color: var(--theme-color);
+}
