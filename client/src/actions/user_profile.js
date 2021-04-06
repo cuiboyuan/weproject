@@ -110,7 +110,6 @@ export const updateProfile = async (updateInfo) => {
 
         const result = await res.json();
 
-        console.log(result);
         return res;
         
     } catch (error) {
@@ -128,7 +127,6 @@ export const deleteProfile = async (username) => {
 
         const result = await res.json();
 
-        console.log(result);
         return result;
 
     } catch (error) {

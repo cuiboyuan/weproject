@@ -17,7 +17,7 @@ export default class User {
 		linkedin,
 		github,
 	) {
-		this.id = userId;
+		this._id = userId;
 		this.userName = userName;
 		this.isAdmin = isAdmin || false;
 
@@ -48,7 +48,7 @@ export default class User {
 
 	static fromResponseBody(object) {
 		return new User(
-			object.id,
+			object._id,
 			object.userName,
 			object.password,
 			object.isAdmin,
@@ -70,7 +70,7 @@ export default class User {
 
 	toJson() {
 		return {
-			id: this.id,
+			_id: this._id,
 			userName: this.userName,
 			password: this.password,
 			isAdmin: this.isAdmin,

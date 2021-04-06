@@ -27,10 +27,9 @@ import {
 } from "react-icons/ai";
 import TextArea from "antd/lib/input/TextArea";
 
-import {getProfile, updateProfile, deleteProfile} from "../../actions/user_profile";
 
 /**
- * To link to this page: <Link to={{pathname: '/user', state:{ username: `username` }}></Link>
+ * To link to this page: <Link to={{pathname: '/user', state:{ data: {username: `username`} }}></Link>
  */
 
 class Profile extends Component {
@@ -74,25 +73,7 @@ class Profile extends Component {
 	/* Function calls that involve server */
 
 	componentDidMount() {
-
-		// getProfile(this)
-		// .then((res) => {
-			
-		// 	if (res !== 200){
-		// 		notification["error"]({
-		// 			message: `Something went wrong (Error code:${res})`,
-		// 		});
-				
-		// 		this.props.history.push("/teammates");
-		// 	}
-		// }).catch(err => {
-			
-		// 	notification["error"]({
-		// 		message: "Something went wrong",
-		// 	});
-			
-		// 	this.props.history.push("/teammates");
-		// })
+		
 		const {allUsers, auth, allProjects, location} = this.props;
 		let loginName = auth.userName;
 		let loginUser = allUsers.getUser(loginName);
@@ -160,32 +141,7 @@ class Profile extends Component {
 
 	editProfile = async (e) => {
 		
-		// if (this.state.isEditing){
-		// 	updateProfile(this)
-		// 	.then(res => {
-		// 		if (res !== 200){
-		// 			notification["error"]({
-		// 				message: `Fail to update. Something went wrong (Error code:${res})`,
-		// 			});
-		// 			return;
-		// 		}
-		// 		notification["success"]({
-		// 			message: "Profile Updated!",
-		// 		});
-
-		// 		this.setState({ isEditing: !this.state.isEditing });
-		// 		return;
-		// 	}).catch(err => {
-		// 		notification["error"]({
-		// 			message: "Fail to update. Something went wrong",
-		// 		});
-		// 		return;
-		// 	})
-		// } else {
-		// 	this.setState({ isEditing: !this.state.isEditing });
-		// }
-		
-		const {allUsers, auth, allProjects} = this.props;
+		const {allUsers} = this.props;
 		if (this.state.isEditing){
 			try {
 				const res = await allUsers.updateUserProfile(this.state);
@@ -214,33 +170,7 @@ class Profile extends Component {
 
 	deleteUser = async (e) => {
 
-		// deleteProfile(this)
-		// .then((res) => {
-		// 	if (res !== 200){
-		// 		notification["error"]({
-		// 			message: `Fail to delete ${this.state.userName}. Something went wrong (Error code:${res})`,
-		// 		});
-		// 	} else {
-		// 		notification["success"]({
-		// 			message: `${this.state.userName} Deleted`,
-		// 		});
-
-		// 		this.props.history.push("/teammates");
-		// 	}
-		// }).catch(err => {
-		// 	notification["error"]({
-		// 		message: `Fail to delete ${this.state.userName}. Something went wrong`,
-		// 	});
-		// })
-
-		// // remove it afterwards
-		// let newUsers = this.props.allUsers.users.filter(item => {
-		// 	return item.userName !== this.state.userName;
-		// });
-
-		// this.props.allUsers.setUsers(newUsers);
-
-		const {allUsers, auth, allProjects} = this.props;
+		const {allUsers} = this.props;
 		try {
 			const res = await allUsers.deleteUserProfile(this.state.userName);
 			if (res === 200){
@@ -264,7 +194,7 @@ class Profile extends Component {
 	};
 
 	connectUser = async e => {
-		const {allUsers, auth, allProjects} = this.props;
+		const {allUsers} = this.props;
 
 		if (!this.state.isFriend){
 			try {
@@ -298,7 +228,7 @@ class Profile extends Component {
 
 	replyFriendRequest = async (member, accept) => {
 
-		const {allUsers, auth, allProjects} = this.props;
+		const {allUsers} = this.props;
 
 		try {
 			const res = await allUsers.replyRequests(member.userName, accept);
@@ -346,7 +276,7 @@ class Profile extends Component {
 
 	deleteFriend = async (member) => {
 		
-		const {allUsers, auth, allProjects} = this.props;
+		const {allUsers} = this.props;
 
 		try {
 			const res = await allUsers.deleteFriend(member.userName)

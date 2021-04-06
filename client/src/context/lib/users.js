@@ -107,7 +107,7 @@ export const UsersProvider = (props) => {
     
     const updateUser = (user) => {
         let newUsers = users;
-        let index = newUsers.findIndex((u) => u.id === user.id);
+        let index = newUsers.findIndex((u) => u._id === user._id);
         if (index >= 0) {
             newUsers.splice(index, 1, user);
             setUsers(newUsers);
@@ -131,7 +131,7 @@ export const UsersProvider = (props) => {
     const FRONTEND_ERR = 500;
     const getUser = username => {
         const user = users.filter(u => u.userName === username)[0];
-        console.log(user);
+        
         if (user){
             return user;
         } else {
@@ -143,21 +143,15 @@ export const UsersProvider = (props) => {
         const login = auth.userName;
         try {
             const res = await updateProfile(updateInfo);
-            const updatedUsers = users.map(u => {
-                if (u.userName !== login){
-                    return u;
-                } else {
-                    let update = u;
-                    for (let attr of Object.keys(updateInfo)){
+
+            const user = getUser(login);
+            for (let attr of Object.keys(updateInfo)){
                         
-                        if (update[attr]){
-                            update[attr] = updateInfo[attr]
-                        }
-                    }
-                    return update;
+                if (user[attr]){
+                    user[attr] = updateInfo[attr]
                 }
-            })
-            setUsers(updatedUsers);
+            }
+            updateUser(user);
             return res.status;
         } catch (error) {
             console.log(error)
@@ -209,6 +203,11 @@ export const UsersProvider = (props) => {
                 const idx = user.connections.indexOf(friendName)
                 user.connections.splice(idx, 1);
                 updateUser(user);
+                
+                const friend = getUser(friendName);
+                const idx2 = user.connections.indexOf(login)
+                friend.connections.splice(idx2, 1);
+                updateUser(friend);
             }
             return res.status;
         } catch (error) {
@@ -231,6 +230,12 @@ export const UsersProvider = (props) => {
                     user.connections.push(friendName);
                 }
                 updateUser(user);
+                
+                const friend = getUser(friendName);
+                if (accept){
+                    friend.connections.push(login);
+                }
+                updateUser(friend);
             }
             return res.status;
         } catch (error) {
