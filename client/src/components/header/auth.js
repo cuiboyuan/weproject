@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { Popover, Avatar } from "antd";
 import { AiOutlineUser } from "react-icons/ai";
@@ -24,9 +24,30 @@ const Popup = props => {
 
 const Auth = props => {
 	const usersContext = useUsersState();
-	console.log(usersContext.users)
+	//TODO: fix the bug, userContext.users is currently empty. I think useEffect hook should work...
+	//How to trigger the bug after building the project:
+		//1 npm run build-run
+		//2 sign in 
+		//3 refresh the page
+
+	console.log("current users in the header !!!", usersContext.users)
 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
 	const user = index >= 0 ? usersContext.users[index] : undefined;
+
+	
+	//my solution below doesn't work... But it solved the similar problem in TeammateBrowser/index.js
+
+	// const [index, setindex] = useState(0)
+	// const [user, setuser] = useState(undefined)
+
+	// useEffect(() => {
+	// 	setindex(usersContext.users.findIndex(u => u.userName === props.authInfo.userName))
+	// 	setuser(index >= 0 ? usersContext.users[index] : undefined)	
+	// }, [usersContext.users])
+
+
+
+
 	return (
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (

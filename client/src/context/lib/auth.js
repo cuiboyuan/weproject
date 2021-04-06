@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import ENV from "../../config.js";
+const API_HOST = ENV.api_host;
 
 const AuthContext = createContext();
 const ADMIN = "admin";
@@ -9,8 +11,35 @@ export const AuthProvider = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
-    //TODO add useEffect to communicate with the server session to check Loggin state
+
+    
 	
+    //TODO add useEffect to communicate with the server session to check Loggin state
+    useEffect(()=>{
+        const checkSession = async ()=>{
+            const res = await fetch(`${API_HOST}/api/check-session`)
+            console.log("the res in auth.js", res)
+            if (res.status === 200){
+                try{
+                console.log("in the respond body")
+                // if the user is logged in
+                const json = await res.json()
+                setIsLoggedIn(true)
+                simpleCheck(json.userName)
+                // console.log("json is!!!!!!!!!!!!!", json)
+                }catch(err){
+                    console.log("fail", err)
+                    
+                }
+                // simpleCheck(json.userName)
+            }
+        }
+        checkSession()
+    }, [])
+
+
+
+
 	//moved to login_page/index.js, since the async call there
     // useEffect(() => {
     //     simpleCheck(

@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV; // read the environment variable (will be 'pro
 
 const USE_TEST_USER = env !== "production" && process.env.TEST_USER_ON; // option to turn on the test user.
 const TEST_USER_ID = "5fb8b011b864666580b4efe3"; // the id of our test user (you will have to replace it with a test user that you made). can also put this into a separate configutation file
-const TEST_USER_EMAIL = "test@user.com";
+const TEST_USER_NAME = "testName";
 //////
 
 const path = require("path");
@@ -101,6 +101,25 @@ app.use(
 
 /* API Routes */
 
+// A route to check if a user is logged in on the session
+app.get("/api/check-session", (req, res) => {
+    if (env !== "production" && USE_TEST_USER) {
+        // test user on development environment.
+        req.session.user = TEST_USER_ID;
+        req.session.userName = TEST_USER_NAME;
+        res.send({ userName: TEST_USER_NAME });
+        return;
+    }
+    console.log(req.session)
+
+    if (req.session.userName) {
+        // console.log({ userName: req.session.userName  })
+        res.send({ userName: req.session.userName });
+    } else {
+        res.status(401).send();
+    }
+});
+
 // A route to login and create a session
 app.post("/api/login", (req, res) => {
     const userName = req.body.userName;
@@ -115,7 +134,7 @@ app.post("/api/login", (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
-            console.log("debug", user);
+            console.log("debug!!!!!!\n", req.session);
             res.send(user);
         })
         .catch((error) => {
@@ -147,12 +166,12 @@ app.get("/api/user/:username", (req, res) => {
 
 app.get("/api/users", mongoChecker, async (req, res) => {
     try {
-        const users = await User.find({})
-        const json = JSON.stringify(users)
-        res.send(json)
-    }catch(err){
-        log(error)
-        res.status(500).send("Internal Server Error")
+        const users = await User.find({});
+        const json = JSON.stringify(users);
+        res.send(json);
+    } catch (err) {
+        log(error);
+        res.status(500).send("Internal Server Error");
     }
 });
 
@@ -163,7 +182,7 @@ app.post("/api/newUser", (req, res) => {
         return;
     }
 
-    console.log(req.body)
+    console.log(req.body);
     const newUser = new User({
         userName: req.body.userName,
         password: req.body.password,
@@ -172,12 +191,17 @@ app.post("/api/newUser", (req, res) => {
 
     newUser
         .save()
-        .then((result) => {
-            res.send(result);
+        .then((user) => {
+            // Add the user's id to the session.
+            // We can check later if this exists to ensure we are logged in.
+            req.session.user = user._id;
+            req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+            console.log("debug", user);
+            res.send(user);
         })
         .catch((error) => {
             res.status(400).send("Bad Request");
-            console.log(error)
+            console.log(error);
         });
 });
 
