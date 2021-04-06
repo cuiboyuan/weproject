@@ -8,6 +8,8 @@ export const AuthProvider = (props) => {
     const [userName, setUserName] = useState("user");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+
+    //TODO add useEffect to communicate with the server session to check Loggin state
 	
 	//moved to login_page/index.js, since the async call there
     // useEffect(() => {
@@ -34,6 +36,10 @@ export const AuthProvider = (props) => {
     // 	}
     // 	return false;
     // };
+
+    // useEffect(() => {
+    //     simpleCheck(localStorage.getItem("username"))
+    // }, [])
 
     const simpleCheck = (username) => {
         if (username === ADMIN) setIsAdmin(true);

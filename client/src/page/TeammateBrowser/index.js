@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
@@ -26,7 +26,14 @@ const TeammateBrowser = (props) => {
 		}
 	}
 
+	useEffect(() => {
+		setDisplayData(userContext.users)
+		// return () => {
+		// 	cleanup
+		// }
+	}, [userContext.users])
 
+	
 	//the data that is actually displayed on the teambrowing page
 	const [displayData, setDisplayData] = useState([...userContext.users].sort(compare));
 

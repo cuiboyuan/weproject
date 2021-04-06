@@ -69,9 +69,10 @@ export const UsersProvider = (props) => {
             try {
                 const res = await fetch(url);
                 if (res.status === 200) {
-                    const json = await res.json();
-                    console.log("json", json);
-                    setUsers(json);
+                    const jsonFiles = await res.json();
+                    console.log("The respond json file:", jsonFiles)
+                    setUsers(jsonFiles);
+                    console.log("users after setting", users)
                 }
             } catch (err) {
                 console.log(err);
