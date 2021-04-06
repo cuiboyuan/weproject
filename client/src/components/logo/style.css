@@ -17,6 +17,10 @@
     font-weight: bold;
     color: white;
 }
+
+a {
+    text-decoration: none !important;
+}
 .logo a:hover {
     color: white;
 }

@@ -15,7 +15,7 @@ const path = require("path");
 const express = require("express");
 
 const app = express();
-
+const log = console.log
 // enable CORS if in development, for React local development server to connect to the web server.
 const cors = require("cors");
 if (env !== "production") {
@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
 const { User } = require("./models/user");
+const { Project } = require("./models/project");
 
 const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
@@ -150,7 +151,7 @@ app.get("/api/users", mongoChecker, async (req, res) => {
         const users = await User.find({})
         const json = JSON.stringify(users)
         res.send(json)
-    }catch(err){
+    } catch(err){
         log(error)
         res.status(500).send("Internal Server Error")
     }
@@ -251,6 +252,61 @@ app.patch("/api/updateProfile/:username", (req, res) => {
         .catch((err) => {
             res.status(500).send("Internal Server error");
             return;
+        });
+});
+
+
+// project api
+app.get("/api/projects", async (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        res.status(500).send("Internal server error");
+        return;
+    }
+    try {
+        const result = await Project.find();
+        res.status(200).send(result);
+    } catch (err) {
+        log(err);
+        res.status(500).send("Internal Server error");
+        return;
+    }
+
+})
+
+app.post("/api/project", async (req, res) => {
+    console.log(req.body.id)
+    if (mongoose.connection.readyState != 1) {
+        res.status(500).send("Internal server error");
+        return;
+    }
+    try {
+        const newProject = new Project(req.body);
+        const result = await newProject.save();
+        res.status(200).send(result);
+    } catch (err) {
+        log(err);
+        res.status(500).send("Internal Server error");
+        return;
+    }
+})
+
+app.delete("/api/project/:id", (req, res) => {
+    if (mongoose.connection.readyState != 1) {
+        res.status(500).send("Internal server error");
+        return;
+    }
+    Project.deleteOne({ id: req.params.id })
+        .then((result) => {
+            if (result.n === 0) {
+                res.status(404).send("Project not found");
+            } else if (result.ok) {
+                res.send(result);
+            } else {
+                res.status(500).send("Internal server error");
+            }
+        })
+        .catch((error) => {
+            res.status(500).send("Internal server error");
         });
 });
 
