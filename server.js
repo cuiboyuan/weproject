@@ -441,6 +441,27 @@ app.post("/connections/request/:username", (req,res) => {
     })
 })
 
+
+app.get("/api/top/:username", async (req, res)=>{
+    const userName = req.params.username
+    console.log("c!!!!!!!!!!!!!!!!!!!!!!")
+    try{
+        const user = await User.findOne({userName: userName})
+        console.log("the user name", userName)
+        if (!user){
+            res.status(404).send("User not found")
+            return
+        }
+        //otherwise top the user
+        user.topped = !user.topped
+        await user.save()
+        res.send()
+    }catch (err){
+        console.log(err)
+        res.status(404).send("user not found")
+    }
+})
+
 app.delete("/connections/remove/:username", async (req, res) => {
     
     if (mongoose.connection.readyState != 1){

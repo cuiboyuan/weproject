@@ -15,6 +15,7 @@ import { UserOutlined } from "@ant-design/icons";
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
 import { useAuthState, useUsersState } from "../../context";
+import { useTopUser } from "../../actions/user_profile";
 // import reactDom from "react-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -49,8 +50,11 @@ const PeopleCard = ({
 		return [{friendName: friendName, res: res}, setfriendName]
     }
 
+
+
 	const [{friendName, res}, setfriendName] = useAddFriend()
 
+	const [{topUserName, resTop}, settopUserName] = useTopUser()
 
     return (
         <Col lg="3" md="6" sm="12">
@@ -111,6 +115,7 @@ const PeopleCard = ({
                                             e.preventDefault();
                                             data.topped = !data.topped;
                                             setifTopped(data.topped);
+											settopUserName(data.userName)
                                             sortFunction();
                                         }}
                                     >

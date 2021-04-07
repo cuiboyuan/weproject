@@ -111,7 +111,6 @@ export const updateProfile = async (updateInfo) => {
         const result = await res.json();
 
         return res;
-        
     } catch (error) {
         return 500;
     }
@@ -128,7 +127,6 @@ export const deleteProfile = async (username) => {
         const result = await res.json();
 
         return result;
-
     } catch (error) {
         return Promise.reject();
     }
@@ -138,12 +136,11 @@ export const connectFriend = async (username) => {
     const url = `${API_HOST}/connections/request`;
 
     try {
-        const res = await fetch(`${url}/${username}`,{
+        const res = await fetch(`${url}/${username}`, {
             method: "POST",
-        })
-        
-        return res;
+        });
 
+        return res;
     } catch (error) {
         return Promise.reject();
     }
@@ -153,41 +150,38 @@ export const removeFriend = async (friendName) => {
     const url = `${API_HOST}/connections/remove`;
 
     try {
-        const res = await fetch(`${url}/${friendName}`,{
+        const res = await fetch(`${url}/${friendName}`, {
             method: "DELETE",
-        })
-        
+        });
+
         return res;
-        
     } catch (error) {
         return Promise.reject();
     }
-
-}
+};
 
 export const replyRequest = async (friendName, accept) => {
     const url = `${API_HOST}/connections/reply`;
 
     try {
-        const res = await fetch(`${url}/${friendName}`,{
+        const res = await fetch(`${url}/${friendName}`, {
             method: "PATCH",
-            body: JSON.stringify({accept: accept}),
+            body: JSON.stringify({ accept: accept }),
             headers: {
-                'Content-Type': "application/json"
-            }
-        })
-        
+                "Content-Type": "application/json",
+            },
+        });
+
         return res;
-        
     } catch (error) {
         return Promise.reject();
     }
-}
+};
 
 /**
  * TODO2: not utlizing the client/src/model/lib/users.js functions, the backend API
  * and front end API should be updated to make sure the consistency of json attributes
- * 
+ *
  * TODO3: error checking ?
  */
 
@@ -232,7 +226,7 @@ export const useIsLoggedIn = () => {
                     setLoggedIn(true);
                     const json = await res.json();
                     setUser(json);
-                    console.log("usehook", user)
+                    console.log("usehook", user);
                 }
             } catch (err) {
                 console.log("hook call fail!!!, err is:", err);
@@ -244,18 +238,15 @@ export const useIsLoggedIn = () => {
     return [{ loggedIn: loggedIn, user: user }, setInputs];
 };
 
-
 /**
  * user info register, used in loggin_page/index.js
  */
 export const useRegister = () => {
-
     const [user, setUser] = useState(null);
-
 
     const [userName, setuserName] = useState("");
     const [password, setpassword] = useState("");
-    const [regSuccess, setregSuccess] = useState(false)
+    const [regSuccess, setregSuccess] = useState(false);
     // const [isAdmin, setisAdmin] = useState(initialState)
     const setInputs = function (userName, password) {
         setuserName(userName);
@@ -284,23 +275,52 @@ export const useRegister = () => {
                     // setUser(res.json);
                     const json = await res.json();
                     setUser(json);
-                    setregSuccess(true)
+                    setregSuccess(true);
                 }
             } catch (err) {
                 console.log("hook call fail!!!, err is:", err);
-                setregSuccess(false)
+                setregSuccess(false);
             }
         };
         if (userName) makeRequest();
     }, [userName, password]);
-    return [{regSuccess: regSuccess, newUser:user}, setInputs];
+    return [{ regSuccess: regSuccess, newUser: user }, setInputs];
 };
 
+export const useTopUser = () => {
+    const [topUserName, settopUserName] = useState("");
+    const [triggerTop, settriggerTop] = useState(false);
+    const [res, setres] = useState(false);
+
+    const triggerFunction = (userName) => {
+        settopUserName(userName);
+        settriggerTop(!triggerTop);
+    };
+
+    useEffect(() => {
+        const makeRequest = async () => {
+            const url = `${API_HOST}/api/top/${topUserName}`;
+            try {
+                if (topUserName) {
+                    const res = await fetch(url);
+                    if (res.status === 200) {
+                        setres(true);
+                    }
+                }
+            } catch (err) {
+                setres(false);
+                console.log(err);
+            }
+        };
+        makeRequest();
+    }, [triggerTop]);
+    return [{ topUserName: topUserName, resTop: res }, triggerFunction];
+};
 
 // export const useLoadAllUsers = ()=>{
 //     //the array of all user objects
 //     const [users, setusers] = useState([])
-    
+
 //     const [success, setsuccess] = useState(false)
 
 //     useeffect(()=>{
@@ -322,9 +342,5 @@ export const useRegister = () => {
 //     }, [])
 
 //     return {data:users, success: success}
-
-
-
-
 
 // }

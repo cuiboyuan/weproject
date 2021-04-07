@@ -12,8 +12,22 @@ import { useAuthState } from '../../context'
 const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
 	
+	const compare = (p1, p2)=>{
+		if (p1.topped == p2.topped){
+			//if tie, sort by project id
+			return p1._id > p2._id?-1:1;
+		}else{
+			//if p1 is topped but p2 isn't
+			if (p1.topped){
+				return -1;
+			}else{
+				return 1;
+			}
+		}
+	}
+
 	useEffect(() => {
-		setDisplayData(userContext.users)
+		setDisplayData([...userContext.users].sort(compare))
 		// return () => {
 		// 	cleanup
 		// }
@@ -27,20 +41,6 @@ const TeammateBrowser = (props) => {
 		setisAdmin(authState.isAdmin)
 	}, [authState.isAdmin])
 	
-	const compare = (p1, p2)=>{
-		if (p1.topped == p2.topped){
-			//if tie, sort by project id
-			return p1.id > p2.id?-1:1;
-		}else{
-			//if p1 is topped but p2 isn't
-			if (p1.topped){
-				return -1;
-			}else{
-				return 1;
-			}
-		}
-	}
-
 
 	//the data that is actually displayed on the teambrowing page
 	const [displayData, setDisplayData] = useState([...userContext.users].sort(compare));
