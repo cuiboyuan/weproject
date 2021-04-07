@@ -22,7 +22,7 @@ const UsersContext = createContext();
 //         connection: [],
 //     })
 // );
-
+// data = []
 // data.push(
 //     User.fromResponseBody({
 //         id: uuid(),
