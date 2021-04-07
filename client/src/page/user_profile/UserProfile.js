@@ -139,6 +139,16 @@ class Profile extends Component {
 			
 	};
 
+	checkTimeout = (res) => {
+		if (res === 401){
+			notification["error"]({
+				message: `Session Timeout`,
+			});
+			// TODO logout manually
+			this.props.history.push("/");
+		}
+	}
+
 	editProfile = async (e) => {
 		
 		const {allUsers} = this.props;
@@ -150,6 +160,10 @@ class Profile extends Component {
 						message: "Profile Updated!",
 					});
 				} else {
+					if (res === 401){
+						this.checkTimeout(res);
+						return;
+					}
 					notification["error"]({
 						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
@@ -179,6 +193,10 @@ class Profile extends Component {
 				});
 				this.props.history.push("/");
 			} else {
+				if (res === 401){
+					this.checkTimeout(res);
+					return;
+				}
 				notification["error"]({
 					message: `Fail to delete ${this.state.userName} (Error code:${res}).`,
 				});
@@ -200,11 +218,7 @@ class Profile extends Component {
 			try {
 				const res = await allUsers.addFriend(this.state.userName);
 				if (res === 401) {
-					notification["error"]({
-						message: `Session Timeout`,
-					});
-					
-					this.props.history.push("/");
+					this.checkTimeout(res);
 					return;
 
 				} else if (res !== 200){
@@ -234,11 +248,7 @@ class Profile extends Component {
 			const res = await allUsers.replyRequests(member.userName, accept);
 
 			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				this.props.history.push("/");
+				this.checkTimeout(res);
 				return;
 
 			} else if (res !== 200){
@@ -282,11 +292,7 @@ class Profile extends Component {
 			const res = await allUsers.deleteFriend(member.userName)
 
 			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				this.props.history.push("/");
+				this.checkTimeout(res);
 				return;
 
 			} else if (res !== 200){

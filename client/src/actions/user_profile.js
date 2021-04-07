@@ -98,9 +98,9 @@ const API_HOST = ENV.api_host;
 
 export const updateProfile = async (updateInfo) => {
     const url = `${API_HOST}/api/updateProfile`;
-
+    let res;
     try {
-        const res = await fetch(`${url}`, {
+        res = await fetch(`${url}`, {
             method: "PATCH",
             body: JSON.stringify(updateInfo),
             headers: {
@@ -112,59 +112,63 @@ export const updateProfile = async (updateInfo) => {
 
         return res;
     } catch (error) {
-        return 500;
+        return res;
     }
 };
 
 export const deleteProfile = async (username) => {
     const url = `${API_HOST}/api/deleteUser`;
 
+    let res;
     try {
-        const res = await fetch(`${url}/${username}`, {
+        res = await fetch(`${url}/${username}`, {
             method: "DELETE",
         });
 
         const result = await res.json();
 
-        return result;
+        return res;
+
     } catch (error) {
-        return Promise.reject();
+        return res;
     }
 };
 
 export const connectFriend = async (username) => {
     const url = `${API_HOST}/connections/request`;
 
+    let res;
     try {
-        const res = await fetch(`${url}/${username}`, {
+        res = await fetch(`${url}/${username}`,{
             method: "POST",
         });
 
         return res;
     } catch (error) {
-        return Promise.reject();
+        return res;
     }
 };
 
 export const removeFriend = async (friendName) => {
     const url = `${API_HOST}/connections/remove`;
 
+    let res;
     try {
-        const res = await fetch(`${url}/${friendName}`, {
+        res = await fetch(`${url}/${friendName}`,{
             method: "DELETE",
         });
 
         return res;
     } catch (error) {
-        return Promise.reject();
+        return res;
     }
 };
 
 export const replyRequest = async (friendName, accept) => {
     const url = `${API_HOST}/connections/reply`;
-
+    let res;
     try {
-        const res = await fetch(`${url}/${friendName}`, {
+        res = await fetch(`${url}/${friendName}`,{
             method: "PATCH",
             body: JSON.stringify({ accept: accept }),
             headers: {
@@ -174,7 +178,7 @@ export const replyRequest = async (friendName, accept) => {
 
         return res;
     } catch (error) {
-        return Promise.reject();
+        return res;
     }
 };
 

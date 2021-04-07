@@ -163,8 +163,7 @@ export const UsersProvider = (props) => {
         try {
             const res = await deleteProfile(username);
             if (res.ok){
-                const user = await res.json();
-                const updatedUsers = users.filter(u => u.userName !== user.userName);
+                const updatedUsers = users.filter(u => u.userName !== username);
                 setUsers(updatedUsers);
                 return 200;
             }
@@ -182,12 +181,18 @@ export const UsersProvider = (props) => {
 
     /** Functionality for connecting with other users */
     const addFriend = async (friendName) => {
+        if (friendName === auth.userName){
+            return 400;
+        }
+        const login = auth.userName;
         try {
             const res = await connectFriend(friendName);
             if (res.status === 200){
                 const user = getUser(friendName);
-                user.pending.push(auth.userName);
-                updateUser(user);
+                if (!user.pending.includes(login)){       
+                    user.pending.push(auth.userName);
+                    updateUser(user);
+                }
             }
             return res.status;
         } catch (error) {
