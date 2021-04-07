@@ -163,8 +163,7 @@ export const UsersProvider = (props) => {
         try {
             const res = await deleteProfile(username);
             if (res.ok){
-                const user = await res.json();
-                const updatedUsers = users.filter(u => u.userName !== user.userName);
+                const updatedUsers = users.filter(u => u.userName !== username);
                 setUsers(updatedUsers);
                 return 200;
             }

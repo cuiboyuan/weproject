@@ -128,7 +128,7 @@ export const deleteProfile = async (username) => {
 
         const result = await res.json();
 
-        return result;
+        return res;
 
     } catch (error) {
         return res;
