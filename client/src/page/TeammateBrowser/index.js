@@ -12,6 +12,13 @@ import { SortDescendingOutlined } from "@ant-design/icons";
 const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
 
+	useEffect(() => {
+		setDisplayData(userContext.users)
+		// return () => {
+		// 	cleanup
+		// }
+	}, [userContext.users])	
+	
 	const compare = (p1, p2)=>{
 		if (p1.topped == p2.topped){
 			//if tie, sort by project id
