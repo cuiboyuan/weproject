@@ -49,7 +49,7 @@ const ProjectCard = ({
 					<Card.Body className="simplecard-description">
 						<div className="simplecard-username-container">
 							<Avatar className="simplecard-avatar" icon={<UserOutlined />} />
-							<span>{data.owner.userName}</span>
+							<span>{data.owner?.userName}</span>
 						</div>
 						<p>{data.description}</p>
 						<div className="simplecard-info-container">

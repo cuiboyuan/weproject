@@ -63,7 +63,8 @@ class ProjectCreation extends Component {
 		// newProjects.push(newProj);
 
 		this.props.allUsers.setUsers(newUsers);
-		this.props.allProjects.addProject(newProjects);
+		this.props.allProjects.addProject(newProj);
+		console.log("LOG", newProj);
 		
 		notification['success']({
 			message: `Project ${this.state.projectName} Created!`
