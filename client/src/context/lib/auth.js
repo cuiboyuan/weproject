@@ -47,6 +47,7 @@ export const AuthProvider = (props) => {
                     const json = await res.json();
                     setIsLoggedIn(true);
                     simpleCheck(json.userName);
+                    // setIsAdmin(json.isAdmin);
                     // console.log("json is!!!!!!!!!!!!!", json)
                 } catch (err) {
                     console.log("fail", err);
