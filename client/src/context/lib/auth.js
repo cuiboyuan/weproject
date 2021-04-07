@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
+import ENV from "../../config.js";
+const API_HOST = ENV.api_host;
 const AuthContext = createContext();
 const ADMIN = "admin";
 const USER = "user";
@@ -34,6 +35,28 @@ export const AuthProvider = (props) => {
     // 	}
     // 	return false;
     // };
+
+    useEffect(()=>{
+        const checkSession = async ()=>{
+            const res = await fetch(`${API_HOST}/api/check-session`)
+            console.log("the res in auth.js", res)
+            if (res.status === 200){
+                try{
+                console.log("in the respond body")
+                // if the user is logged in
+                const json = await res.json()
+                setIsLoggedIn(true)
+                simpleCheck(json.userName)
+                // console.log("json is!!!!!!!!!!!!!", json)
+                }catch(err){
+                    console.log("fail", err)
+
+                }
+                // simpleCheck(json.userName)
+            }
+        }
+        checkSession()
+    }, [])
 
     const simpleCheck = (username) => {
         if (username === ADMIN) setIsAdmin(true);
