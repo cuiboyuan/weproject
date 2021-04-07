@@ -408,9 +408,10 @@ app.post("/connections/request/:username", (req,res) => {
 		res.status(500).send('Internal server error')
 		return;
 	}
-
     const username = req.session.userName;
     const friendName = req.params.username;
+    console.log(`friendName: ${friendName}, username: ${username}`)
+    console.log("current session", req.session)
 
     User.findOne({userName: friendName})
     .then((user) => {

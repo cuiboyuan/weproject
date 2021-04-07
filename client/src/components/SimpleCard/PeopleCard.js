@@ -40,6 +40,7 @@ const PeopleCard = ({
             const makeRequest = async () => {
                 if (friendName) {
                     const respond = await usersContext.addFriend(friendName)
+					console.log("call addFriend(", friendName, ")!!!!!!!respond:",respond)
 					setres(respond)
                 }
             }
