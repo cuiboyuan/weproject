@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const ProjectSchema = new mongoose.Schema({
     id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         // required: true,
     },
     owner: {
@@ -24,7 +24,7 @@ const ProjectSchema = new mongoose.Schema({
         default: "",
     },
     userIds: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         default: [],
     },
     status: {
@@ -32,7 +32,7 @@ const ProjectSchema = new mongoose.Schema({
         default: "incomplete",
     },
     usersLiked: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [String],
         default: [],
     },
     tags: {

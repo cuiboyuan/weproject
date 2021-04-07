@@ -43,7 +43,7 @@ const Routes = props => {
 						{authContext.isLoggedIn ? <Redirect to="/" /> : <Login />}
 					</Route>
 					<Route path="/" exact>
-						<ProjectBrowserPage isAdmin={authContext.isAdmin} projects={projectsContext.projects} />
+						<ProjectBrowserPage context={projectsContext} isAdmin={authContext.isAdmin} projects={projectsContext.projects} />
 					</Route>
 					<Route path="/teammates" exact>
 						<TeammateBrowser isAdmin={authContext.isAdmin} />
@@ -52,8 +52,8 @@ const Routes = props => {
 						{authContext.isLoggedIn ? <ProjectDetailPage authContext={authContext} projectsContext={projectsContext} usersContext={usersContext}/> : <Login />}
 					</Route>
 					{/* <Route path="/project/create" exact>
-						{authContext.isLoggedIn ? <ProjectCreatePage /> : <Login />}
-					</Route> */}
+							{authContext.isLoggedIn ? <ProjectCreatePage /> : <Login />}
+						</Route> */}
 					<Route path="/user" exact>
 						{authContext.isLoggedIn ? (
 							<UserProfile

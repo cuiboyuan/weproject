@@ -1,5 +1,4 @@
 "user strict";
-
 /* Server environment setup */
 // To run in development mode, run normally: node server.js
 // To run in development with the test user logged in the backend, run: TEST_USER_ON=true node server.js
@@ -29,9 +28,12 @@ const { ObjectID } = require("mongodb");
 const { mongoose } = require("./db/mongoose");
 const { User } = require("./models/user");
 const { Project } = require("./models/project");
-
 const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
+
+const ProjectRouter = require('./routes/project');
+
+app.use("/api", ProjectRouter);
 
 function isMongoError(error) {
     // checks for first error returned by promise rejection if Mongo database suddently disconnects
@@ -281,76 +283,6 @@ app.patch("/api/updateProfile", (req, res) => {
 });
 
 
-// project api
-app.get("/api/projects", async (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    try {
-        const result = await Project.find();
-        res.status(200).send(result);
-    } catch (err) {
-        log(err);
-        res.status(500).send("Internal Server error");
-        return;
-    }
-
-})
-
-app.post("/api/project", async (req, res) => {
-    console.log(req.body.id)
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    try {
-        const newProject = new Project(req.body);
-        const result = await newProject.save();
-        res.status(200).send(result);
-    } catch (err) {
-        log(err);
-        res.status(500).send("Internal Server error");
-        return;
-    }
-})
-
-app.delete("/api/project/:id", (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
-    Project.deleteOne({ id: req.params.id })
-        .then((result) => {
-            if (result.n === 0) {
-                res.status(404).send("Project not found");
-            } else if (result.ok) {
-                res.send(result);
-            } else {
-                res.status(500).send("Internal server error");
-            }
-        })
-        .catch((error) => {
-            res.status(500).send("Internal server error");
-        });
-});
-
-
-
-// A route to logout a user
-app.get("/api/logout", (req, res) => {
-    // Remove the session
-    console.log("logout !!!!!!")
-    req.session.destroy(error => {
-        if (error) {
-            res.status(500).send(error);
-        } else {
-            console.log("logout successfully")
-            res.send()
-        }
-    });
-});
-
 
 
 
@@ -508,17 +440,6 @@ app.delete("/connections/remove/:username", async (req, res) => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
 app.use(express.static(path.join(__dirname, "/client/build")));
 
 
@@ -534,6 +455,7 @@ app.get("*", (req, res) => {
     // send index.html
     res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
+
 
 
 const port = process.env.PORT || 5000;
