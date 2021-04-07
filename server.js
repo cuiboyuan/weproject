@@ -269,8 +269,7 @@ app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
 
 
 
-
-
+// route for friends/connection features
 app.patch("/connections/reply/:username", mongoChecker, authenticate, async (req,res) => {
 
     const username = req.session.userName;
