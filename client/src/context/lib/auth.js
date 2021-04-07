@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../../config.js";
 import { notification } from "antd";
+import { requestLogout } from "../../actions/user_profile.js";
 const API_HOST = ENV.api_host;
 const AuthContext = createContext();
 const ADMIN = "admin";
@@ -65,13 +66,12 @@ export const AuthProvider = (props) => {
         if (username === ADMIN) setIsAdmin(true);
         setIsLoggedIn(true);
         setUserName(username);
-        console.log("simple check", user);
         setIsAdmin(user.isAdmin);
         localStorage.setItem("username", username);
     };
 
     const logout = async () => {
-        const res = await fetch(`${API_HOST}/api/logout`);
+        const res = await requestLogout() 
         if (res.status === 200) {
             localStorage.removeItem("username");
             setIsLoggedIn(false);

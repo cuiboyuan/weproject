@@ -321,6 +321,12 @@ export const useTopUser = () => {
     return [{ topUserName: topUserName, resTop: res }, triggerFunction];
 };
 
+
+export const requestLogout = async ()=>{
+    const res = await fetch(`${API_HOST}/api/logout`)
+    return res
+}
+
 // export const useLoadAllUsers = ()=>{
 //     //the array of all user objects
 //     const [users, setusers] = useState([])
