@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../../config.js";
+import { notification } from "antd";
 const API_HOST = ENV.api_host;
 const AuthContext = createContext();
 const ADMIN = "admin";
@@ -36,7 +37,6 @@ export const AuthProvider = (props) => {
     // 	return false;
     // };
 
-
     //used to refresh page to continue the session
     useEffect(() => {
         const checkSession = async () => {
@@ -61,38 +61,29 @@ export const AuthProvider = (props) => {
         checkSession();
     }, []);
 
-
-    const [logOutTrigger, setlogOutTrigger] = useState(false);
-    useEffect(() => {
-        const logoutRequest = async () => {
-            const res = await fetch(`${API_HOST}/api/logout`);
-            if (res.status === 200) {
-                localStorage.removeItem("username")
-                setIsLoggedIn(false);
-                setIsAdmin(false);
-            }
-        };
-        if (isLoggedIn) {
-            logoutRequest();
-        }
-    }, [logOutTrigger]);
-
     const simpleCheck = (username, user) => {
         if (username === ADMIN) setIsAdmin(true);
         setIsLoggedIn(true);
         setUserName(username);
-        console.log("simple check", user)
-        setIsAdmin(user.isAdmin)
+        console.log("simple check", user);
+        setIsAdmin(user.isAdmin);
         localStorage.setItem("username", username);
     };
 
-    const logout = () => {
-        // localStorage.removeItem("username");
-        // localStorage.removeItem("password");
-        setlogOutTrigger(!logOutTrigger);
-        // setIsLoggedIn(false);
-        
-        // window.location.reload(false);
+    const logout = async () => {
+        const res = await fetch(`${API_HOST}/api/logout`);
+        if (res.status === 200) {
+            localStorage.removeItem("username");
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+            notification["success"]({
+                message: "Logout Successful!",
+            });
+        } else {
+            notification["error"]({
+                message: `Logout Failed`,
+            });
+        }
     };
 
     const getValues = () => {
