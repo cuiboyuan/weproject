@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import SimpleList from "../../components/SimpleList/SimpleList";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Layout from "../../components/layout";
+const compare = (p1, p2) => {
+  if (p1.topped === p2.topped) {
+    //if tie, sort by project id
+    return p1.id > p2.id ? -1 : 1;
+  } else {
+    //if p1 is topped but p2 isn't
+    if (p1.topped) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+};
 
 const ProjectBrowser = (props) => {
-
-  const compare = (p1, p2) => {
-    if (p1.topped === p2.topped) {
-      //if tie, sort by project id
-      return p1.id > p2.id ? -1 : 1;
-    } else {
-      //if p1 is topped but p2 isn't
-      if (p1.topped) {
-        return -1;
-      } else {
-        return 1;
-      }
-    }
-  };
   //the data that is actually displayed on the browsing page
   const [displayData, setDisplayData] = useState(props.projects.sort(compare));
+
+
+  useEffect(() => {
+    setDisplayData(props.projects.sort(compare));
+  }, [props.projects])
+
 
   //the function used to respond to search request, used in SearchBar Component
   const filterData = (searchContent) => {
