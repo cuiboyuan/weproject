@@ -128,7 +128,6 @@ export const deleteProfile = async (username) => {
         const result = await res.json();
 
         return res;
-
     } catch (error) {
         return res;
     }
@@ -139,7 +138,7 @@ export const connectFriend = async (username) => {
 
     let res;
     try {
-        res = await fetch(`${url}/${username}`,{
+        res = await fetch(`${url}/${username}`, {
             method: "POST",
         });
 
@@ -154,7 +153,7 @@ export const removeFriend = async (friendName) => {
 
     let res;
     try {
-        res = await fetch(`${url}/${friendName}`,{
+        res = await fetch(`${url}/${friendName}`, {
             method: "DELETE",
         });
 
@@ -168,7 +167,7 @@ export const replyRequest = async (friendName, accept) => {
     const url = `${API_HOST}/connections/reply`;
     let res;
     try {
-        res = await fetch(`${url}/${friendName}`,{
+        res = await fetch(`${url}/${friendName}`, {
             method: "PATCH",
             body: JSON.stringify({ accept: accept }),
             headers: {
@@ -240,6 +239,26 @@ export const useIsLoggedIn = () => {
         if (userName) makeRequest();
     }, [userName, password]);
     return [{ loggedIn: loggedIn, user: user }, setInputs];
+};
+
+export const requestLogin = async (userName, password) => {
+    const url = `${API_HOST}/api/login`;
+    const request = new Request(url, {
+        method: "post",
+        body: JSON.stringify({ userName: userName, password: password }),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        },
+    });
+
+    try {
+        const res = await fetch(request);
+        return res
+    } catch (err) {
+        console.log(err)
+        return false
+    }
 };
 
 /**
@@ -321,11 +340,10 @@ export const useTopUser = () => {
     return [{ topUserName: topUserName, resTop: res }, triggerFunction];
 };
 
-
-export const requestLogout = async ()=>{
-    const res = await fetch(`${API_HOST}/api/logout`)
-    return res
-}
+export const requestLogout = async () => {
+    const res = await fetch(`${API_HOST}/api/logout`);
+    return res;
+};
 
 // export const useLoadAllUsers = ()=>{
 //     //the array of all user objects

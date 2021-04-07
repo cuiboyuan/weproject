@@ -55,7 +55,9 @@ const Loggin = (props) => {
 	//user_profile.js to update check if the user is logged in, 
 	//setInputs is the trigger function for that hook
     const onSubmit = () => {
-        setLoginInputs(username, password);
+        // setLoginInputs(username, password);
+        auth.login(username, password)
+        console.log("!!!!click signin!!!!!")
     };
 
 //================ register logic ==================

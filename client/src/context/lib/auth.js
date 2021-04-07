@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../../config.js";
 import { notification } from "antd";
-import { requestLogout } from "../../actions/user_profile.js";
+import { requestLogin, requestLogout } from "../../actions/user_profile.js";
 const API_HOST = ENV.api_host;
 const AuthContext = createContext();
 const ADMIN = "admin";
 const USER = "user";
 
 export const AuthProvider = (props) => {
-    const [userName, setUserName] = useState("user");
+    const [userName, setUserName] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -70,8 +70,20 @@ export const AuthProvider = (props) => {
         localStorage.setItem("username", username);
     };
 
+    const login = async (logInUserName, password) => {
+        const res = await requestLogin(logInUserName, password);
+        if (res && res.status == 200) {
+            const user = await res.json()
+            setUserName(logInUserName);
+            setIsAdmin(user.isAdmin);
+            localStorage.setItem("username", userName);
+            console.log("login success", userName)
+            setIsLoggedIn(true);
+        }
+    };
+
     const logout = async () => {
-        const res = await requestLogout() 
+        const res = await requestLogout();
         if (res.status === 200) {
             localStorage.removeItem("username");
             setIsLoggedIn(false);
@@ -93,6 +105,7 @@ export const AuthProvider = (props) => {
             isAdmin,
             simpleCheck,
             logout,
+            login,
         };
     };
 
