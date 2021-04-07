@@ -189,7 +189,6 @@ app.post("/api/newUser", (req, res) => {
         password: req.body.password,
         isAdmin: req.body.isAdmin,
     });
-
     newUser
         .save()
         .then((user) => {
@@ -336,6 +335,19 @@ app.delete("/api/project/:id", (req, res) => {
 
 
 
+// A route to logout a user
+app.get("/api/logout", (req, res) => {
+    // Remove the session
+    console.log("logout !!!!!!")
+    req.session.destroy(error => {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            console.log("logout successfully")
+            res.send()
+        }
+    });
+});
 
 
 
