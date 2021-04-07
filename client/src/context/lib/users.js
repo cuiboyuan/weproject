@@ -91,7 +91,7 @@ export const UsersProvider = (props) => {
     useEffect(() => {
         if (regSuccess) {
 			users.push(User.fromResponseBody({userName:newUserName}))
-            auth.simpleCheck(newUserName);
+            auth.simpleCheck(newUserName, newUser);
             setUpdate(!update);
         }
     }, [regSuccess]);
@@ -175,6 +175,9 @@ export const UsersProvider = (props) => {
         }
     }
 
+    const deleteUserByName = async (userName)=>{
+        await deleteUserProfile(userName)
+    }
 
 
     /** Functionality for connecting with other users */
@@ -264,6 +267,7 @@ export const UsersProvider = (props) => {
             addFriend,
             deleteFriend,
             replyRequests,
+            deleteUserByName
 
 
         };

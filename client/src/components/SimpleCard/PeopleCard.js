@@ -127,7 +127,8 @@ const PeopleCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            removeFunction(data);
+                                            // removeFunction(data);
+                                            usersContext.deleteUserByName(data.userName)
                                         }}
                                     >
                                         <AiOutlineDelete />
