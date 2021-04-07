@@ -179,12 +179,18 @@ export const UsersProvider = (props) => {
 
     /** Functionality for connecting with other users */
     const addFriend = async (friendName) => {
+        if (friendName === auth.userName){
+            return 400;
+        }
+        const login = auth.userName;
         try {
             const res = await connectFriend(friendName);
             if (res.status === 200){
                 const user = getUser(friendName);
-                user.pending.push(auth.userName);
-                updateUser(user);
+                if (!user.pending.includes(login)){       
+                    user.pending.push(auth.userName);
+                    updateUser(user);
+                }
             }
             return res.status;
         } catch (error) {

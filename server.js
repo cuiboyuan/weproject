@@ -271,12 +271,7 @@ app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
 
 
 
-app.patch("/connections/reply/:username", async (req,res) => {
-    // TODO: Add session checks
-	if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
+app.patch("/connections/reply/:username", mongoChecker, authenticate, async (req,res) => {
 
     const username = req.session.userName;
     const friendName = req.params.username;
@@ -320,15 +315,15 @@ app.patch("/connections/reply/:username", async (req,res) => {
 })
 
 
-app.post("/connections/request/:username", (req,res) => {
-    // TODO: Add session checks
-	if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
+app.post("/connections/request/:username", mongoChecker, authenticate, (req,res) => {
 
     const username = req.session.userName;
     const friendName = req.params.username;
+
+    if (username === friendName){
+        res.status(400).send("bad request");
+        return;
+    }
 
     User.findOne({userName: friendName})
     .then((user) => {
@@ -356,12 +351,7 @@ app.post("/connections/request/:username", (req,res) => {
     })
 })
 
-app.delete("/connections/remove/:username", async (req, res) => {
-    
-    if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
+app.delete("/connections/remove/:username", mongoChecker, authenticate, async (req, res) => {
 
     const username = req.session.userName;
     const friendName = req.params.username;
@@ -408,10 +398,11 @@ app.use(express.static(path.join(__dirname, "/client/build")));
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
     // check for page routes that we expect in the frontend to provide correct status code.
-    const goodPageRoutes = ["/", "/loggin", "/teammates", "/project", "/user","/profile","/newProject"];
+    const goodPageRoutes = ["/", "/loggin", "/teammates",]// "/project", "/user","/profile","/newProject"];
     if (!goodPageRoutes.includes(req.url)) {
         // if url not in expected page routes, set status to 404.
-        res.status(404);
+        res.status(404).send();
+        return;
     }
 
     // send index.html
