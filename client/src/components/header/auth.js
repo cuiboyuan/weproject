@@ -23,6 +23,10 @@ const Popup = props => {
 };
 
 const Auth = props => {
+	//TODO fix the error, how to trigger the error:
+		//1 npm run build-run
+		//2 login
+		//3 refresh the page
 	const usersContext = useUsersState();
 	console.log(usersContext.users)
 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
