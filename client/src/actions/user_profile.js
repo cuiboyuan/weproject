@@ -232,6 +232,7 @@ export const useIsLoggedIn = () => {
                     setLoggedIn(true);
                     const json = await res.json();
                     setUser(json);
+                    console.log("usehook", user)
                 }
             } catch (err) {
                 console.log("hook call fail!!!, err is:", err);

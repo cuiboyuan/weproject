@@ -7,17 +7,25 @@ import Layout from "../../components/layout";
 import { useUsersState } from "../../context";
 import { Link } from "react-router-dom";
 import { SortDescendingOutlined } from "@ant-design/icons";
-
+import { useAuthState } from '../../context'
 
 const TeammateBrowser = (props) => {
 	const userContext = useUsersState();
-
+	
 	useEffect(() => {
 		setDisplayData(userContext.users)
 		// return () => {
 		// 	cleanup
 		// }
 	}, [userContext.users])	
+
+	const authState = useAuthState()
+
+	const [isAdmin, setisAdmin] = useState(authState.isAdmin)
+	useEffect(()=>{
+		console.log("the is admin passed in from auth context", authState.isAdmin)
+		setisAdmin(authState.isAdmin)
+	}, [authState.isAdmin])
 	
 	const compare = (p1, p2)=>{
 		if (p1.topped == p2.topped){
@@ -74,7 +82,7 @@ const TeammateBrowser = (props) => {
 							pathname={'/user'}
 							data={displayData}
 							isProject={false}
-							isAdmin={props.isAdmin}
+							isAdmin={isAdmin}
 							sortFunction = {sortData}
 							removeFunction={removeData}
 						/>

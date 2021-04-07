@@ -36,6 +36,8 @@ export const AuthProvider = (props) => {
     // 	return false;
     // };
 
+
+    //used to refresh page to continue the session
     useEffect(() => {
         const checkSession = async () => {
             const res = await fetch(`${API_HOST}/api/check-session`);
@@ -46,8 +48,9 @@ export const AuthProvider = (props) => {
                     // if the user is logged in
                     const json = await res.json();
                     setIsLoggedIn(true);
+                    setIsAdmin(json.isAdmin);
+                    // console.log("the login json!!!!!!!!!!!!!!!!!", json)
                     simpleCheck(json.userName);
-                    // setIsAdmin(json.isAdmin);
                     // console.log("json is!!!!!!!!!!!!!", json)
                 } catch (err) {
                     console.log("fail", err);
@@ -57,6 +60,8 @@ export const AuthProvider = (props) => {
         };
         checkSession();
     }, []);
+
+
     const [logOutTrigger, setlogOutTrigger] = useState(false);
     useEffect(() => {
         const logoutRequest = async () => {
@@ -72,10 +77,12 @@ export const AuthProvider = (props) => {
         }
     }, [logOutTrigger]);
 
-    const simpleCheck = (username) => {
+    const simpleCheck = (username, user) => {
         if (username === ADMIN) setIsAdmin(true);
         setIsLoggedIn(true);
         setUserName(username);
+        console.log("simple check", user)
+        setIsAdmin(user.isAdmin)
         localStorage.setItem("username", username);
     };
 

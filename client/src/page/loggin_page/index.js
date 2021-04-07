@@ -6,6 +6,7 @@ import "./style.css";
 import Office from "../../assets/office.svg";
 import { useAuthState, useUsersState } from "../../context";
 import { useIsLoggedIn, useRegister } from "../../actions/user_profile";
+import { ConsoleSqlOutlined } from "@ant-design/icons";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
 
 
@@ -45,9 +46,10 @@ const Loggin = (props) => {
 	//to the context
     useEffect(() => {
         if (loggedIn) {
-            auth.simpleCheck(username);
+            console.log(`login page ${username}, ${user}`)
+            auth.simpleCheck(username, user);
         }
-    }, [loggedIn]);
+    }, [user]);
 
 	//on submitting the form, we use the "useIsLoggedIn" hook in
 	//user_profile.js to update check if the user is logged in, 
