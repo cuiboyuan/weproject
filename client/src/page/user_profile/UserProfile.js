@@ -150,6 +150,14 @@ class Profile extends Component {
 						message: "Profile Updated!",
 					});
 				} else {
+					if (res === 401){
+						notification["error"]({
+							message: `Session Timeout`,
+						});
+						// TODO logout manually
+						this.props.history.push("/");
+						return;
+					}
 					notification["error"]({
 						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
@@ -179,6 +187,14 @@ class Profile extends Component {
 				});
 				this.props.history.push("/");
 			} else {
+				if (res === 401){
+					notification["error"]({
+						message: `Session Timeout`,
+					});
+					// TODO logout manually
+					this.props.history.push("/");
+					return;
+				}
 				notification["error"]({
 					message: `Fail to delete ${this.state.userName} (Error code:${res}).`,
 				});
@@ -204,6 +220,7 @@ class Profile extends Component {
 						message: `Session Timeout`,
 					});
 					
+					// TODO logout manually
 					this.props.history.push("/");
 					return;
 
@@ -238,6 +255,7 @@ class Profile extends Component {
 					message: `Session Timeout`,
 				});
 				
+				// TODO logout manually
 				this.props.history.push("/");
 				return;
 
@@ -286,6 +304,7 @@ class Profile extends Component {
 					message: `Session Timeout`,
 				});
 				
+				// TODO logout manually
 				this.props.history.push("/");
 				return;
 
