@@ -1,37 +1,62 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import uuid from "react-uuid";
 
 import { Project } from "../../model";
+import {
+	fetch_project,
+	create_project,
+	delete_project,
+} from "../../actions/project";
 
 const ProjectContext = createContext();
 
-const data = [...Array(9).keys()].map((_, i) => {
-	const id = uuid();
-	return new Project(
-		id,
-		{
-			id: uuid(),
-			userName: `user${i}`,
-			password: `user${i}`,
-			ownedProjectIds: [id],
-			joinedProjectIds: [],
-		},
-		`project ${i}`,
-		`project ${i} description`,
-		`project requirement ${i}`,
-		undefined,
-		undefined,
-		[],
-		["tag 1", "tag 2"]
-	);
-});
+// const data = [...Array(9).keys()].map((_, i) => {
+// 	const id = uuid();
+// 	return new Project(
+// 		id,
+// 		{
+// 			id: uuid(),
+// 			userName: `user${i}`,
+// 			password: `user${i}`,
+// 			ownedProjectIds: [id],
+// 			joinedProjectIds: [],
+// 		},
+// 		`project ${i}`,
+// 		`project ${i} description`,
+// 		`project requirement ${i}`,
+// 		undefined,
+// 		undefined,
+// 		[],
+// 		["tag 1", "tag 2"]
+// 	);
+// });
 
 export const ProjectProvider = props => {
-	const [projects, setProjects] = useState(data);
+	const [projects, setProjects] = useState([]);
+
+	useEffect(() => {
+		refresh();
+	}, []);
+
+	const refresh = () => {
+		fetch_project()
+			.then(data => {
+				setProjects(data);
+				console.log(data);
+			})
+			.catch(err => console.error(err));
+	};
 
 	const addProject = project => {
-		setProjects([...projects, project]);
-	}
+		console.log(project);
+		create_project(project)
+			.then(res => {
+				if (res.status === 200) {
+					setProjects([...projects, project]);
+				}
+			})
+			.catch(err => console.error(err));
+	};
 
 	const updateProject = project => {
 		let index = projects.findIndex(p => p.id === project.id);
@@ -61,8 +86,12 @@ export const ProjectProvider = props => {
 		let index = projects.findIndex(p => p.id === projectId);
 		console.log(index);
 		if (index >= 0) {
-			projects.splice(index, 1);
-			setProjects(projects);
+			delete_project(projectId)
+				.then(result => {
+					console.log(result);
+					refresh();
+				})
+				.catch(err => console.log(err));
 		}
 	};
 
@@ -104,6 +133,7 @@ export const ProjectProvider = props => {
 			proceedStep,
 			withdralStep,
 			addProject,
+			refresh,
 		};
 	};
 

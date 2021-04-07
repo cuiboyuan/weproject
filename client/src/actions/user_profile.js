@@ -2,139 +2,187 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../config.js";
 const API_HOST = ENV.api_host;
 
-export const getProfile = async (app) => {
-    const url = `${API_HOST}/api/user`;
+// export const getProfile = async (app) => {
+//     const url = `${API_HOST}/api/user`;
 
-    let { auth, allUsers, allProjects, location } = app.props;
-    console.log(app.props);
-    // Change to EXTERNAL CALL in phase 2:
-    const loginName = auth.userName;
+//     let { auth, allUsers, allProjects, location } = app.props;
+//     console.log(app.props);
+//     // Change to EXTERNAL CALL in phase 2:
+//     const loginName = auth.userName;
 
-    let currentName,
-        currentUser,
-        loginUser,
-        isProfile,
-        ownedProjects,
-        joinedProjects;
-    try {
-        const res = await fetch(`${url}/${loginName}`);
+//     let currentName,
+//         currentUser,
+//         loginUser,
+//         isProfile,
+//         ownedProjects,
+//         joinedProjects;
+//     try {
+//         const res = await fetch(`${url}/${loginName}`);
 
-        if (res.status !== 200) {
-            return res.status;
-        }
-        const login = await res.json();
+//         if (res.status !== 200) {
+//             return res.status;
+//         }
+//         const login = await res.json();
 
-        isProfile = false;
-        loginUser = login;
+//         isProfile = false;
+//         loginUser = login;
 
-        if (location.pathname === "/profile") {
-            currentName = loginName;
-            currentUser = loginUser;
-            isProfile = true;
-        } else {
-            // need some change
-            currentName = location.state.data.userName;
+//         if (location.pathname === "/profile") {
+//             currentName = loginName;
+//             currentUser = loginUser;
+//             isProfile = true;
+//         } else {
+//             // need some change
+//             currentName = location.state.data.userName;
 
-            const response = await fetch(`${url}/${currentName}`);
+//             const response = await fetch(`${url}/${currentName}`);
 
-            if (response.status !== 200) {
-                return response.status;
-            }
-            const user = await response.json();
+//             if (response.status !== 200) {
+//                 return response.status;
+//             }
+//             const user = await response.json();
 
-            currentUser = user;
+//             currentUser = user;
 
-            console.log(currentUser);
-        }
+//             console.log(currentUser);
+//         }
 
-        // change afterwards
-        ownedProjects = allProjects.projects.filter(
-            (item) => item.owner.userName == currentName
-        );
-        joinedProjects = allProjects.projects.filter((item) =>
-            item.userIds.includes(currentUser._id)
-        );
-        app.setState({
-            userName: currentName,
-            loginName: loginName,
+//         // change afterwards
+//         ownedProjects = allProjects.projects.filter(
+//             (item) => item.owner.userName == currentName
+//         );
+//         joinedProjects = allProjects.projects.filter((item) =>
+//             item.userIds.includes(currentUser._id)
+//         );
+//         app.setState({
+//             userName: currentName,
+//             loginName: loginName,
 
-            // avatar: currentUser.avatar,
-            description: currentUser.description,
-            email: currentUser.email,
-            linkedin: currentUser.linkedin,
-            github: currentUser.github,
-            skills: currentUser.skills,
+//             // avatar: currentUser.avatar,
+//             description: currentUser.description,
+//             email: currentUser.email,
+//             linkedin: currentUser.linkedin,
+//             github: currentUser.github,
+//             skills: currentUser.skills,
 
-            experiences: currentUser.experiences,
+//             experiences: currentUser.experiences,
 
-            ownedProjects: ownedProjects,
-            joinedProjects: joinedProjects,
+//             ownedProjects: ownedProjects,
+//             joinedProjects: joinedProjects,
 
-            isAdmin: loginUser.isAdmin,
-            isProfile: isProfile,
-        });
-        return 200;
-    } catch (error) {
-        return 500;
-    }
-};
+//             isAdmin: loginUser.isAdmin,
+//             isProfile: isProfile,
+//         });
+//         return 200;
+//     } catch (error) {
+//         return 500;
+//     }
+// };
 
-export const updateProfile = async (app) => {
+// export const fetchUser = async (username) => {
+//     const url = `${API_HOST}/api/user`;
+
+//     try {
+//         const res = await fetch(`${url}/${username}`);
+
+//         if (res.status === 200) {
+//             const user = await res.json();
+//             return user;
+//         }
+//         return Promise.reject()
+
+//     } catch (error) {
+//         return Promise.reject();
+//     }
+// }
+
+export const updateProfile = async (updateInfo) => {
     const url = `${API_HOST}/api/updateProfile`;
 
-    let { auth, allUsers, allProjects, location } = app.props;
-
-    // Change to EXTERNAL CALL in phase 2:
-    const loginName = auth.userName;
-
     try {
-        const res = await fetch(`${url}/${loginName}`, {
+        const res = await fetch(`${url}`, {
             method: "PATCH",
-            body: JSON.stringify(app.state),
+            body: JSON.stringify(updateInfo),
             headers: {
                 "Content-Type": "application/json",
             },
         });
 
-        if (res.status !== 200) {
-            return res.status;
-        }
+        const result = await res.json();
 
-        console.log(await res.json());
-
-        return 200;
+        return res;
+        
     } catch (error) {
         return 500;
     }
 };
 
-export const deleteProfile = async (app) => {
+export const deleteProfile = async (username) => {
     const url = `${API_HOST}/api/deleteUser`;
-
-    // TODO: change this to check session afterwards
-    const isAdmin = app.state.isAdmin;
-    if (!isAdmin) {
-        return 403;
-    }
-
-    const username = app.state.userName;
 
     try {
         const res = await fetch(`${url}/${username}`, {
             method: "DELETE",
         });
 
-        if (res.status !== 200) {
-            return res.status;
-        }
+        const result = await res.json();
 
-        console.log(await res.json());
+        return result;
 
-        return 200;
     } catch (error) {
-        return 500;
+        return Promise.reject();
     }
 };
+
+export const connectFriend = async (username) => {
+    const url = `${API_HOST}/connections/request`;
+
+    try {
+        const res = await fetch(`${url}/${username}`,{
+            method: "POST",
+        })
+        
+        return res;
+
+    } catch (error) {
+        return Promise.reject();
+    }
+};
+
+export const removeFriend = async (friendName) => {
+    const url = `${API_HOST}/connections/remove`;
+
+    try {
+        const res = await fetch(`${url}/${friendName}`,{
+            method: "DELETE",
+        })
+        
+        return res;
+        
+    } catch (error) {
+        return Promise.reject();
+    }
+
+}
+
+export const replyRequest = async (friendName, accept) => {
+    const url = `${API_HOST}/connections/reply`;
+
+    try {
+        const res = await fetch(`${url}/${friendName}`,{
+            method: "PATCH",
+            body: JSON.stringify({accept: accept}),
+            headers: {
+                'Content-Type': "application/json"
+            }
+        })
+        
+        return res;
+        
+    } catch (error) {
+        return Promise.reject();
+    }
+}
 
 /**
  * TODO2: not utlizing the client/src/model/lib/users.js functions, the backend API
