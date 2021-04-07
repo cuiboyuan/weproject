@@ -139,6 +139,16 @@ class Profile extends Component {
 			
 	};
 
+	checkTimeout = (res) => {
+		if (res === 401){
+			notification["error"]({
+				message: `Session Timeout`,
+			});
+			// TODO logout manually
+			this.props.history.push("/");
+		}
+	}
+
 	editProfile = async (e) => {
 		
 		const {allUsers} = this.props;
@@ -151,11 +161,7 @@ class Profile extends Component {
 					});
 				} else {
 					if (res === 401){
-						notification["error"]({
-							message: `Session Timeout`,
-						});
-						// TODO logout manually
-						this.props.history.push("/");
+						this.checkTimeout(res);
 						return;
 					}
 					notification["error"]({
@@ -188,11 +194,7 @@ class Profile extends Component {
 				this.props.history.push("/");
 			} else {
 				if (res === 401){
-					notification["error"]({
-						message: `Session Timeout`,
-					});
-					// TODO logout manually
-					this.props.history.push("/");
+					this.checkTimeout(res);
 					return;
 				}
 				notification["error"]({
@@ -216,12 +218,7 @@ class Profile extends Component {
 			try {
 				const res = await allUsers.addFriend(this.state.userName);
 				if (res === 401) {
-					notification["error"]({
-						message: `Session Timeout`,
-					});
-					
-					// TODO logout manually
-					this.props.history.push("/");
+					this.checkTimeout(res);
 					return;
 
 				} else if (res !== 200){
@@ -251,12 +248,7 @@ class Profile extends Component {
 			const res = await allUsers.replyRequests(member.userName, accept);
 
 			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				// TODO logout manually
-				this.props.history.push("/");
+				this.checkTimeout(res);
 				return;
 
 			} else if (res !== 200){
@@ -300,12 +292,7 @@ class Profile extends Component {
 			const res = await allUsers.deleteFriend(member.userName)
 
 			if (res === 401) {
-				notification["error"]({
-					message: `Session Timeout`,
-				});
-				
-				// TODO logout manually
-				this.props.history.push("/");
+				this.checkTimeout(res);
 				return;
 
 			} else if (res !== 200){
