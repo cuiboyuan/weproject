@@ -445,6 +445,18 @@ app.delete("/connections/remove/:username", mongoChecker, authenticate, async (r
     }
 })
 
+app.get("/api/logout", (req, res) => {
+    // Remove the session
+    req.session.destroy(error => {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            res.send()
+        }
+    });
+});
+
+
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 
