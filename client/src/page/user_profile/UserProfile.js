@@ -372,11 +372,17 @@ class Profile extends Component {
 		if (e.target.files.length === 0) return;
 		let userName = this.state.userName;
 		let index = this.props.allUsers.users.findIndex(u => u.userName === userName);
-		let user = this.props.allUsers.users[index];
+		// let user = this.props.allUsers.users[index];
 		let img = {name: e.target.files[0].name, url: URL.createObjectURL(e.target.files[0])};
-		user = { ...user, avatar: img };
-		this.props.allUsers.updateUser(user);
-		this.setState({ avatar: img });
+		// user = { ...user, avatar: img };
+		this.props.allUsers.uploadAvatar(this.props.allUsers.users[index], e.target.files[0]).then(res => {
+			if (res.status === 200) {
+				this.setState({ avatar: img });
+			}
+		})
+
+		// this.props.allUsers.updateUser(user);
+		
 	}
 
 	/* render function */

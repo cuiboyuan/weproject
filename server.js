@@ -32,8 +32,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
 
 const ProjectRouter = require('./routes/project');
+const UserRouter = require('./routes/user');
 
 app.use("/api", ProjectRouter);
+app.use("/api", UserRouter);
 
 function isMongoError(error) {
     // checks for first error returned by promise rejection if Mongo database suddently disconnects

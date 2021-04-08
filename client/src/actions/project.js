@@ -1,4 +1,3 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../config.js";
 const API_HOST = ENV.api_host;
 
@@ -50,7 +49,6 @@ export const update_project_image = async (project, form) => {
     formData.append("file", form);
     return fetch(`${API_HOST}/api/project/${project._id}/images`, {
         method: "POST",
-        // headers: { "Content-Type": "multipart/form-data" },
         body: formData
     });
 };
