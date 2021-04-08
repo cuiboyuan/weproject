@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Popover, Avatar } from "antd";
 import { AiOutlineUser } from "react-icons/ai";
@@ -26,8 +26,17 @@ const Auth = props => {
 	const usersContext = useUsersState();
 	console.log(usersContext.users)
 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
-	const user = index >= 0 ? usersContext.users[index] : undefined;
+	const [user, setUser] = useState(index >= 0 ? usersContext.users[index] : undefined);
 	console.log(user)
+
+	// useEffect(() => {
+	// 	const index = usersContext.users.findIndex(u => u.userName === props.authInfo.userName);
+	// 	const newU = usersContext.users[index]
+	// 	if (newU && newU?.avatar !== user.avatar) {
+	// 		setUser(newU);
+	// 	}
+	// }, [usersContext.users])
+
 	return (
 		<div className="auth-container">
 			{props.authInfo?.isLoggedIn ? (
@@ -37,7 +46,7 @@ const Auth = props => {
 						placement="bottomRight"
 						title=""
 					>
-						{user.avatar?.url ? <Avatar icon={<AiOutlineUser />} src={user.avatar.url}/> : <Avatar icon={<AiOutlineUser />} />}
+						{user?.avatar?.url ? <Avatar icon={<AiOutlineUser />} src={user.avatar.url}/> : <Avatar icon={<AiOutlineUser />} />}
 						<span>{props.authInfo.userName}</span>
 					</Popover>
 				</div>

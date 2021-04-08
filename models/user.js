@@ -72,7 +72,9 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-
+    avatar: {
+        type: String,
+    },
     // connections: {
     //     type: [mongoose.Schema.Types.ObjectId],
     //     default: [],

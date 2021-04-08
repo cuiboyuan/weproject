@@ -1,4 +1,3 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../config.js";
 const API_HOST = ENV.api_host;
 
@@ -14,7 +13,6 @@ export const fetch_project = async () => {
 };
 
 export const create_project = async project => {
-    console.log(JSON.stringify(project))
     return fetch(`${API_HOST}/api/project`, {
 		method: "POST",
 		headers: {
@@ -22,7 +20,6 @@ export const create_project = async project => {
 			"Content-Type": "application/json",
         },
         body: JSON.stringify(project)
-        // body: project
     });
 };
 
@@ -34,4 +31,31 @@ export const delete_project = async project_id => {
 			"Content-Type": "application/json",
         },
     });
+};
+
+export const update_project = async project => {
+    return fetch(`${API_HOST}/api/project/${project._id}`, {
+		method: "PATCH",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+        },
+        body: JSON.stringify(project)
+    });
+};
+
+export const update_project_image = async (project, form) => {
+    const formData = new FormData();
+    formData.append("file", form);
+    return fetch(`${API_HOST}/api/project/${project._id}/images`, {
+        method: "POST",
+        body: formData
+    });
+};
+
+export const get_project_images = async project => {
+	const res = await fetch(`${API_HOST}/api/project/${project._id}/images`, {
+		method: "GET",
+    });
+    return res.json();
 };
