@@ -118,16 +118,18 @@ export const updateProfile = async (updateInfo) => {
 
 export const deleteProfile = async (username) => {
     const url = `${API_HOST}/api/deleteUser`;
+    // console.log("deleteProfile server request url", url, username)
 
     let res;
     try {
         res = await fetch(`${url}/${username}`, {
             method: "DELETE",
-        });
+        }
+        );
 
         const result = await res.json();
 
-        return res;
+        return result;
     } catch (error) {
         return res;
     }

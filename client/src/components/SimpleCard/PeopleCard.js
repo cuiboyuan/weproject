@@ -64,8 +64,8 @@ const PeopleCard = ({
                 <Card style={{ marginTop: "15px" }}>
                     <Card.Body className="simplecard-description">
                         <div className="simplecard-username-container">
-                            {user.avatar?.url ? (
-                                <Avatar size={70} src={user.avatar.url} />
+                            {user?.avatar?.url ? (
+                                <Avatar size={70} src={user?.avatar.url} />
                             ) : (
                                 <Avatar
                                     size={70}
