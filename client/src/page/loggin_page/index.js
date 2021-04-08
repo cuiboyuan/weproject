@@ -38,18 +38,18 @@ const Loggin = (props) => {
 	const usersContext = useUsersState()
 
 //===============log in logic ===================
-    const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
+    // const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
 
 
-	//when loggedIn, (returned by the async function), we 
-	//call the simpleCheck function, which writes the username
-	//to the context
-    useEffect(() => {
-        if (loggedIn) {
-            console.log(`login page ${username}, ${user}`)
-            auth.simpleCheck(username, user);
-        }
-    }, [user]);
+	// //when loggedIn, (returned by the async function), we 
+	// //call the simpleCheck function, which writes the username
+	// //to the context
+    // useEffect(() => {
+    //     if (loggedIn) {
+    //         console.log(`login page ${username}, ${user}`)
+    //         auth.simpleCheck(username, user);
+    //     }
+    // }, [user]);
 
 	//on submitting the form, we use the "useIsLoggedIn" hook in
 	//user_profile.js to update check if the user is logged in, 

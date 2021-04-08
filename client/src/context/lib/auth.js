@@ -65,13 +65,13 @@ export const AuthProvider = (props) => {
         checkSession();
     }, []);
 
-    const simpleCheck = (username, user) => {
-        if (username === ADMIN) setIsAdmin(true);
-        setIsLoggedIn(true);
-        setUserName(username);
-        setIsAdmin(user.isAdmin);
-        localStorage.setItem("username", username);
-    };
+    // const simpleCheck = (username, user) => {
+    //     if (username === ADMIN) setIsAdmin(true);
+    //     setIsLoggedIn(true);
+    //     setUserName(username);
+    //     setIsAdmin(user.isAdmin);
+    //     localStorage.setItem("username", username);
+    // };
 
     const login = async (logInUserName, password) => {
         const res = await requestLogin(logInUserName, password);
@@ -106,7 +106,7 @@ export const AuthProvider = (props) => {
             userName,
             isLoggedIn,
             isAdmin,
-            simpleCheck,
+            // simpleCheck,
             logout,
             login,
         };

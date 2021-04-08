@@ -124,8 +124,7 @@ export const deleteProfile = async (username) => {
     try {
         res = await fetch(`${url}/${username}`, {
             method: "DELETE",
-        }
-        );
+        });
 
         const result = await res.json();
 
@@ -183,65 +182,7 @@ export const replyRequest = async (friendName, accept) => {
     }
 };
 
-/**
- * TODO2: not utlizing the client/src/model/lib/users.js functions, the backend API
- * and front end API should be updated to make sure the consistency of json attributes
- *
- * TODO3: error checking ?
- */
 
-/**
- * Customized hook for checking if the user has logged in, used
- * in auth page,
- * @param {string} userName
- * @param {string} password
- * @returns
- * @loggedin {bool} whether the username, password is correct
- * @user {Object} the user info in the DB
- */
-export const useIsLoggedIn = () => {
-    //used in the effect hook, for update
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState(null);
-
-    //for update, used in the caller function
-    const [userName, setuserName] = useState("");
-    const [password, setpassword] = useState("");
-    const setInputs = function (userName, password) {
-        setuserName(userName);
-        setpassword(password);
-    };
-
-    useEffect(() => {
-        const url = `${API_HOST}/api/login`;
-        const request = new Request(url, {
-            method: "post",
-            body: JSON.stringify({ userName: userName, password: password }),
-            headers: {
-                Accept: "application/json, text/plain, */*",
-                "Content-Type": "application/json",
-            },
-        });
-
-        const makeRequest = async () => {
-            try {
-                const res = await fetch(request);
-                if (res.status === 200) {
-                    // setUser(res.json);
-                    setLoggedIn(true);
-                    const json = await res.json();
-                    setUser(json);
-                    console.log("usehook", user);
-                }
-            } catch (err) {
-                console.log("hook call fail!!!, err is:", err);
-            }
-        };
-        //if the userName is not "", we make the request to the server
-        if (userName) makeRequest();
-    }, [userName, password]);
-    return [{ loggedIn: loggedIn, user: user }, setInputs];
-};
 
 export const requestLogin = async (userName, password) => {
     const url = `${API_HOST}/api/login`;
@@ -256,10 +197,10 @@ export const requestLogin = async (userName, password) => {
 
     try {
         const res = await fetch(request);
-        return res
+        return res;
     } catch (err) {
-        console.log(err)
-        return false
+        console.log(err);
+        return false;
     }
 };
 
@@ -312,6 +253,34 @@ export const useRegister = () => {
     return [{ regSuccess: regSuccess, newUser: user }, setInputs];
 };
 
+export const requestAddUser = async (userName, password) => {
+    const url = `${API_HOST}/api/newUser`;
+    const request = new Request(url, {
+        method: "post",
+        //TODO: isAdmin might not be neccessary
+        body: JSON.stringify({
+            userName: userName,
+            password: password,
+            isAdmin: false,
+        }),
+        headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+        },
+    });
+
+    try {
+        const res = await fetch(request);
+        if (res.status === 200) {
+            // setUser(res.json);
+            const json = await res.json();
+            return json
+        }
+    } catch (err) {
+        console.log("hook call fail!!!, err is:", err);
+    }
+};
+
 export const useTopUser = () => {
     const [topUserName, settopUserName] = useState("");
     const [triggerTop, settriggerTop] = useState(false);
@@ -347,50 +316,20 @@ export const requestLogout = async () => {
     return res;
 };
 
-// export const useLoadAllUsers = ()=>{
-//     //the array of all user objects
-//     const [users, setusers] = useState([])
 
-//     const [success, setsuccess] = useState(false)
-
-//     useeffect(()=>{
-//         const url = `${api_host}/api/users`
-//         const makerequest = async ()=>{
-//             try{
-//                 const res = await fetch(url)
-//                 if (res.status === 200){
-//                     setusers(res.body)
-//                     setsuccess(true)
-//                 }
-//             }catch(err){
-//                 console.log(err)
-//                 setsuccess(false)
-//             }
-//         }
-
-//         makerequest()
-//     }, [])
-
-//     return {data:users, success: success}
-
-
-
-
-
-// }
 
 export const upload_avatar = (user, form) => {
     const formData = new FormData();
     formData.append("file", form);
     return fetch(`${API_HOST}/api/user/${user.userName}/images`, {
         method: "POST",
-        body: formData
+        body: formData,
     });
-}
+};
 
-export const get_avatar = async user => {
-	const res = await fetch(`${API_HOST}/api/user/${user.userName}/images`, {
-		method: "GET",
+export const get_avatar = async (user) => {
+    const res = await fetch(`${API_HOST}/api/user/${user.userName}/images`, {
+        method: "GET",
     });
     return res.json();
 };
