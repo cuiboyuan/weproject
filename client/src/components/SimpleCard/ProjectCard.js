@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Card } from "react-bootstrap";
-import { Avatar } from "antd";
+import { Avatar, notification } from "antd";
 import { Link } from "react-router-dom";
 import {
     AiOutlineFileImage,
@@ -71,7 +71,11 @@ const ProjectCard = ({
                                         // if (!data.usersLiked.includes(userName) && isLoggedIn) {
                                         // data.userLiked.push(userName);
                                         // setuserLikedNum(data.userLiked.length);
-                                        projectContext.thumUpProject(
+										if (!isLoggedIn){
+											notification["warning"]({message:"please login to like"})
+											return
+										}
+										projectContext.thumUpProject(
                                             data._id,
                                             userName,
                                             setuserLikedNum
