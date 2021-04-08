@@ -13,7 +13,7 @@ import { UserOutlined } from "@ant-design/icons";
 
 import "./style.css";
 import TopDownIcon from "./TopDownIcon";
-import { useAuthState } from "../../context";
+import { useAuthState, useProjectState } from "../../context";
 
 const ProjectCard = ({
 	isAdmin,
@@ -26,6 +26,7 @@ const ProjectCard = ({
 	//TODO: modify it to userID
 	const authContext = useAuthState();
 	const userName = authContext.userName;
+	const projectContext = useProjectState()
 	const [userLikedNum, setuserLikedNum] = useState(data.userLiked?.length || 0);
 	const isLoggedIn = authContext.isLoggedIn;
 	return (
@@ -77,8 +78,9 @@ const ProjectCard = ({
 										className="simplecard-icon-admin"
 										onClick={e => {
 											e.preventDefault();
-											data.topped = !data.topped;
-											setifTopped(data.topped);
+											// data.topped = !data.topped;
+											console.log(`click top!!! data_id ${data._id},data.id ${data.id}`)
+											projectContext.topProject(data._id, setifTopped)
 											sortFunction();
 										}}
 									>

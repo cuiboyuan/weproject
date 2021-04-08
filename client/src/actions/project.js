@@ -53,9 +53,23 @@ export const update_project_image = async (project, form) => {
     });
 };
 
+
 export const get_project_images = async project => {
 	const res = await fetch(`${API_HOST}/api/project/${project._id}/images`, {
 		method: "GET",
     });
     return res.json();
 };
+
+export const requestTopProject = async (projectID)=>{
+	const url =  `${API_HOST}/api/project/top/${projectID}`
+	try {
+		const res = await fetch(url)
+		if (res.status === 200){
+			return res
+		}
+	}catch(err){
+		console.log(err)
+	}
+}
+

@@ -252,11 +252,13 @@ const Create = props => {
 			notification["warning"]({
 				message: `Please type your project requirement.`,
 			});
-		} else if (!project.tags || project.tags.length === 0) {
+		// } else if (!project.tags || project.tags.length === 0) {
+		} else if (false) {
 			notification["warning"]({
 				message: `Please type your project tags.`,
 			});
-		} else if (!project.steps || project.steps.length === 0) {
+		// } else if (!project.steps || project.steps.length === 0) {
+		} else if (false) {
 			notification["warning"]({
 				message: `Please type your project steps.`,
 			});
