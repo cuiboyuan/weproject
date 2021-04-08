@@ -33,6 +33,11 @@ const TeammateBrowser = (props) => {
 		// }
 	}, [userContext.users])	
 
+	// useEffect(()=>{
+
+	// })
+
+
 	const authState = useAuthState()
 
 	const [isAdmin, setisAdmin] = useState(authState.isAdmin)

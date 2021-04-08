@@ -371,4 +371,24 @@ export const requestLogout = async () => {
 
 //     return {data:users, success: success}
 
+
+
+
+
 // }
+
+export const upload_avatar = (user, form) => {
+    const formData = new FormData();
+    formData.append("file", form);
+    return fetch(`${API_HOST}/api/user/${user.userName}/images`, {
+        method: "POST",
+        body: formData
+    });
+}
+
+export const get_avatar = async user => {
+	const res = await fetch(`${API_HOST}/api/user/${user.userName}/images`, {
+		method: "GET",
+    });
+    return res.json();
+};

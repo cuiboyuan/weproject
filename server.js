@@ -32,8 +32,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
 
 const ProjectRouter = require('./routes/project');
+const UserRouter = require('./routes/user');
 
 app.use("/api", ProjectRouter);
+app.use("/api", UserRouter);
 
 function isMongoError(error) {
     // checks for first error returned by promise rejection if Mongo database suddently disconnects
@@ -140,7 +142,7 @@ app.get("/api/check-session", (req, res) => {
 
     if (req.session.userName) {
         // console.log({ userName: req.session.userName  })
-        res.send({ userName: req.session.userName });
+        res.send({ userName: req.session.userName, isAdmin: req.session.isAdmin });
     } else {
         res.status(401).send();
     }
@@ -292,12 +294,13 @@ app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
         });
 });
 
-
-
-
+	
 // route for friends/connection features
 app.patch("/connections/reply/:username", mongoChecker, authenticate, async (req,res) => {
-
+    if (mongoose.connection.readyState != 1){
+		res.status(500).send('Internal server error')
+		return;
+	}
     const username = req.session.userName;
     const friendName = req.params.username;
     try {

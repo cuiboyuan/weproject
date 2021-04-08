@@ -48,10 +48,13 @@ export const AuthProvider = (props) => {
                     // console.log("in the respond body");
                     // if the user is logged in
                     const json = await res.json();
+
                     setIsLoggedIn(true);
+                    setUserName(json.userName)
                     setIsAdmin(json.isAdmin);
+                    console.log(`the session json isadmin ${json.isAdmin}`, json)
                     // console.log("the login json!!!!!!!!!!!!!!!!!", json)
-                    simpleCheck(json.userName);
+                    // simpleCheck(json.userName);
                     // console.log("json is!!!!!!!!!!!!!", json)
                 } catch (err) {
                     console.log("fail", err);
