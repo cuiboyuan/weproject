@@ -8,7 +8,6 @@ var express = require("express");
 var router = express.Router();
 const multipart = require("connect-multiparty");
 const multipartMiddleware = multipart();
-
 // project api
 router.get("/projects", async (req, res) => {
 	if (mongoose.connection.readyState != 1) {
@@ -47,7 +46,7 @@ router.delete("/project/:id", (req, res) => {
 		res.status(500).send("Internal server error");
 		return;
 	}
-	Project.deleteOne({id: req.params.id})
+	Project.deleteOne({ id: req.params.id })
 		.then(result => {
 			if (result.n === 0) {
 				res.status(404).send("Project not found");
@@ -118,5 +117,4 @@ router.get("/project/:id/images", async (req, res) => {
 			// .catch(error => console.error());
 	}
 });
-
 module.exports = router;
