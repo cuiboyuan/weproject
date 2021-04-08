@@ -182,8 +182,6 @@ export const replyRequest = async (friendName, accept) => {
     }
 };
 
-
-
 export const requestLogin = async (userName, password) => {
     const url = `${API_HOST}/api/login`;
     const request = new Request(url, {
@@ -202,55 +200,6 @@ export const requestLogin = async (userName, password) => {
         console.log(err);
         return false;
     }
-};
-
-/**
- * user info register, used in loggin_page/index.js
- */
-export const useRegister = () => {
-    const [user, setUser] = useState(null);
-
-    const [userName, setuserName] = useState("");
-    const [password, setpassword] = useState("");
-    const [regSuccess, setregSuccess] = useState(false);
-    // const [isAdmin, setisAdmin] = useState(initialState)
-    const setInputs = function (userName, password) {
-        setuserName(userName);
-        setpassword(password);
-    };
-
-    useEffect(() => {
-        const url = `${API_HOST}/api/newUser`;
-        const request = new Request(url, {
-            method: "post",
-            //TODO: isAdmin might not be neccessary
-            body: JSON.stringify({
-                userName: userName,
-                password: password,
-                isAdmin: false,
-            }),
-            headers: {
-                Accept: "application/json, text/plain, */*",
-                "Content-Type": "application/json",
-            },
-        });
-        const makeRequest = async () => {
-            try {
-                const res = await fetch(request);
-                if (res.status === 200) {
-                    // setUser(res.json);
-                    const json = await res.json();
-                    setUser(json);
-                    setregSuccess(true);
-                }
-            } catch (err) {
-                console.log("hook call fail!!!, err is:", err);
-                setregSuccess(false);
-            }
-        };
-        if (userName) makeRequest();
-    }, [userName, password]);
-    return [{ regSuccess: regSuccess, newUser: user }, setInputs];
 };
 
 export const requestAddUser = async (userName, password) => {
@@ -274,49 +223,33 @@ export const requestAddUser = async (userName, password) => {
         if (res.status === 200) {
             // setUser(res.json);
             const json = await res.json();
-            return json
+            return json;
         }
     } catch (err) {
         console.log("hook call fail!!!, err is:", err);
     }
 };
 
-export const useTopUser = () => {
-    const [topUserName, settopUserName] = useState("");
-    const [triggerTop, settriggerTop] = useState(false);
-    const [res, setres] = useState(false);
 
-    const triggerFunction = (userName) => {
-        settopUserName(userName);
-        settriggerTop(!triggerTop);
-    };
 
-    useEffect(() => {
-        const makeRequest = async () => {
-            const url = `${API_HOST}/api/top/${topUserName}`;
-            try {
-                if (topUserName) {
-                    const res = await fetch(url);
-                    if (res.status === 200) {
-                        setres(true);
-                    }
-                }
-            } catch (err) {
-                setres(false);
-                console.log(err);
+export const requestTopUser = async (userName) => {
+    const url = `${API_HOST}/api/top/${userName}`;
+    try {
+        if (userName) {
+            const res = await fetch(url);
+            if (res.status === 200) {
+                return res
             }
-        };
-        makeRequest();
-    }, [triggerTop]);
-    return [{ topUserName: topUserName, resTop: res }, triggerFunction];
+        }
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 export const requestLogout = async () => {
     const res = await fetch(`${API_HOST}/api/logout`);
     return res;
 };
-
-
 
 export const upload_avatar = (user, form) => {
     const formData = new FormData();

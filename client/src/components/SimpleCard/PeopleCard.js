@@ -1,6 +1,6 @@
 import React, { useState, Component, useEffect } from "react";
 import { /*  CardDeck, */ Col, Card, Button } from "react-bootstrap";
-import { Avatar } from "antd";
+import { Avatar, notification } from "antd";
 import { Link } from "react-router-dom";
 import {
     AiOutlineFileImage,
@@ -34,27 +34,6 @@ const PeopleCard = ({
     const isLoggedIn = authContext.isLoggedIn;
     const user = usersContext.users.find((u) => u.userName === data.userName);
 
-    const useAddFriend = () => {
-        const [friendName, setfriendName] = useState("");
-		const [res, setres] = useState(-1)
-        useEffect(() => {
-            const makeRequest = async () => {
-                if (friendName) {
-                    const respond = await usersContext.addFriend(friendName)
-					console.log("call addFriend(", friendName, ")!!!!!!!respond:",respond)
-					setres(respond)
-                }
-            }
-			makeRequest()
-        }, [friendName])
-		return [{friendName: friendName, res: res}, setfriendName]
-    }
-
-
-
-	const [{friendName, res}, setfriendName] = useAddFriend()
-
-	const [{topUserName, resTop}, settopUserName] = useTopUser()
 
     return (
         <Col lg="3" md="6" sm="12">
@@ -97,9 +76,17 @@ const PeopleCard = ({
                                             ) &&
                                             isLoggedIn
                                         ) {
-                                            // data.pending.push(userName);
-											setfriendName(data.userName)
-											console.log("currently adding friends", data.userName)
+                                            usersContext.addFriend(
+                                                data.userName
+                                            );
+
+                                            console.log(
+                                                "currently adding friends",
+                                                data.userName,
+                                                data.pending,
+                                                data.connections,
+                                                authContext.userName
+                                            );
                                             // setNumFriends(numFriends +1)
                                         }
                                     }}
@@ -113,10 +100,14 @@ const PeopleCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            data.topped = !data.topped;
-                                            setifTopped(data.topped);
-											settopUserName(data.userName)
-                                            sortFunction();
+                                            // data.topped = !data.topped;
+                                            // setifTopped(data.topped);
+                                            // settopUserName(data.userName)
+                                            usersContext.topUser(
+                                                data.userName,
+                                                setifTopped,
+                                                sortFunction
+                                            );
                                         }}
                                     >
                                         <TopDownIcon
@@ -128,7 +119,9 @@ const PeopleCard = ({
                                         onClick={(e) => {
                                             e.preventDefault();
                                             // removeFunction(data);
-                                            usersContext.deleteUserByName(data.userName)
+                                            usersContext.deleteUserByName(
+                                                data.userName
+                                            );
                                         }}
                                     >
                                         <AiOutlineDelete />

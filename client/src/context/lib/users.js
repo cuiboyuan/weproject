@@ -6,6 +6,7 @@ import {
 	upload_avatar,
 	get_avatar,
 	requestAddUser,
+	requestTopUser,
 } from "../../actions/user_profile";
 import { useAuthState } from "../../context";
 import { User } from "../../model";
@@ -86,6 +87,16 @@ export const UsersProvider = props => {
 		}
 	}
 
+	const topUser = async (userName, setifTopped, sortFunction)=>{
+		const res = await requestTopUser(userName)
+		if (res){
+			const user = users.find((u) => u.userName === userName)
+			user.topped = !user.topped
+			setifTopped(user.topped)
+			console.log("current top value of", userName, user.topped)
+			sortFunction()
+		}
+	}
 
     const updateUser = (user) => {
         let newUsers = users;
@@ -254,7 +265,8 @@ export const UsersProvider = props => {
             addFriend,
             deleteFriend,
             replyRequests,
-            deleteUserByName
+            deleteUserByName,
+			topUser
 
 
         };

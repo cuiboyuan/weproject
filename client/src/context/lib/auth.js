@@ -42,7 +42,6 @@ export const AuthProvider = (props) => {
     useEffect(() => {
         const checkSession = async () => {
             const res = await fetch(`${API_HOST}/api/check-session`);
-            // console.log("the res in auth.js", res);
             if (res.status === 200) {
                 try {
                     // console.log("in the respond body");
