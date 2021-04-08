@@ -65,7 +65,6 @@ class Project extends Component {
 	onFileUpload = files => {
 		// var filesArr = Array.prototype.slice.call(files);
 		let _files = files;
-		console.log(files);
 		// if (Array.isArray(files)) _files = [files];
 		let fileObjects = _files.map(file => {
 			return { name: file.name, url: URL.createObjectURL(file) };
@@ -74,8 +73,18 @@ class Project extends Component {
 			...this.state.data,
 			images: [...(this.state.data.images || []), ...fileObjects],
 		};
-		this.setState({ data: newData });
-		this.props.projectsContext.updateProject(newData);
+		this.props.projectsContext
+			.uploadProjectImage(this.state.data, files[0])
+			.then(res => {
+				if (res.status === 200) {
+					console.log("Image upload success!")
+					this.setState({ data: newData });
+				} else {
+					console.error(res);
+				}
+			})
+			.catch(err => console.error(err));
+		// this.props.projectsContext.updateProject(newData);
 	};
 
 	removeMember = userName => {

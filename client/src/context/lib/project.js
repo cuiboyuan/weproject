@@ -6,6 +6,9 @@ import {
 	fetch_project,
 	create_project,
 	delete_project,
+	update_project,
+	update_project_image,
+	get_project_images
 } from "../../actions/project";
 
 const ProjectContext = createContext();
@@ -41,6 +44,12 @@ export const ProjectProvider = props => {
 	const refresh = () => {
 		fetch_project()
 			.then(data => {
+				var d_w_img = data;
+				data.forEach(async (proj, i) => {
+					console.log("REFRESH", proj)
+					const images = await get_project_images(proj);
+					d_w_img[i].images = images.map(img => { return { id: img.image_id, name: img.image_name, url: img.image_url } })
+				})
 				setProjects(data);
 				console.log(data);
 			})
@@ -48,22 +57,53 @@ export const ProjectProvider = props => {
 	};
 
 	const addProject = project => {
-		console.log(project);
 		create_project(project)
 			.then(res => {
 				if (res.status === 200) {
-					setProjects([...projects, project]);
+					res.json().then(data => {
+						project._id = data.id;
+						setProjects([...projects, project]);
+					});
+				} else {
+					return;
 				}
 			})
 			.catch(err => console.error(err));
 	};
 
+	const uploadProjectImage = (project, form) => {
+		let promise = new Promise((resolve, reject) => {
+			update_project_image(project, form)
+				.then(res => {
+					if (res.status === 200) {
+						refresh();
+						resolve(res);
+					} else {
+						reject(res);
+					}
+				})
+				.catch(err => {
+					console.error(err);
+					reject(err);
+				});
+		});
+		return promise;
+	};
+
 	const updateProject = project => {
 		let index = projects.findIndex(p => p.id === project.id);
 		if (index >= 0) {
-			let newProjects = projects;
-			newProjects.splice(index, 1, project);
-			setProjects(newProjects);
+			update_project(project)
+				.then(res => {
+					if (res.status === 200) {
+						refresh();
+						return 200;
+					}
+				})
+				.catch(err => {
+					console.error(err);
+					return 400;
+				});
 		}
 	};
 
@@ -78,7 +118,7 @@ export const ProjectProvider = props => {
 				...(projects[index].applicants || []),
 				userName,
 			];
-			setProjects(projects);
+			updateProject(projects[index]);
 		}
 	};
 
@@ -88,8 +128,10 @@ export const ProjectProvider = props => {
 		if (index >= 0) {
 			delete_project(projectId)
 				.then(result => {
+					if (result.status === 200) {
+						refresh();
+					}
 					console.log(result);
-					refresh();
 				})
 				.catch(err => console.log(err));
 		}
@@ -104,8 +146,9 @@ export const ProjectProvider = props => {
 			} else {
 				newProject.progress.current = newProject.progress.steps.length;
 			}
-			projects.splice(index, 1, newProject);
-			setProjects(projects);
+			updateProject(newProject);
+			// projects.splice(index, 1, newProject);
+			// setProjects(projects);
 		}
 	};
 
@@ -118,8 +161,9 @@ export const ProjectProvider = props => {
 			} else {
 				newProject.progress.current = 0;
 			}
-			projects.splice(index, 1, newProject);
-			setProjects(projects);
+			updateProject(newProject);
+			// projects.splice(index, 1, newProject);
+			// setProjects(projects);
 		}
 	};
 
@@ -134,6 +178,7 @@ export const ProjectProvider = props => {
 			withdralStep,
 			addProject,
 			refresh,
+			uploadProjectImage,
 		};
 	};
 
