@@ -90,7 +90,8 @@ const ProjectCard = ({
 										className="simplecard-icon-admin"
 										onClick={e => {
 											e.preventDefault();
-											removeFunction(data);
+											// removeFunction(data);
+											projectContext.deleteProject(data.id)
 										}}
 									>
 										<AiOutlineDelete />
