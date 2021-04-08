@@ -7,6 +7,7 @@ const log = console.log;
 var express = require("express");
 var router = express.Router();
 const multipart = require("connect-multiparty");
+const { User } = require("../models/user");
 const multipartMiddleware = multipart();
 // project api
 router.get("/projects", async (req, res) => {
@@ -134,4 +135,28 @@ router.get("/project/top/:projectID", async (req, res) => {
 
 	}
 });
+
+
+router.post("/project/like", async (req, res)=>{
+    console.log("!!!!!!!!!!request like received")
+    try{
+        console.log("request body!!!!!", req.body)
+        const project_ID = req.body.project_ID
+        const userName = req.body.userName
+        const project = await Project.findById(project_ID)
+        console.log("project", project)
+        const user = await User.findOne({userName: userName})
+        console.log('user', user)
+        if (!project || !user){
+            res.status(404).send("proejct / user wrong")
+        }
+        project.usersLiked.push(userName)
+        await project.save()
+        res.send()
+    }catch(err){
+        console.log(err)
+        res.status(404).send(err)
+    }
+})
+
 module.exports = router;

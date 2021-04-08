@@ -10,7 +10,9 @@ import {
     update_project_image,
     get_project_images,
     requestTopProject,
+    requestThumUp,
 } from "../../actions/project";
+import { notification } from "antd";
 
 const ProjectContext = createContext();
 
@@ -189,6 +191,22 @@ export const ProjectProvider = (props) => {
         }
     };
 
+    const thumUpProject = async (project_ID, userName, setuserLikedNum)=>{
+        let index = projects.findIndex((p) => p._id === project_ID);
+        if (index >=0){
+            let project = projects[index]
+            if (project.usersLiked.includes(userName)){
+                notification["warning"]({message:"you can not like the project twice"})
+                console.log("liked twice!")
+                return
+            }
+            const res = await requestThumUp(project_ID, userName)
+            if (res){
+                project.usersLiked.push(userName)
+                setuserLikedNum(project.usersLiked.length)
+            }
+        }
+    }
 
 
     const getValues = () => {
@@ -204,6 +222,7 @@ export const ProjectProvider = (props) => {
             refresh,
             uploadProjectImage,
             topProject,
+            thumUpProject
         };
     };
 
