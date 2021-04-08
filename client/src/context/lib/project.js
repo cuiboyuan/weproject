@@ -130,8 +130,9 @@ export const ProjectProvider = props => {
 				.then(result => {
 					if (result.status === 200) {
 						refresh();
+					} else {
+						console.error(result);
 					}
-					console.log(result);
 				})
 				.catch(err => console.log(err));
 		}
