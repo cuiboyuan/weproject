@@ -18,6 +18,7 @@ http://we-project.herokuapp.com/
 - react-dropzone (image upload)
 - Ant Design (Avatar, Icons)
 - React Bootstrap (SimpleCard, SimpleList)
+- Cloudinay (backeng image upload)
 
 ## Current Features
 - Header
@@ -137,10 +138,10 @@ http://we-project.herokuapp.com/
    - The request to remove **username** from the ```connection``` list of the current login user. The userName of the login user will also be removed from the ```connections``` list of the user with **username**. No request body is required
 
 ## Project Routes
-  - GET ```/project/top/:projectID```
+  - GET ```/api/project/top/:projectID```
     - The request from admin to top a particular project by their projectID (the _id attribute)
     - returns status code 200 on success and 404 on failure
-  - POST ```/project/like```
+  - POST ```/api/project/like```
     - The request from users to like a particular project
     - The request body is in the following format:
       ```
@@ -150,6 +151,52 @@ http://we-project.herokuapp.com/
       }
       ```
     - Returns status code 200 on success and 404 on failure
+  - GET ```/api/projects```
+    - Fetch all projects
+    - 200 on success, 500 on failure
+```
+    {
+        "name": "Project",
+        "description": "Project",
+    }
+```
+  - POST ```/api/project```
+    - Add a new project
+    - Please pass the above JSON object to the request body for testing
+    - 200 on success, 500 on failure
+  - DELETE ```/api/project/:id```
+    - Delete an existing project
+    - Please pass an project id `_id` returned by DB to route url.
+    - 200 on success, 404 on id not found, 500 on other failures
+```
+{
+        "requirement": "No requirement",
+        "userIds": [],
+        "status": "incomplete",
+        "usersLiked": [],
+        "tags": [],
+        "topped": false,
+        "images": [],
+        "id": "17f3777-54a0-2b7-47d0-5054a0fe044",
+        "name": "Project",
+        "description": "Project",
+    }
+```
+  - PATCH ```/api/project/:id```
+    - Update an existing project
+    - Please pass an project id `_id` returned by DB to route url.
+    - Please pass the above JSON object to the request body for testing
+    - 200 on success, 404 on id not found, 500 on other failures
+  - POST ```/api/project/:id/images```
+    - Add images to a project
+    - Please pass an project id `_id` returned by DB to route url.
+    - Please pass an image file to the form-data with field `file`.
+    - 200 on success, 404 on id not found, 500 on other failures
+  - GET ```/api/project/:id/images```
+    - Fetch project image.
+    - Please pass an project id `_id` returned by DB to route url.
+    - Please pass an image file to the form-data with field `file`.
+    - 200 on success, 404 on id not found, 500 on other failures
 ## User Cases
 - **project browsing** page (see the pricture below for detailed reference)
   - search bar: you could search project by name
