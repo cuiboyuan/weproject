@@ -426,7 +426,7 @@ class Profile extends Component {
 							<div className="project-admin-control">
 								<div className="user-profile-avatar">
 									<label className="user-profile-avatar-input-label">
-										<input type="file" onChange={ this.onUploadAvatar}/>
+										{isProfile && (<input type="file" onChange={ this.onUploadAvatar}/>)}
 										{this.state.avatar?.url ? <Avatar className="user-profile-avatar-input-label" size={70} src={this.state.avatar.url} /> : <Avatar className="user-profile-avatar-input-label" size={70} icon={<AiOutlineUser />} />}
 									</label>
 									<div className="project-page-name">{userName}</div>
@@ -737,11 +737,17 @@ class Profile extends Component {
 								{this.state.friends.map(
 									(member, i) => (
 										<div key={i} className="project-page-owner">
-											<Avatar
-												className="simplecard-avatar"
-												size={40}
-												icon={<UserOutlined />}
-											/>
+											{member?.avatar?.url ? (
+												<Avatar size={70} src={member?.avatar.url} />
+											) : (
+												<Avatar
+													size={70}
+													className="project-card-avatar"
+													icon={
+														<UserOutlined className="project-card-avatar-content" />
+													}
+												/>
+											)}
 											<div className="project-page-owner-name-span">
 													<span>{member.userName}</span>
 											</div>
@@ -765,11 +771,17 @@ class Profile extends Component {
 										{this.state.friendRequests.map(
 											(member, i) => (
 												<div key={i} className="project-page-owner">
-													<Avatar
-														className="simplecard-avatar"
-														size={40}
-														icon={<UserOutlined />}
-													/>
+													{member?.avatar?.url ? (
+														<Avatar size={70} src={member?.avatar.url} />
+													) : (
+														<Avatar
+															size={70}
+															className="project-card-avatar"
+															icon={
+																<UserOutlined className="project-card-avatar-content" />
+															}
+														/>
+													)}
 													<div className="project-page-owner-name-span">
 														
 															<span>{member.userName}</span>
