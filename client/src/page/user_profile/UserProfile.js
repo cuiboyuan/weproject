@@ -426,7 +426,7 @@ class Profile extends Component {
 							<div className="project-admin-control">
 								<div className="user-profile-avatar">
 									<label className="user-profile-avatar-input-label">
-										<input type="file" onChange={ this.onUploadAvatar}/>
+										{isProfile && (<input type="file" onChange={ this.onUploadAvatar}/>)}
 										{this.state.avatar?.url ? <Avatar className="user-profile-avatar-input-label" size={70} src={this.state.avatar.url} /> : <Avatar className="user-profile-avatar-input-label" size={70} icon={<AiOutlineUser />} />}
 									</label>
 									<div className="project-page-name">{userName}</div>
