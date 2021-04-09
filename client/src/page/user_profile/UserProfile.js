@@ -374,6 +374,10 @@ class Profile extends Component {
 
 
 	onUploadAvatar = e => {
+
+		if (!this.state.isProfile){
+			return;
+		}
 		console.log(e);
 		if (e.target.files.length === 0) return;
 		let userName = this.state.userName;

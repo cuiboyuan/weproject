@@ -270,6 +270,10 @@ export const UsersProvider = (props) => {
             addFriend,
             deleteFriend,
             replyRequests,
+            deleteUserByName,
+			topUser,
+
+            uploadAvatar
 
 
         };
