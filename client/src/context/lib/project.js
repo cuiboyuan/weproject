@@ -195,6 +195,7 @@ export const ProjectProvider = (props) => {
         let index = projects.findIndex((p) => p._id === project_ID);
         if (index >=0){
             let project = projects[index]
+            console.log("the user like attribute of project", project)
             if (project.usersLiked.includes(userName)){
                 notification["warning"]({message:"you can not like the project twice"})
                 console.log("liked twice!")

@@ -450,6 +450,16 @@ app.delete("/connections/remove/:username", mongoChecker, authenticate, async (r
     }
 })
 
+
+// app.delete("/api/removeUser/:userName", async (req, res)=>{
+//     const userName = req.params.userName
+//     try{
+
+//     }catch(error){
+
+//     }
+// })
+
 app.get("/api/logout", (req, res) => {
     // Remove the session
     req.session.destroy(error => {
