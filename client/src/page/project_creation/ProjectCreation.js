@@ -56,8 +56,8 @@ class ProjectCreation extends Component {
 			{ current: 0, steps: e.steps },
 		)
 		//TODO: Delete ===========
-		newProj.applicants = ["user1", "user2"];
-		newProj.members = ["user3", "user4"];
+		// newProj.applicants = ["user1", "user2"];
+		// newProj.members = ["user3", "user4"];
 		//=======================
 
 		// newProjects.push(newProj);

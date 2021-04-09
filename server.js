@@ -17,7 +17,7 @@ const path = require("path");
 const express = require("express");
 
 const app = express();
-const log = console.log
+const log = console.log;
 // enable CORS if in development, for React local development server to connect to the web server.
 const cors = require("cors");
 if (env !== "production") {
@@ -34,8 +34,8 @@ const { Project } = require("./models/project");
 const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
 
-const ProjectRouter = require('./routes/project');
-const UserRouter = require('./routes/user');
+const ProjectRouter = require("./routes/project");
+const UserRouter = require("./routes/user");
 
 app.use("/api", ProjectRouter);
 app.use("/api", UserRouter);
@@ -92,7 +92,7 @@ const adminCheck = (req, res, next) => {
                 if (!user) {
                     return Promise.reject();
                 } else {
-                    if (user.isAdmin){
+                    if (user.isAdmin) {
                         next();
                     } else {
                         res.status(403).send("Forbidden");
@@ -105,7 +105,7 @@ const adminCheck = (req, res, next) => {
     } else {
         res.status(401).send("Unauthorized");
     }
-}
+};
 
 // Create a session and session cookie
 app.use(
@@ -131,7 +131,6 @@ app.use(
 
 /* API Routes */
 
-
 app.get("/api/check-session", (req, res) => {
     if (env !== "production" && USE_TEST_USER) {
         // test user on development environment.
@@ -140,16 +139,18 @@ app.get("/api/check-session", (req, res) => {
         res.send({ userName: TEST_USER_NAME });
         return;
     }
-    console.log(req.session)
+    console.log(req.session);
 
     if (req.session.userName) {
         // console.log({ userName: req.session.userName  })
-        res.send({ userName: req.session.userName, isAdmin: req.session.isAdmin });
+        res.send({
+            userName: req.session.userName,
+            isAdmin: req.session.isAdmin,
+        });
     } else {
         res.status(401).send();
     }
 });
-
 
 // A route to login and create a session
 app.post("/api/login", mongoChecker, (req, res) => {
@@ -165,7 +166,7 @@ app.post("/api/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
-            req.session.isAdmin = user.isAdmin
+            req.session.isAdmin = user.isAdmin;
             console.log("debug", user);
             res.send(user);
         })
@@ -198,19 +199,18 @@ app.get("/api/user/:username", mongoChecker, (req, res) => {
 
 app.get("/api/users", mongoChecker, async (req, res) => {
     try {
-        const users = await User.find({})
-        const json = JSON.stringify(users)
-        res.send(json)
-    } catch(err){
-        log(error)
-        res.status(500).send("Internal Server Error")
+        const users = await User.find({});
+        const json = JSON.stringify(users);
+        res.send(json);
+    } catch (err) {
+        log(error);
+        res.status(500).send("Internal Server Error");
     }
 });
 
 // route to create a new user
 app.post("/api/newUser", mongoChecker, (req, res) => {
-
-    console.log(req.body)
+    console.log(req.body);
     const newUser = new User({
         userName: req.body.userName,
         password: req.body.password,
@@ -229,34 +229,54 @@ app.post("/api/newUser", mongoChecker, (req, res) => {
         })
         .catch((error) => {
             res.status(400).send("Bad Request");
-            console.log(error)
+            console.log(error);
         });
 });
 
 // route to delete a user
-app.delete("/api/deleteUser/:username", mongoChecker, adminCheck, (req, res) => {
-    // TODO: add a middleware to check for admin
+app.delete(
+    "/api/deleteUser/:username",
+    mongoChecker,
+    adminCheck,
+    async (req, res) => {
+        // TODO: add a middleware to check for admin
 
-    const username = req.params.username;
-
-    User.deleteOne({ userName: username })
-        .then((result) => {
-            if (result.n === 0) {
-                res.status(404).send("user not found");
-            } else if (result.ok) {
-                res.send(result);
-            } else {
-                res.status(500).send("Internal server error");
+        const username = req.params.username;
+        try {
+            const users = await User.find({});
+            // console.log(users)
+            for (let u of users) {
+                console.log("the user info:", u);
+                //connections
+                // u.connections = u.connections.filter((u) => u != username);
+                u.connections.remove(username);
+                //pending
+                // u.pending = u.pending.filter((u) => u != username);
+                u.pending.remove(username);
+                await u.save();
             }
-        })
-        .catch((error) => {
-            res.status(500).send("Internal server error");
-        });
-});
+        } catch (err) {
+            res.status(500).send()
+            console.log(err);
+        }
+        User.deleteOne({ userName: username })
+            .then((result) => {
+                if (result.n === 0) {
+                    res.status(404).send("user not found");
+                } else if (result.ok) {
+                    res.send(result);
+                } else {
+                    res.status(500).send("Internal server error");
+                }
+            })
+            .catch((error) => {
+                res.status(500).send("Internal server error");
+            });
+    }
+);
 
 // route to update user profile
 app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
-
     const profileData = [
         "description",
         "skills",
@@ -296,190 +316,182 @@ app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
         });
 });
 
-	
 // route for friends/connection features
-app.patch("/connections/reply/:username", mongoChecker, authenticate, async (req,res) => {
-    if (mongoose.connection.readyState != 1){
-		res.status(500).send('Internal server error')
-		return;
-	}
-    const username = req.session.userName;
-    const friendName = req.params.username;
-    try {
-        const user = await User.findOne({userName: username});
-        if (!user){
-            res.status(404).send('User not found')
+app.patch(
+    "/connections/reply/:username",
+    mongoChecker,
+    authenticate,
+    async (req, res) => {
+        if (mongoose.connection.readyState != 1) {
+            res.status(500).send("Internal server error");
             return;
         }
-        if (!user.pending.includes(friendName)){
-            res.status(404).send('User not found')
+        const username = req.session.userName;
+        const friendName = req.params.username;
+        try {
+            const user = await User.findOne({ userName: username });
+            if (!user) {
+                res.status(404).send("User not found");
+                return;
+            }
+            if (!user.pending.includes(friendName)) {
+                res.status(404).send("User not found");
+                return;
+            } else {
+                user.pending.remove(friendName);
+            }
+            if (req.body.accept) {
+                if (!user.connections.includes(friendName)) {
+                    user.connections.push(friendName);
+
+                    const friend = await User.findOne({ userName: friendName });
+
+                    if (!friend) {
+                        res.status(404).send("User not found");
+                        return;
+                    }
+                    friend.connections.push(username);
+                    await friend.save();
+                }
+            }
+            await user.save();
+            console.log(`connection accepted`);
+            res.send(friendName);
+        } catch (error) {
+            res.status(500).send("Internal Server error");
             return;
-        } else {
-            user.pending.remove(friendName);
         }
-        if (req.body.accept){
-            if (!user.connections.includes(friendName)){
-                user.connections.push(friendName);
+    }
+);
 
+app.post(
+    "/connections/request/:username",
+    mongoChecker,
+    authenticate,
+    (req, res) => {
+        const username = req.session.userName;
+        const friendName = req.params.username;
+        console.log(`friendName: ${friendName}, username: ${username}`);
+        console.log("current session", req.session);
 
-                const friend = await User.findOne({userName: friendName})
+        if (username === friendName) {
+            res.status(400).send("bad request");
+            return;
+        }
 
-                if (!friend){
-                    res.status(404).send('User not found')
+        User.findOne({ userName: friendName })
+            .then((user) => {
+                if (!user) {
+                    res.status(404).send("User not found");
                     return;
                 }
-                friend.connections.push(username);
-                await friend.save();
-            }
-        }
-        await user.save();
-        console.log(`connection accepted`)
-        res.send(friendName)
-        
-    } catch (error) {
-		res.status(500).send("Internal Server error")
-        return;
-        
+
+                if (
+                    !user.pending.includes(username) &&
+                    !user.connections.includes(username)
+                ) {
+                    user.pending.push(username);
+                }
+
+                user.save()
+                    .then((result) => {
+                        res.send(result);
+                    })
+                    .catch((err) => {
+                        res.status(400).send("bad request");
+                        return;
+                    });
+            })
+            .catch((err) => {
+                res.status(500).send("Internal Server error");
+                return;
+            });
     }
-    
-})
+);
 
-
-app.post("/connections/request/:username", mongoChecker, authenticate, (req,res) => {
-
-    const username = req.session.userName;
-    const friendName = req.params.username;
-    console.log(`friendName: ${friendName}, username: ${username}`)
-    console.log("current session", req.session)
-
-    if (username === friendName){
-        res.status(400).send("bad request");
-        return;
-    }
-
-    User.findOne({userName: friendName})
-    .then((user) => {
-        if (!user){
-            res.status(404).send('User not found')
+app.get("/api/top/:username", async (req, res) => {
+    const userName = req.params.username;
+    console.log("c!!!!!!!!!!!!!!!!!!!!!!");
+    try {
+        const user = await User.findOne({ userName: userName });
+        console.log("the user name", userName);
+        if (!user) {
+            res.status(404).send("User not found");
             return;
-        }
-
-        if (!user.pending.includes(username) && !user.connections.includes(username)){
-            user.pending.push(username);
-        }
-
-        user.save()
-        .then(result => {
-            res.send(result);
-        }).catch(err => {
-            res.status(400).send("bad request")
-            return;
-        })
-        
-        
-    }).catch((err) => {
-		res.status(500).send("Internal Server error")
-        return;
-    })
-})
-
-
-app.get("/api/top/:username", async (req, res)=>{
-    const userName = req.params.username
-    console.log("c!!!!!!!!!!!!!!!!!!!!!!")
-    try{
-        const user = await User.findOne({userName: userName})
-        console.log("the user name", userName)
-        if (!user){
-            res.status(404).send("User not found")
-            return
         }
         //otherwise top the user
-        user.topped = !user.topped
-        await user.save()
-        res.send()
-    }catch (err){
-        console.log(err)
-        res.status(404).send("user not found")
+        user.topped = !user.topped;
+        await user.save();
+        res.send();
+    } catch (err) {
+        console.log(err);
+        res.status(404).send("user not found");
     }
-})
+});
 
 // app.delete("/connections/remove/:username", async (req, res) => {
-    
+
 //     if (mongoose.connection.readyState != 1){
 // 		res.status(500).send('Internal server error')
 // 		return;
 // 	}
-app.delete("/connections/remove/:username", mongoChecker, authenticate, async (req, res) => {
-
-    const username = req.session.userName;
-    const friendName = req.params.username;
-    try {
-        const user = await User.findOne({userName: username});
-        if (!user){
-            res.status(404).send('User not found')
-            return;
-        }
-
-        if (user.connections.includes(friendName)){
-            user.connections.remove(friendName);
-
-
-            const friend = await User.findOne({userName: friendName})
-
-            if (!friend){
-                res.status(404).send('User not found')
+app.delete(
+    "/connections/remove/:username",
+    mongoChecker,
+    authenticate,
+    async (req, res) => {
+        const username = req.session.userName;
+        const friendName = req.params.username;
+        try {
+            const user = await User.findOne({ userName: username });
+            if (!user) {
+                res.status(404).send("User not found");
                 return;
             }
-            friend.connections.remove(username);
 
-            await friend.save();
-            await user.save();
-            
-            console.log(`connection accepted`)
-        } else {
-            res.status(404).send('User not found')
+            if (user.connections.includes(friendName)) {
+                user.connections.remove(friendName);
+
+                const friend = await User.findOne({ userName: friendName });
+
+                if (!friend) {
+                    res.status(404).send("User not found");
+                    return;
+                }
+                friend.connections.remove(username);
+
+                await friend.save();
+                await user.save();
+
+                console.log(`connection accepted`);
+            } else {
+                res.status(404).send("User not found");
+            }
+            res.send(friendName);
+        } catch (error) {
+            res.status(500).send("Internal Server error");
+            return;
         }
-        res.send(friendName)
-
-        
-    } catch (error) {
-		res.status(500).send("Internal Server error")
-        return;
-        
     }
-})
-
-
-// app.delete("/api/removeUser/:userName", async (req, res)=>{
-//     const userName = req.params.userName
-//     try{
-
-//     }catch(error){
-
-//     }
-// })
+);
 
 app.get("/api/logout", (req, res) => {
     // Remove the session
-    req.session.destroy(error => {
+    req.session.destroy((error) => {
         if (error) {
             res.status(500).send(error);
         } else {
-            res.send()
+            res.send();
         }
     });
 });
 
-
-
 app.use(express.static(path.join(__dirname, "/client/build")));
-
 
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
     // check for page routes that we expect in the frontend to provide correct status code.
-    const goodPageRoutes = ["/", "/loggin", "/teammates",]// "/project", "/user","/profile","/newProject"];
+    const goodPageRoutes = ["/", "/loggin", "/teammates"]; // "/project", "/user","/profile","/newProject"];
     if (!goodPageRoutes.includes(req.url)) {
         // if url not in expected page routes, set status to 404.
         res.status(404).send();
@@ -489,8 +501,6 @@ app.get("*", (req, res) => {
     // send index.html
     res.sendFile(path.join(__dirname, "/client/build/index.html"));
 });
-
-
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

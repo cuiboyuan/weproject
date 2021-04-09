@@ -28,6 +28,7 @@ const TeammateBrowser = (props) => {
 
 	useEffect(() => {
 		setDisplayData([...userContext.users].sort(compare))
+		console.log("updating teammate browsing page")
 		// return () => {
 		// 	cleanup
 		// }
