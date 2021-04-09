@@ -18,6 +18,7 @@ http://we-project.herokuapp.com/
 - react-dropzone (image upload)
 - Ant Design (Avatar, Icons)
 - React Bootstrap (SimpleCard, SimpleList)
+- MongoDB Atlas (backend data)
 - Cloudinay (backeng image upload)
 
 ## Current Features
