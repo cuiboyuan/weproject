@@ -364,7 +364,7 @@ app.post("/connections/request/:username", mongoChecker, authenticate, (req,res)
             return;
         }
 
-        if (!user.pending.includes(username)){
+        if (!user.pending.includes(username) && !user.connections.includes(username)){
             user.pending.push(username);
         }
 
