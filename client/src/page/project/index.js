@@ -21,12 +21,12 @@ import ProjectCreate from "../project_create";
 
 const { TextArea } = Input;
 
-const members = [...Array(3).keys()].map((_, i) => {
-	return { userName: `member ${i}` };
-});
-const applicants = [...Array(4).keys()].map((_, i) => {
-	return { userName: `applicant ${i}` };
-});
+// const members = [...Array(3).keys()].map((_, i) => {
+// 	return { userName: `member ${i}` };
+// });
+// const applicants = [...Array(4).keys()].map((_, i) => {
+// 	return { userName: `applicant ${i}` };
+// });
 
 const FileUpload = ({ onDrop, accept }) => {
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
