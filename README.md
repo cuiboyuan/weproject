@@ -39,7 +39,7 @@ http://we-project.herokuapp.com/
 - Admin Previliges (In progress)
 
 ## Server Routes
-- get ```/api/check-session```:
+- GET ```/api/check-session```:
   - if the user is currently loggedin, returns status code 200 and a object of 
     ```
     {
@@ -52,9 +52,9 @@ http://we-project.herokuapp.com/
 
 ### User Routes
 
-- GET "/api/user/:username"
+- GET ```/api/user/:username```
   - Return the user object with userName of parameter "username"; no request body required.
-- GET "/api/users"
+- GET ```/api/users```
   - Return the all user objects in the database; no request body required.
 - GET ```/api/top/:username```
   - Request to top the user with the given **username**
@@ -63,22 +63,7 @@ http://we-project.herokuapp.com/
 - GET ```/api/logout```
   - Request to logout the user's account. The request will destroy the created session
   - Returns status code 200 on success and 500 on error
-- POST "/api/newUser"
-  - Add a new user object to the database. The request body should be of type JSON and formatted as:
     
-    {
-    
-        "userName": "user",
-        
-        "password": "user",
-        
-        "isAdmin": false
-        
-    }
-    
-    If "isAdmin" is false, the route will create a regular user and set its userName and password to values of the corresponding attributes in the body; otherwise, the route will create admin and set its credentials correspondingly.
-    
-   - Route returns the object id of the new user on success. If username already exists it will return status code 400.
 - POST ```/api/login``` 
   - The login request. Request body is of form:
     ```
@@ -99,43 +84,55 @@ http://we-project.herokuapp.com/
         isAdmin: <if it is an admin user>
       }
   - Returns the created User object on success and status code 400 on failure.
-- DELETE "/api/deleteUser/:username"
+- DELETE ```/api/deleteUser/:username```
    - The route deletes the user with userName of parameter username; no request body required
    - The route will only execute successfully if the currently logged in user is an admin
    - On success, it will return whatever is returned from the deleteOne() mongoose call.
-- PATCH "/api/updateProfile"
+- PATCH ```/api/updateProfile```
    - The route updates the basic user info of the currently logged in user
    - The request body contains updated information, and it should be a JSON document formatted as below:
+    ```
+    {
 
-{
+        "description": "user description",
 
-    "description": "user description",
-    
-    "skills": ["skill1", ""skill2" ],
-    
-    "experiences":[{
-    
-        "company":"UofT",
+        "skills": ["skill1", ""skill2" ],
 
-        "position": "student",
+        "experiences":[{
 
-        "start": "2018-09-01",
+            "company":"UofT",
 
-        "end": "2022-05-01"
-    
-    }],
-    
-    "email": "user@user.com",
-    
-    "linkedin": "linkedin.com/user",
-    
-    "github": "github.com/user",
-    
-}
+            "position": "student",
 
-- PATCH "/connections/reply/:username"
+            "start": "2018-09-01",
+
+            "end": "2022-05-01"
+
+        }],
+
+        "email": "user@user.com",
+
+        "linkedin": "linkedin.com/user",
+
+        "github": "github.com/user",
+
+    }
+    ```
+  - On success, the user will update its corresponding information in the request body, and the updated user object will be returned
+
 - POST "/connections/request/:username"
+  - The request to add the current logged in user to the ```pending``` list of the user with the given **username**; i.e., login user sends a friend request to another user.
+  - On success, the route will return the user object with the updated pending list.
+- PATCH "/connections/reply/:username"
+  - The request takes in a request body of type JSON with only one attribute:
+  ```
+  {
+    "accept": <boolean representing whether the user accepts the friend request>
+  }
+  ```
+  - If ```accept``` is false, we will just remove the given **username** from the pending list of the login user; else, we will move **username** from pending list to the connection list.
 - DELETE "/connections/remove/:username"
+   - The request to remove **username** from the connection list of the current login user. No request body is required
 
 ## Project Routes
   - GET ```/project/top/:projectID```
