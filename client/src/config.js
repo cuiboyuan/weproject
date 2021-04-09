@@ -6,7 +6,7 @@
 
 const prod = {
     env: 'production',
-    api_host: '' // an empty string to signify a relative path. can also put a deployment URL.
+    api_host: 'mongodb://localhost/we-project' // an empty string to signify a relative path. can also put a deployment URL.
 };
 const dev = {
     env: 'development',
