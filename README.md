@@ -87,7 +87,7 @@ http://we-project.herokuapp.com/
 - DELETE ```/api/deleteUser/:username```
    - The route deletes the user with userName of parameter username; no request body required
    - The route will only execute successfully if the currently logged in user is an admin
-   - On success, it will return whatever is returned from the deleteOne() mongoose call.
+   
 - PATCH ```/api/updateProfile```
    - The route updates the basic user info of the currently logged in user
    - The request body contains updated information, and it should be a JSON document formatted as below:
@@ -96,25 +96,25 @@ http://we-project.herokuapp.com/
 
         "description": "user description",
 
-        "skills": ["skill1", ""skill2" ],
+        "skills": ["skill1", ""skill2",... ],
 
         "experiences":[{
 
-            "company":"UofT",
+            "company":"company 1",
 
-            "position": "student",
+            "position": "title 1",
 
             "start": "2018-09-01",
 
             "end": "2022-05-01"
 
-        }],
+        }, ... ],
 
-        "email": "user@user.com",
+        "email": <user email address>,
 
-        "linkedin": "linkedin.com/user",
+        "linkedin": <user linkedin link>,
 
-        "github": "github.com/user",
+        "github": <user github link>,
 
     }
     ```
@@ -130,9 +130,9 @@ http://we-project.herokuapp.com/
     "accept": <boolean representing whether the user accepts the friend request>
   }
   ```
-  - If ```accept``` is false, we will just remove the given **username** from the pending list of the login user; else, we will move **username** from pending list to the connection list.
+  - If ```accept``` is false, we will just remove the given **username** from the pending list of the login user (user rejects the friend request); else, we will move **username** from pending list to the connection list (user accepts the friend request).
 - DELETE ```/connections/remove/:username```
-   - The request to remove **username** from the connection list of the current login user. No request body is required
+   - The request to remove **username** from the ```connection``` list of the current login user. The userName of the login user will also be removed from the ```connections``` list of the user with **username**. No request body is required
 
 ## Project Routes
   - GET ```/project/top/:projectID```
