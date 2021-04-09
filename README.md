@@ -38,6 +38,19 @@ http://we-project.herokuapp.com/
 - Teammate Details
 - Admin Previliges (In progress)
 
+## Server Routes
+
+### User Routes
+
+- GET "/api/user/:username"
+- GET "/api/users"
+- POST "/api/newUser"
+- DELETE "/api/deleteUser/:username"
+- PATCH "/api/updateProfile"
+- PATCH "/connections/reply/:username"
+- POST "/connections/request/:username"
+- DELETE "/connections/remove/:username"
+
 ## User Cases
 - **project browsing** page (see the pricture below for detailed reference)
   - search bar: you could search project by name
