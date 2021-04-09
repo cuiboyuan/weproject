@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose');
+const Image = require('./image');
 
 const ProjectSchema = new mongoose.Schema({
     id: {
@@ -40,8 +41,8 @@ const ProjectSchema = new mongoose.Schema({
         default: [],
     },
     progress: {
-        type: Array,
-        default: [],
+        type: Object,
+        // default: [],
     },
     topped: {
         type: Boolean,
@@ -52,6 +53,10 @@ const ProjectSchema = new mongoose.Schema({
         default: [],
     },
     applicants: {
+        type: [String],
+        default: [],
+    },
+    images: {
         type: [String],
         default: [],
     }

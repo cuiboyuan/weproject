@@ -1,110 +1,103 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import uuid from "react-uuid";
-import { useLoadAllUsers, useRegister } from "../../actions/user_profile";
+import {
+	useLoadAllUsers,
+	useRegister,
+	upload_avatar,
+	get_avatar,
+	requestAddUser,
+	requestTopUser,
+} from "../../actions/user_profile";
 import { useAuthState } from "../../context";
 import { User } from "../../model";
 
-import { updateProfile, deleteProfile, replyRequest, connectFriend, removeFriend } from "../../actions/user_profile";
+import {
+	updateProfile,
+	deleteProfile,
+	replyRequest,
+	connectFriend,
+	removeFriend,
+} from "../../actions/user_profile";
 
 import ENV from "../../config.js";
 const API_HOST = ENV.api_host;
 
 const UsersContext = createContext();
 
-// const data = [...Array(12).keys()].map((_, i) =>
-//     User.fromResponseBody({
-//         id: uuid(),
-//         description: `user${i} description`,
-//         userName: `user${i}`,
-//         password: `user${i}`,
-//         ownedProjectIds: [],
-//         joinedProjectIds: [],
-//         connection: [],
-//     })
-// );
 
-// data.push(
-//     User.fromResponseBody({
-//         id: uuid(),
-//         description: "",
-//         userName: "testName",
-//         password: "abcd",
-//         ownedProjectIds: [],
-//         joinedProjectIds: [],
-//         connection: [],
-//     })
-// );
-
-// data.push(
-//     User.fromResponseBody({
-//         id: uuid(),
-//         description: `user description`,
-//         userName: `user`,
-//         password: `user`,
-//         ownedProjectIds: [],
-//         joinedProjectIds: [],
-//     })
-// );
-
-// data.push(
-//     User.fromResponseBody({
-//         id: uuid(),
-//         description: `admin description`,
-//         userName: `admin`,
-//         password: `admin`,
-//         ownedProjectIds: [],
-//         joinedProjectIds: [],
-//     })
-// );
-
-
-//TODO: implement the folowing in the order:
-	//1 server on success
-	//2 update the context 
-export const UsersProvider = (props) => {
+export const UsersProvider = props => {
 	//part for initializing the data
-    const [users, setUsers] = useState([]);
-    const [update, setUpdate] = useState(false);
-    useEffect(() => {
-        const url = `${API_HOST}/api/users`;
-        const makerequest = async () => {
-            try {
-                const res = await fetch(url);
-                if (res.status === 200) {
-                    const json = await res.json();
-                    console.log("json", json);
-                    setUsers(json);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        console.log(users)
-        makerequest();
-    }, []);
+	const [users, setUsers] = useState([]);
+	const [update, setUpdate] = useState(false);
+	useEffect(() => {
+		refresh();
+	}, []);
 
+	const refresh = () => {
+		const url = `${API_HOST}/api/users`;
+		const makerequest = async () => {
+			try {
+				const res = await fetch(url);
+				if (res.status === 200) {
+					const json = await res.json();
+					var u_avatar = json;
+					json.forEach(async (u, i) => {
+                        const avatar = await get_avatar(u);
+                        if (avatar.length > 0) {
+                            u_avatar[i].avatar = {
+                                id: avatar[0].image_id,
+                                name: avatar[0].image_name,
+                                url: avatar[0].image_url,
+                            };
+                        }
+					});
+					setUsers(u_avatar);
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		};
+		console.log(users);
+		makerequest();
+	};
 
-	//part for adding new user
-    const auth = useAuthState();
-    const [newUserName, setnewUserName] = useState("");
-    const [{ regSuccess, newUser }, setRegInputs] = useRegister();
-    useEffect(() => {
-        if (regSuccess) {
-			users.push(User.fromResponseBody({userName:newUserName}))
-            auth.simpleCheck(newUserName);
-            setUpdate(!update);
-        }
-    }, [regSuccess]);
-    const addUser = (userName, password) => {
-        setRegInputs(userName, password);
-        setnewUserName(userName);
-    };
+	const uploadAvatar = (user, file) => {
+		let promise = new Promise((resolve, reject) => {
+			upload_avatar(user, file)
+				.then(res => {
+					if (res.status === 200) {
+                        refresh();
+                        console.log(res);
+						resolve(res);
+					} else {
+						reject(res);
+					}
+				})
+				.catch(err => reject(err));
+		});
+		return promise;
+	};
 
+    const auth = useAuthState()
+	const addUser = async(userName, password)=>{
+		const newUser = await requestAddUser(userName, password)
+		if (newUser){
+			users.push(newUser)
+			auth.login(userName, password)
+		}
+	}
 
+	const topUser = async (userName, setifTopped, sortFunction)=>{
+		const res = await requestTopUser(userName)
+		if (res){
+			const user = users.find((u) => u.userName === userName)
+			user.topped = !user.topped
+			setifTopped(user.topped)
+			console.log("current top value of", userName, user.topped)
+			sortFunction()
+		}
+	}
 
-
-
-    
     const updateUser = (user) => {
         let newUsers = users;
         let index = newUsers.findIndex((u) => u._id === user._id);
@@ -163,8 +156,7 @@ export const UsersProvider = (props) => {
         try {
             const res = await deleteProfile(username);
             if (res.ok){
-                const user = await res.json();
-                const updatedUsers = users.filter(u => u.userName !== user.userName);
+                const updatedUsers = users.filter(u => u.userName !== username);
                 setUsers(updatedUsers);
                 return 200;
             }
@@ -175,6 +167,9 @@ export const UsersProvider = (props) => {
         }
     }
 
+    const deleteUserByName = async (userName)=>{
+        await deleteUserProfile(userName)
+    }
 
 
     /** Functionality for connecting with other users */
@@ -287,8 +282,8 @@ export const UsersProvider = (props) => {
 };
 
 export function useUsersState() {
-    const context = useContext(UsersContext);
-    if (!context)
-        throw new Error("useUsersState must be used within a UsersProvider");
-    return context;
+	const context = useContext(UsersContext);
+	if (!context)
+		throw new Error("useUsersState must be used within a UsersProvider");
+	return context;
 }

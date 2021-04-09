@@ -1,4 +1,7 @@
 "user strict";
+/* Credit to https://github.com/csc309-winter-2021/react-express-authentication*/
+/* Credit to https://github.com/csc309-winter-2021/cloudinary-mongoose-react*/
+
 /* Server environment setup */
 // To run in development mode, run normally: node server.js
 // To run in development with the test user logged in the backend, run: TEST_USER_ON=true node server.js
@@ -7,7 +10,7 @@ const env = process.env.NODE_ENV; // read the environment variable (will be 'pro
 
 const USE_TEST_USER = env !== "production" && process.env.TEST_USER_ON; // option to turn on the test user.
 const TEST_USER_ID = "5fb8b011b864666580b4efe3"; // the id of our test user (you will have to replace it with a test user that you made). can also put this into a separate configutation file
-const TEST_USER_EMAIL = "test@user.com";
+const TEST_USER_NAME = "testName";
 //////
 
 const path = require("path");
@@ -32,8 +35,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo"); // to store session information on the database in production
 
 const ProjectRouter = require('./routes/project');
+const UserRouter = require('./routes/user');
 
 app.use("/api", ProjectRouter);
+app.use("/api", UserRouter);
 
 function isMongoError(error) {
     // checks for first error returned by promise rejection if Mongo database suddently disconnects
@@ -81,7 +86,6 @@ const authenticate = (req, res, next) => {
 
 const adminCheck = (req, res, next) => {
     if (env !== "production" && USE_TEST_USER) req.session.user = TEST_USER_ID; // test user on development. (remember to run `TEST_USER_ON=true node server.js` if you want to use this user.)
-
     if (req.session.user) {
         User.findById(req.session.user)
             .then((user) => {
@@ -127,6 +131,26 @@ app.use(
 
 /* API Routes */
 
+
+app.get("/api/check-session", (req, res) => {
+    if (env !== "production" && USE_TEST_USER) {
+        // test user on development environment.
+        req.session.user = TEST_USER_ID;
+        req.session.userName = TEST_USER_NAME;
+        res.send({ userName: TEST_USER_NAME });
+        return;
+    }
+    console.log(req.session)
+
+    if (req.session.userName) {
+        // console.log({ userName: req.session.userName  })
+        res.send({ userName: req.session.userName, isAdmin: req.session.isAdmin });
+    } else {
+        res.status(401).send();
+    }
+});
+
+
 // A route to login and create a session
 app.post("/api/login", mongoChecker, (req, res) => {
     const userName = req.body.userName;
@@ -141,6 +165,7 @@ app.post("/api/login", mongoChecker, (req, res) => {
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
             req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+            req.session.isAdmin = user.isAdmin
             console.log("debug", user);
             res.send(user);
         })
@@ -191,11 +216,16 @@ app.post("/api/newUser", mongoChecker, (req, res) => {
         password: req.body.password,
         isAdmin: req.body.isAdmin,
     });
-
     newUser
         .save()
-        .then((result) => {
-            res.send(result);
+        .then((user) => {
+            // Add the user's id to the session.
+            // We can check later if this exists to ensure we are logged in.
+            req.session.user = user._id;
+            req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+            req.session.isAdmin = user.isAdmin;
+            console.log("debug", user);
+            res.send(user);
         })
         .catch((error) => {
             res.status(400).send("Bad Request");
@@ -266,12 +296,13 @@ app.patch("/api/updateProfile", mongoChecker, authenticate, (req, res) => {
         });
 });
 
-
-
-
+	
 // route for friends/connection features
 app.patch("/connections/reply/:username", mongoChecker, authenticate, async (req,res) => {
-
+    if (mongoose.connection.readyState != 1){
+		res.status(500).send('Internal server error')
+		return;
+	}
     const username = req.session.userName;
     const friendName = req.params.username;
     try {
@@ -318,6 +349,8 @@ app.post("/connections/request/:username", mongoChecker, authenticate, (req,res)
 
     const username = req.session.userName;
     const friendName = req.params.username;
+    console.log(`friendName: ${friendName}, username: ${username}`)
+    console.log("current session", req.session)
 
     if (username === friendName){
         res.status(400).send("bad request");
@@ -350,6 +383,33 @@ app.post("/connections/request/:username", mongoChecker, authenticate, (req,res)
     })
 })
 
+
+app.get("/api/top/:username", async (req, res)=>{
+    const userName = req.params.username
+    console.log("c!!!!!!!!!!!!!!!!!!!!!!")
+    try{
+        const user = await User.findOne({userName: userName})
+        console.log("the user name", userName)
+        if (!user){
+            res.status(404).send("User not found")
+            return
+        }
+        //otherwise top the user
+        user.topped = !user.topped
+        await user.save()
+        res.send()
+    }catch (err){
+        console.log(err)
+        res.status(404).send("user not found")
+    }
+})
+
+// app.delete("/connections/remove/:username", async (req, res) => {
+    
+//     if (mongoose.connection.readyState != 1){
+// 		res.status(500).send('Internal server error')
+// 		return;
+// 	}
 app.delete("/connections/remove/:username", mongoChecker, authenticate, async (req, res) => {
 
     const username = req.session.userName;
@@ -389,6 +449,18 @@ app.delete("/connections/remove/:username", mongoChecker, authenticate, async (r
         
     }
 })
+
+app.get("/api/logout", (req, res) => {
+    // Remove the session
+    req.session.destroy(error => {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            res.send()
+        }
+    });
+});
+
 
 
 app.use(express.static(path.join(__dirname, "/client/build")));

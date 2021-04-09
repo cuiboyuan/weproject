@@ -6,6 +6,7 @@ import "./style.css";
 import Office from "../../assets/office.svg";
 import { useAuthState, useUsersState } from "../../context";
 import { useIsLoggedIn, useRegister } from "../../actions/user_profile";
+import { ConsoleSqlOutlined } from "@ant-design/icons";
 // CREDIT: https://www.iconfont.cn/illustrations/detail?spm=a313x.7781069.1998910419.d9df05512&cid=24182
 
 
@@ -37,23 +38,26 @@ const Loggin = (props) => {
 	const usersContext = useUsersState()
 
 //===============log in logic ===================
-    const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
+    // const [{ loggedIn, user }, setLoginInputs] = useIsLoggedIn();
 
 
-	//when loggedIn, (returned by the async function), we 
-	//call the simpleCheck function, which writes the username
-	//to the context
-    useEffect(() => {
-        if (loggedIn) {
-            auth.simpleCheck(username);
-        }
-    }, [loggedIn]);
+	// //when loggedIn, (returned by the async function), we 
+	// //call the simpleCheck function, which writes the username
+	// //to the context
+    // useEffect(() => {
+    //     if (loggedIn) {
+    //         console.log(`login page ${username}, ${user}`)
+    //         auth.simpleCheck(username, user);
+    //     }
+    // }, [user]);
 
 	//on submitting the form, we use the "useIsLoggedIn" hook in
 	//user_profile.js to update check if the user is logged in, 
 	//setInputs is the trigger function for that hook
     const onSubmit = () => {
-        setLoginInputs(username, password);
+        // setLoginInputs(username, password);
+        auth.login(username, password)
+        console.log("!!!!click signin!!!!!")
     };
 
 //================ register logic ==================
