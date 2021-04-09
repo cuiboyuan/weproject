@@ -81,7 +81,9 @@ export const AuthProvider = (props) => {
             localStorage.setItem("username", userName);
             console.log("login success", userName)
             setIsLoggedIn(true);
-        }
+        }else{
+            notification["error"]({message:"wrong username/password"})
+            }
     };
 
     const logout = async () => {
