@@ -737,11 +737,17 @@ class Profile extends Component {
 								{this.state.friends.map(
 									(member, i) => (
 										<div key={i} className="project-page-owner">
-											<Avatar
-												className="simplecard-avatar"
-												size={40}
-												icon={<UserOutlined />}
-											/>
+											{member?.avatar?.url ? (
+												<Avatar size={70} src={member?.avatar.url} />
+											) : (
+												<Avatar
+													size={70}
+													className="project-card-avatar"
+													icon={
+														<UserOutlined className="project-card-avatar-content" />
+													}
+												/>
+											)}
 											<div className="project-page-owner-name-span">
 													<span>{member.userName}</span>
 											</div>
@@ -765,11 +771,17 @@ class Profile extends Component {
 										{this.state.friendRequests.map(
 											(member, i) => (
 												<div key={i} className="project-page-owner">
-													<Avatar
-														className="simplecard-avatar"
-														size={40}
-														icon={<UserOutlined />}
-													/>
+													{member?.avatar?.url ? (
+														<Avatar size={70} src={member?.avatar.url} />
+													) : (
+														<Avatar
+															size={70}
+															className="project-card-avatar"
+															icon={
+																<UserOutlined className="project-card-avatar-content" />
+															}
+														/>
+													)}
 													<div className="project-page-owner-name-span">
 														
 															<span>{member.userName}</span>
