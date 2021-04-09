@@ -144,7 +144,7 @@ class Profile extends Component {
 			notification["error"]({
 				message: `Session Timeout`,
 			});
-			// TODO logout manually
+			this.props.auth.logout();
 			this.props.history.push("/");
 		}
 	}
@@ -188,25 +188,17 @@ class Profile extends Component {
 		try {
 			const res = await allUsers.deleteUserProfile(this.state.userName);
 			if (res === 200){
-				notification["success"]({
-					message: `${this.state.userName} Deleted`,
-				});
+				
 				this.props.history.push("/");
 			} else {
 				if (res === 401){
 					this.checkTimeout(res);
 					return;
 				}
-				notification["error"]({
-					message: `Fail to delete ${this.state.userName} (Error code:${res}).`,
-				});
 			}
 			
 		} catch (error) {
-			
-			notification["error"]({
-				message: `Fail to delete ${this.state.userName} Something went wrong.`,
-			});
+			console.log(error)
 		}
 		
 	};
@@ -226,16 +218,10 @@ class Profile extends Component {
 						message: `Fail to update. Something went wrong (Error code:${res})`,
 					});
 				} else {
-					notification["success"]({
-						message: `Request send!`,
-					});
 					this.setState({requested: true})
 				}
 			} catch (error) {
 				console.log(error)
-				notification["error"]({
-					message: `Something went wrong`,
-				});
 			}
 		}
 	}
@@ -432,7 +418,6 @@ class Profile extends Component {
 									<div className="project-page-name">{userName}</div>
 								</div>
 								<div className="project-page-margin">
-									<Button type="text" icon={<LikeOutlined />} />
 
 									{isProfile && (
 										<Button

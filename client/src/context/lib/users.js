@@ -9,7 +9,8 @@ import {
     requestTopUser,
 } from "../../actions/user_profile";
 import { useAuthState } from "../../context";
-import { User } from "../../model";
+
+import { notification } from "antd";
 
 import {
     updateProfile,
@@ -162,11 +163,18 @@ export const UsersProvider = (props) => {
                 const updatedUsers = users.filter((u) => u.userName !== username);
 				console.log(`deleteUserProfile updated users: ${updatedUsers}`)
                 setUsers(updatedUsers);
+                
+				notification["success"]({
+					message: `${username} Deleted`,
+				});
                 return 200;
             }
             return 500;
         } catch (error) {
             console.log(error);
+			notification["error"]({
+				message: `Fail to delete ${username} Something went wrong.`,
+			});
             return FRONTEND_ERR;
         }
     };
@@ -192,10 +200,16 @@ export const UsersProvider = (props) => {
                     user.pending.push(auth.userName);
                     updateUser(user);
                 }
+                notification["success"]({
+                    message: `Request send!`,
+                });
             }
             return res.status;
         } catch (error) {
             console.log(error);
+            notification["error"]({
+                message: `Something went wrong`,
+            });
             return FRONTEND_ERR;
         }
     };
