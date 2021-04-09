@@ -4,7 +4,6 @@
   "description": "- Install all the dependencies: `npm i`\r - Build and run at the localhost PORT=3000: `npm start`\r - Login Credential `username:password`\r     - user: `user:user`\r     - admin: `admin:admin`",
   "main": "server.js",
   "dependencies": {
-    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-polyfill": "^6.26.0",
