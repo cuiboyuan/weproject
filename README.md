@@ -1,11 +1,15 @@
 # App Name: WeProject
 
 ## How to start
-- Install all the dependencies: `npm i`
-- Build and run at the localhost PORT=3000: `npm start`
+- Install all the dependencies: `npm run setup`
+- Build and run at the localhost PORT=5000: `npm run build-run`
 - Login Credential `username:password`
     - user: `user:user`
     - admin: `admin:admin`
+
+## Deployed Website Link
+
+http://we-project.herokuapp.com/
 
 ## Third party libraries:
 - React
