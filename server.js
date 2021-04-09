@@ -1,4 +1,7 @@
 "user strict";
+/* Credit to https://github.com/csc309-winter-2021/react-express-authentication*/
+/* Credit to https://github.com/csc309-winter-2021/cloudinary-mongoose-react*/
+
 /* Server environment setup */
 // To run in development mode, run normally: node server.js
 // To run in development with the test user logged in the backend, run: TEST_USER_ON=true node server.js
