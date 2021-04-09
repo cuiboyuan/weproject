@@ -24,7 +24,7 @@ http://we-project.herokuapp.com/
 ## Current Features
 - Header
     - Router
-    - User logour
+    - User logout
 - Login
     - Sign In/Sign up
     - Login as admin
@@ -33,10 +33,16 @@ http://we-project.herokuapp.com/
     - owner avatar, username
     - description
     - number of views/team membesr/likes
+- User
+    - profile update
+    - upload avatar
 - Teammate Browsing
     - User info
     - Connect with users
 - Project Details
+    - images upload
+    - manage teammates
+    - current progress
 - Teammate Details
     - Connect other users
     - Edit profile info
