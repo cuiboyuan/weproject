@@ -67,6 +67,7 @@ router.patch("/project/:id", async (req, res) => {
         res.status(500).send("Internal server error");
         return;
     }
+    req.body.images = req.body.images.map(img => img.id);
     try {
         var project = await Project.findOneAndUpdate(
             { _id: req.params.id },

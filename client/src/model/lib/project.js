@@ -1,7 +1,7 @@
 import { User } from "../";
 
 export default class Project {
-	constructor(id, owner, name, description, requirement, members, status, userLiked, tags, progress) {
+	constructor(id, owner, name, description, requirement, members, status, usersLiked, tags, progress) {
 		this.id = id;
 		this.owner = User.fromResponseBody(owner);
 		this.name = name;
@@ -9,7 +9,7 @@ export default class Project {
 		this.requirement = requirement;
 		this.userIds = members || [];
 		this.status = status || "incomplete";
-		this.userLiked = userLiked || [];
+		this.usersLiked = usersLiked || [];
 		this.tags = tags || [];
 		this.progress = progress || []
 		//added new attributes by Tian
@@ -25,7 +25,7 @@ export default class Project {
 			object.description,
 			object.userIds,
 			object.status,
-			object.userLiked,
+			object.usersLiked,
 			object.tags,
 			//added new attributes by Tian
 			object.topped
@@ -40,7 +40,7 @@ export default class Project {
 			description: this.description,
 			userIds: this.userIds,
 			status: this.status,
-			userLiked: this.userLiked,
+			usersLiked: this.usersLiked,
 			tags: this.tags,
 
 			//added new attributes by Tian

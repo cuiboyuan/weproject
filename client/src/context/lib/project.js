@@ -192,7 +192,7 @@ export const ProjectProvider = (props) => {
     };
 
     const thumUpProject = async (project_ID, userName, setuserLikedNum)=>{
-        let index = projects.findIndex((p) => p._id === project_ID);
+        let index = projects.findIndex((p) => p.id === project_ID);
         if (index >=0){
             let project = projects[index]
             if (project.usersLiked.includes(userName)){
