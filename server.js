@@ -65,7 +65,7 @@ const mongoChecker = (req, res, next) => {
 
 // Middleware for authentication of resources
 const authenticate = (req, res, next) => {
-    if (env !== "production" && USE_TEST_USER) req.session.user = TEST_USER_ID; // test user on development. (remember to run `TEST_USER_ON=true node server.js` if you want to use this user.)
+    if (env !== "production" && USE_TEST_USER) req.session.user = TEST_USER_ID; 
 
     if (req.session.user) {
         User.findById(req.session.user)
@@ -85,7 +85,7 @@ const authenticate = (req, res, next) => {
 };
 
 const adminCheck = (req, res, next) => {
-    if (env !== "production" && USE_TEST_USER) req.session.user = TEST_USER_ID; // test user on development. (remember to run `TEST_USER_ON=true node server.js` if you want to use this user.)
+    if (env !== "production" && USE_TEST_USER) req.session.user = TEST_USER_ID; 
     if (req.session.user) {
         User.findById(req.session.user)
             .then((user) => {
@@ -142,7 +142,7 @@ app.get("/api/check-session", (req, res) => {
     console.log(req.session);
 
     if (req.session.userName) {
-        // console.log({ userName: req.session.userName  })
+        
         res.send({
             userName: req.session.userName,
             isAdmin: req.session.isAdmin,
@@ -157,7 +157,6 @@ app.post("/api/login", mongoChecker, (req, res) => {
     const userName = req.body.userName;
     const password = req.body.password;
 
-    // log(email, password);
     // Use the static method on the User model to find a user
     // by their email and password
     User.findByUnamePassword(userName, password)
@@ -165,7 +164,7 @@ app.post("/api/login", mongoChecker, (req, res) => {
             // Add the user's id to the session.
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
-            req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+            req.session.userName = user.userName; 
             req.session.isAdmin = user.isAdmin;
             console.log("debug", user);
             res.send(user);
@@ -177,10 +176,6 @@ app.post("/api/login", mongoChecker, (req, res) => {
 
 // route to get user profile
 app.get("/api/user/:username", mongoChecker, (req, res) => {
-    if (mongoose.connection.readyState != 1) {
-        res.status(500).send("Internal server error");
-        return;
-    }
 
     const username = req.params.username;
 
@@ -222,7 +217,7 @@ app.post("/api/newUser", mongoChecker, (req, res) => {
             // Add the user's id to the session.
             // We can check later if this exists to ensure we are logged in.
             req.session.user = user._id;
-            req.session.userName = user.userName; // we will later send the email to the browser when checking if someone is logged in through GET /check-session (we will display it on the frontend dashboard. You could however also just send a boolean flag).
+            req.session.userName = user.userName;
             req.session.isAdmin = user.isAdmin;
             console.log("debug", user);
             res.send(user);
@@ -248,10 +243,8 @@ app.delete(
             for (let u of users) {
                 console.log("the user info:", u);
                 //connections
-                // u.connections = u.connections.filter((u) => u != username);
                 u.connections.remove(username);
                 //pending
-                // u.pending = u.pending.filter((u) => u != username);
                 u.pending.remove(username);
                 await u.save();
             }
@@ -322,10 +315,7 @@ app.patch(
     mongoChecker,
     authenticate,
     async (req, res) => {
-        if (mongoose.connection.readyState != 1) {
-            res.status(500).send("Internal server error");
-            return;
-        }
+
         const username = req.session.userName;
         const friendName = req.params.username;
         try {
@@ -411,7 +401,7 @@ app.post(
 
 app.get("/api/top/:username", async (req, res) => {
     const userName = req.params.username;
-    console.log("c!!!!!!!!!!!!!!!!!!!!!!");
+    
     try {
         const user = await User.findOne({ userName: userName });
         console.log("the user name", userName);
@@ -463,7 +453,6 @@ app.delete(
                 await friend.save();
                 await user.save();
 
-                console.log(`connection accepted`);
             } else {
                 res.status(404).send("User not found");
             }
@@ -491,7 +480,7 @@ app.use(express.static(path.join(__dirname, "/client/build")));
 // All routes other than above will go to index.html
 app.get("*", (req, res) => {
     // check for page routes that we expect in the frontend to provide correct status code.
-    const goodPageRoutes = ["/", "/loggin", "/teammates"]; // "/project", "/user","/profile","/newProject"];
+    const goodPageRoutes = ["/", "/loggin", "/teammates"]; 
     if (!goodPageRoutes.includes(req.url)) {
         // if url not in expected page routes, set status to 404.
         res.status(404).send();

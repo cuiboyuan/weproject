@@ -23,7 +23,6 @@ const ProjectCard = ({
     removeFunction,
 }) => {
     const [ifTopped, setifTopped] = useState(data.topped);
-    //TODO: modify it to userID
     const authContext = useAuthState();
     const userName = authContext.userName;
     const projectContext = useProjectState();
@@ -51,10 +50,12 @@ const ProjectCard = ({
                     </div>
                     <Card.Body className="simplecard-description">
                         <div className="simplecard-username-container">
-                            <Avatar
-                                className="simplecard-avatar"
-                                icon={<UserOutlined />}
-                            />
+
+                        <Avatar
+                                        className="simplecard-avatar"
+                                        icon={<UserOutlined />}
+
+                    />
                             <span>{data.owner?.userName}</span>
                         </div>
                         <p>{data.description}</p>
@@ -68,9 +69,6 @@ const ProjectCard = ({
                                     className="simplecard-icon"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        // if (!data.usersLiked.includes(userName) && isLoggedIn) {
-                                        // data.userLiked.push(userName);
-                                        // setuserLikedNum(data.userLiked.length);
 										if (!isLoggedIn){
 											notification["warning"]({message:"please login to like"})
 											return
@@ -93,7 +91,6 @@ const ProjectCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            // data.topped = !data.topped;
                                             console.log(
                                                 `click top!!! data_id ${data._id},data.id ${data.id}`
                                             );
@@ -112,7 +109,6 @@ const ProjectCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            // removeFunction(data);
                                             projectContext.deleteProject(
                                                 data.id
                                             );

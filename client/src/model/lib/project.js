@@ -12,8 +12,6 @@ export default class Project {
 		this.usersLiked = usersLiked || [];
 		this.tags = tags || [];
 		this.progress = progress || []
-		//added new attributes by Tian
-			// indicate whether the current project is topped by admin
 		this.topped = false;
 	}
 

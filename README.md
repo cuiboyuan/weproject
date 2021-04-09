@@ -1,11 +1,15 @@
 # App Name: WeProject
 
 ## How to start
-- Install all the dependencies: `npm i`
-- Build and run at the localhost PORT=3000: `npm start`
+- Install all the dependencies: `npm run setup`
+- Build and run at the localhost PORT=5000: `npm run build-run`
 - Login Credential `username:password`
     - user: `user:user`
     - admin: `admin:admin`
+
+## Deployed Website Link
+
+http://we-project.herokuapp.com/
 
 ## Third party libraries:
 - React
@@ -32,8 +36,120 @@
     - Connect with users
 - Project Details
 - Teammate Details
-- Admin Previliges (In progress)
+    - Connect other users
+    - Edit profile info
+- Admin Previliges 
+    - Delete user/project
+## Server Routes
+- GET ```/api/check-session```:
+  - if the user is currently loggedin, returns status code 200 and a object of 
+    ```
+    {
+      userName: <the current user name>
+      isAdmin: <if the current logged in user is admin user>
+    }
+    ```
+  - If no user is logged in, return status code 401
 
+
+### User Routes
+
+- GET ```/api/user/:username```
+  - Return the user object with userName of parameter "username"; no request body required.
+- GET ```/api/users```
+  - Return the all user objects in the database; no request body required.
+- GET ```/api/top/:username```
+  - Request to top the user with the given **username**
+  - Returns status code 200 on success and 404 on failure
+
+- GET ```/api/logout```
+  - Request to logout the user's account. The request will destroy the created session
+  - Returns status code 200 on success and 500 on error
+    
+- POST ```/api/login``` 
+  - The login request. Request body is of form:
+    ```
+    {
+      userName: <the username>,
+      password: <the password of that user>
+    }
+    ```
+  - If the userName and password matches, returns the logged in user object (we store each user as an object in the database) and create a session coockie storing the following three attributes of that user object: ```isAdmin, userName, _id```
+  - If the userName and password doesn't match, return status code 400
+
+- POST ```/api/newUser```
+  - The request for registration. The request body is of the form:
+    ```
+      {
+        userName: <The username of this new user, UNIQUE>
+        password: <The user's password>
+        isAdmin: <if it is an admin user>
+      }
+  - Returns the created User object on success and status code 400 on failure.
+- DELETE ```/api/deleteUser/:username```
+   - The route deletes the user with userName of parameter username; no request body required
+   - The route will only execute successfully if the currently logged in user is an admin
+   
+- PATCH ```/api/updateProfile```
+   - The route updates the basic user info of the currently logged in user
+   - The request body contains updated information, and it should be a JSON document formatted as below:
+    ```
+    {
+
+        "description": "user description",
+
+        "skills": ["skill1", ""skill2",... ],
+
+        "experiences":[{
+
+            "company":"company 1",
+
+            "position": "title 1",
+
+            "start": "2018-09-01",
+
+            "end": "2022-05-01"
+
+        }, ... ],
+
+        "email": <user email address>,
+
+        "linkedin": <user linkedin link>,
+
+        "github": <user github link>,
+
+    }
+    ```
+  - On success, the user will update its corresponding information in the request body, and the updated user object will be returned
+
+- POST ```/connections/request/:username```
+  - The request to add the current logged in user to the ```pending``` list of the user with the given **username**; i.e., login user sends a friend request to another user.
+  - On success, the route will return the user object with the updated pending list.
+- PATCH ```/connections/reply/:username```
+  - The request takes in a request body of type JSON with only one attribute:
+  ```
+  {
+    "accept": <boolean representing whether the user accepts the friend request>
+  }
+  ```
+  - If ```accept``` is false, we will just remove the given **username** from the pending list of the login user (user rejects the friend request); else, we will move **username** from pending list to the connection list (user accepts the friend request).
+- DELETE ```/connections/remove/:username```
+   - The request to remove **username** from the ```connection``` list of the current login user. The userName of the login user will also be removed from the ```connections``` list of the user with **username**. No request body is required
+
+## Project Routes
+  - GET ```/project/top/:projectID```
+    - The request from admin to top a particular project by their projectID (the _id attribute)
+    - returns status code 200 on success and 404 on failure
+  - POST ```/project/like```
+    - The request from users to like a particular project
+    - The request body is in the following format:
+      ```
+      {
+        userName:<the username of the user who likes the project>
+        project_ID: <the _id attribute of the liked project object>
+      }
+      ```
+    - Returns status code 200 on success and 404 on failure
 ## User Cases
 - **project browsing** page (see the pricture below for detailed reference)
   - search bar: you could search project by name

@@ -62,27 +62,6 @@ const ProjectSchema = new mongoose.Schema({
     }
 });
 
-// // find user by userName and password
-// UserSchema.statics.findByUnamePassword = function(userName, password) {
-// 	const User = this // binds this to the User model
-
-// 	// First find the user by their email
-// 	return User.findOne({ userName: userName }).then((user) => {
-// 		if (!user) {
-// 			return Promise.reject()  // a rejected promise
-// 		}
-// 		// if the user exists, make sure their password is correct
-// 		return new Promise((resolve, reject) => {
-// 			bcrypt.compare(password, user.password, (err, result) => {
-// 				if (result) {
-// 					resolve(user)
-// 				} else {
-// 					reject()
-// 				}
-// 			})
-// 		})
-// 	})
-// }
 
 
 const Project = mongoose.model("Project", ProjectSchema);

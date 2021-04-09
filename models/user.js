@@ -75,17 +75,7 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String,
     },
-    // connections: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     default: [],
-    // },
 
-    // //the applicants
-    // pending: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     default: [],
-    // },
-    
     connections: {
         type: [String],
         default: [],

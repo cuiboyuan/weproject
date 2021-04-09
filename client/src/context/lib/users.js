@@ -26,7 +26,6 @@ const API_HOST = ENV.api_host;
 const UsersContext = createContext();
 
 export const UsersProvider = (props) => {
-    //part for initializing the data
     const [users, setUsers] = useState([]);
     const [update, setUpdate] = useState(false);
     useEffect(() => {
@@ -153,12 +152,8 @@ export const UsersProvider = (props) => {
             if (res.ok) {
                 for (let u of users) {
 					console.log(u)
-                    //connections
                     u.connections = u.connections.filter((u) => u != username);
-                    // u.connections.remove(username);
-                    //pending
                     u.pending = u.pending.filter((u) => u != username);
-                    // u.pending.remove(username);
                 }
                 const updatedUsers = users.filter((u) => u.userName !== username);
 				console.log(`deleteUserProfile updated users: ${updatedUsers}`)
