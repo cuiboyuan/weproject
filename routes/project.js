@@ -97,10 +97,10 @@ router.post("/project/:id/images", multipartMiddleware, async (req, res) => {
             const image_id = result.id;
             project.images.push(image_id);
             const proj = await project.save();
-            // console.log(result);
+            
             res.status(200).json(proj);
         });
-        // .catch(error => console.error());
+        
     }
 });
 
@@ -114,7 +114,7 @@ router.get("/project/:id/images", async (req, res) => {
             console.log(result);
             res.status(200).json(result);
         });
-        // .catch(error => console.error());
+        
     }
 });
 
@@ -131,7 +131,7 @@ router.get("/project/top/:projectID", async (req, res) => {
         await project.save();
         res.send();
     } catch (err) {
-		// console.log(err)
+        
 		res.status(404).send(err)
 
 	}
@@ -139,9 +139,9 @@ router.get("/project/top/:projectID", async (req, res) => {
 
 
 router.post("/project/like", async (req, res)=>{
-    console.log("!!!!!!!!!!request like received")
+    
     try{
-        console.log("request body!!!!!", req.body)
+        
         const project_ID = req.body.project_ID
         const userName = req.body.userName
         const project = await Project.findById(project_ID)
