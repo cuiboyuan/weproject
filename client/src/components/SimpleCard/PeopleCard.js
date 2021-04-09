@@ -59,7 +59,7 @@ const PeopleCard = ({
                         <span className="project-card-name">
                             {data.userName}
                         </span>
-                        {/* <p>{data.description}</p> */}
+                        <p>{data.description}</p>
                         <div className="simplecard-info-container">
                             <div className="simplecard-info-left">
                                 <div className="simplecard-icon">
