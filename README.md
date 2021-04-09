@@ -131,7 +131,7 @@ http://we-project.herokuapp.com/
   }
   ```
   - If ```accept``` is false, we will just remove the given **username** from the pending list of the login user; else, we will move **username** from pending list to the connection list.
-- DELETE "/connections/remove/:username"
+- DELETE ```/connections/remove/:username```
    - The request to remove **username** from the connection list of the current login user. No request body is required
 
 ## Project Routes
