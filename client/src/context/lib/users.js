@@ -182,7 +182,7 @@ export const UsersProvider = props => {
             const res = await connectFriend(friendName);
             if (res.status === 200){
                 const user = getUser(friendName);
-                if (!user.pending.includes(login)){       
+                if (!user.pending.includes(login) && !user.connections.includes(login)){       
                     user.pending.push(auth.userName);
                     updateUser(user);
                 }
