@@ -36,8 +36,10 @@ http://we-project.herokuapp.com/
     - Connect with users
 - Project Details
 - Teammate Details
-- Admin Previliges (In progress)
-
+    - Connect other users
+    - Edit profile info
+- Admin Previliges 
+    - Delete user/project
 ## Server Routes
 - GET ```/api/check-session```:
   - if the user is currently loggedin, returns status code 200 and a object of 
