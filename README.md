@@ -39,6 +39,16 @@ http://we-project.herokuapp.com/
 - Admin Previliges (In progress)
 
 ## Server Routes
+- get ```/api/check-session```:
+  - if the user is currently loggedin, returns status code 200 and a object of 
+    ```
+    {
+      userName: <the current user name>
+      isAdmin: <if the current logged in user is admin user>
+    }
+    ```
+  - If no user is logged in, return status code 401
+
 
 ### User Routes
 
@@ -46,6 +56,13 @@ http://we-project.herokuapp.com/
   - Return the user object with userName of parameter "username"; no request body required.
 - GET "/api/users"
   - Return the all user objects in the database; no request body required.
+- GET ```/api/top/:username```
+  - Request to top the user with the given **username**
+  - Returns status code 200 on success and 404 on failure
+
+- GET ```/api/logout```
+  - Request to logout the user's account. The request will destroy the created session
+  - Returns status code 200 on success and 500 on error
 - POST "/api/newUser"
   - Add a new user object to the database. The request body should be of type JSON and formatted as:
     
@@ -62,7 +79,26 @@ http://we-project.herokuapp.com/
     If "isAdmin" is false, the route will create a regular user and set its userName and password to values of the corresponding attributes in the body; otherwise, the route will create admin and set its credentials correspondingly.
     
    - Route returns the object id of the new user on success. If username already exists it will return status code 400.
-    
+- POST ```/api/login``` 
+  - The login request. Request body is of form:
+    ```
+    {
+      userName: <the username>,
+      password: <the password of that user>
+    }
+    ```
+  - If the userName and password matches, returns the logged in user object (we store each user as an object in the database) and create a session coockie storing the following three attributes of that user object: ```isAdmin, userName, _id```
+  - If the userName and password doesn't match, return status code 400
+
+- POST ```/api/newUser```
+  - The request for registration. The request body is of the form:
+    ```
+      {
+        userName: <The username of this new user, UNIQUE>
+        password: <The user's password>
+        isAdmin: <if it is an admin user>
+      }
+  - Returns the created User object on success and status code 400 on failure.
 - DELETE "/api/deleteUser/:username"
    - The route deletes the user with userName of parameter username; no request body required
    - The route will only execute successfully if the currently logged in user is an admin
@@ -101,6 +137,20 @@ http://we-project.herokuapp.com/
 - POST "/connections/request/:username"
 - DELETE "/connections/remove/:username"
 
+## Project Routes
+  - GET ```/project/top/:projectID```
+    - The request from admin to top a particular project by their projectID (the _id attribute)
+    - returns status code 200 on success and 404 on failure
+  - POST ```/project/like```
+    - The request from users to like a particular project
+    - The request body is in the following format:
+      ```
+      {
+        userName:<the username of the user who likes the project>
+        project_ID: <the _id attribute of the liked project object>
+      }
+      ```
+    - Returns status code 200 on success and 404 on failure
 ## User Cases
 - **project browsing** page (see the pricture below for detailed reference)
   - search bar: you could search project by name
