@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../../config.js";
 import { notification } from "antd";
 import { requestLogin, requestLogout } from "../../actions/user_profile.js";
+import PeopleCard from "../../components/SimpleCard/PeopleCard.js";
 const API_HOST = ENV.api_host;
 const AuthContext = createContext();
 const ADMIN = "admin";
@@ -11,8 +12,15 @@ export const AuthProvider = (props) => {
     const [userName, setUserName] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [sessionTrigger, setsessionTrigger] = useState(false)
+    const [sessionAlive, setsessionAlive] = useState(false)
 
-    //moved to login_page/index.js, since the async call there
+    const checkSessionGlobal = ()=>{
+        setsessionAlive(false)
+        setsessionTrigger(!sessionTrigger)
+        return sessionAlive
+    }
+    
     // useEffect(() => {
     //     simpleCheck(
     //         localStorage.getItem("username"),
@@ -49,9 +57,13 @@ export const AuthProvider = (props) => {
                     const json = await res.json();
 
                     setIsLoggedIn(true);
-                    setUserName(json.userName)
+                    setUserName(json.userName);
                     setIsAdmin(json.isAdmin);
-                    console.log(`the session json isadmin ${json.isAdmin}`, json)
+                    console.log(
+                        `the session json isadmin ${json.isAdmin}`,
+                        json
+                    );
+                    setsessionAlive(true)
                     // console.log("the login json!!!!!!!!!!!!!!!!!", json)
                     // simpleCheck(json.userName);
                     // console.log("json is!!!!!!!!!!!!!", json)
@@ -59,10 +71,13 @@ export const AuthProvider = (props) => {
                     console.log("fail", err);
                 }
                 // simpleCheck(json.userName)
+            } else {
+                console.log("localstorage", localStorage.getItem("username"), "xxxx", localStorage);
+                if (localStorage.getItem("username")) logout();
             }
         };
         checkSession();
-    }, []);
+    }, [sessionTrigger]);
 
     // const simpleCheck = (username, user) => {
     //     if (username === ADMIN) setIsAdmin(true);
@@ -75,11 +90,11 @@ export const AuthProvider = (props) => {
     const login = async (logInUserName, password) => {
         const res = await requestLogin(logInUserName, password);
         if (res && res.status == 200) {
-            const user = await res.json()
+            const user = await res.json();
             setUserName(logInUserName);
             setIsAdmin(user.isAdmin);
-            localStorage.setItem("username", userName);
-            console.log("login success", userName)
+            localStorage.setItem("username", logInUserName);
+            console.log("login success", logInUserName);
             setIsLoggedIn(true);
         }
     };
@@ -90,9 +105,9 @@ export const AuthProvider = (props) => {
             localStorage.removeItem("username");
             setIsLoggedIn(false);
             setIsAdmin(false);
-            notification["success"]({
-                message: "Logout Successful!",
-            });
+            // notification["success"]({
+            //     message: "Logout Successful!",
+            // });
         } else {
             notification["error"]({
                 message: `Logout Failed`,
@@ -108,6 +123,7 @@ export const AuthProvider = (props) => {
             // simpleCheck,
             logout,
             login,
+            checkSessionGlobal
         };
     };
 

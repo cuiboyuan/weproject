@@ -20,6 +20,7 @@ import {
 } from "../../actions/user_profile";
 
 import ENV from "../../config.js";
+import { notification } from "antd";
 const API_HOST = ENV.api_host;
 
 const UsersContext = createContext();
@@ -87,6 +88,12 @@ export const UsersProvider = (props) => {
     };
 
     const topUser = async (userName, setifTopped, sortFunction) => {
+		if (!await auth.checkSessionGlobal()){
+			notification["warning"]({
+				message:"you are not loggedin"
+			})
+			return
+		}
         const res = await requestTopUser(userName);
         if (res) {
             const user = users.find((u) => u.userName === userName);
