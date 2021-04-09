@@ -14,10 +14,8 @@ const TeammateBrowser = (props) => {
 	
 	const compare = (p1, p2)=>{
 		if (p1.topped == p2.topped){
-			//if tie, sort by project id
 			return p1._id > p2._id?-1:1;
 		}else{
-			//if p1 is topped but p2 isn't
 			if (p1.topped){
 				return -1;
 			}else{
@@ -29,14 +27,8 @@ const TeammateBrowser = (props) => {
 	useEffect(() => {
 		setDisplayData([...userContext.users].sort(compare))
 		console.log("updating teammate browsing page")
-		// return () => {
-		// 	cleanup
-		// }
 	}, [userContext.users])	
 
-	// useEffect(()=>{
-
-	// })
 
 
 	const authState = useAuthState()

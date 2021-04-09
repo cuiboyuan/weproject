@@ -21,12 +21,6 @@ import ProjectCreate from "../project_create";
 
 const { TextArea } = Input;
 
-// const members = [...Array(3).keys()].map((_, i) => {
-// 	return { userName: `member ${i}` };
-// });
-// const applicants = [...Array(4).keys()].map((_, i) => {
-// 	return { userName: `applicant ${i}` };
-// });
 
 const FileUpload = ({ onDrop, accept }) => {
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -63,9 +57,7 @@ class Project extends Component {
 		this.setState({ currentTab: e.key });
 	};
 	onFileUpload = files => {
-		// var filesArr = Array.prototype.slice.call(files);
 		let _files = files;
-		// if (Array.isArray(files)) _files = [files];
 		let fileObjects = _files.map(file => {
 			return { name: file.name, url: URL.createObjectURL(file) };
 		});
@@ -84,7 +76,6 @@ class Project extends Component {
 				}
 			})
 			.catch(err => console.error(err));
-		// this.props.projectsContext.updateProject(newData);
 	};
 
 	removeMember = userName => {

@@ -2,99 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import ENV from "../config.js";
 const API_HOST = ENV.api_host;
 
-// export const getProfile = async (app) => {
-//     const url = `${API_HOST}/api/user`;
-
-//     let { auth, allUsers, allProjects, location } = app.props;
-//     console.log(app.props);
-//     // Change to EXTERNAL CALL in phase 2:
-//     const loginName = auth.userName;
-
-//     let currentName,
-//         currentUser,
-//         loginUser,
-//         isProfile,
-//         ownedProjects,
-//         joinedProjects;
-//     try {
-//         const res = await fetch(`${url}/${loginName}`);
-
-//         if (res.status !== 200) {
-//             return res.status;
-//         }
-//         const login = await res.json();
-
-//         isProfile = false;
-//         loginUser = login;
-
-//         if (location.pathname === "/profile") {
-//             currentName = loginName;
-//             currentUser = loginUser;
-//             isProfile = true;
-//         } else {
-//             // need some change
-//             currentName = location.state.data.userName;
-
-//             const response = await fetch(`${url}/${currentName}`);
-
-//             if (response.status !== 200) {
-//                 return response.status;
-//             }
-//             const user = await response.json();
-
-//             currentUser = user;
-
-//             console.log(currentUser);
-//         }
-
-//         // change afterwards
-//         ownedProjects = allProjects.projects.filter(
-//             (item) => item.owner.userName == currentName
-//         );
-//         joinedProjects = allProjects.projects.filter((item) =>
-//             item.userIds.includes(currentUser._id)
-//         );
-//         app.setState({
-//             userName: currentName,
-//             loginName: loginName,
-
-//             // avatar: currentUser.avatar,
-//             description: currentUser.description,
-//             email: currentUser.email,
-//             linkedin: currentUser.linkedin,
-//             github: currentUser.github,
-//             skills: currentUser.skills,
-
-//             experiences: currentUser.experiences,
-
-//             ownedProjects: ownedProjects,
-//             joinedProjects: joinedProjects,
-
-//             isAdmin: loginUser.isAdmin,
-//             isProfile: isProfile,
-//         });
-//         return 200;
-//     } catch (error) {
-//         return 500;
-//     }
-// };
-
-// export const fetchUser = async (username) => {
-//     const url = `${API_HOST}/api/user`;
-
-//     try {
-//         const res = await fetch(`${url}/${username}`);
-
-//         if (res.status === 200) {
-//             const user = await res.json();
-//             return user;
-//         }
-//         return Promise.reject()
-
-//     } catch (error) {
-//         return Promise.reject();
-//     }
-// }
 
 export const updateProfile = async (updateInfo) => {
     const url = `${API_HOST}/api/updateProfile`;
@@ -118,7 +25,6 @@ export const updateProfile = async (updateInfo) => {
 
 export const deleteProfile = async (username) => {
     const url = `${API_HOST}/api/deleteUser`;
-    // console.log("deleteProfile server request url", url, username)
 
     let res;
     try {
@@ -206,7 +112,6 @@ export const requestAddUser = async (userName, password) => {
     const url = `${API_HOST}/api/newUser`;
     const request = new Request(url, {
         method: "post",
-        //TODO: isAdmin might not be neccessary
         body: JSON.stringify({
             userName: userName,
             password: password,
@@ -221,7 +126,6 @@ export const requestAddUser = async (userName, password) => {
     try {
         const res = await fetch(request);
         if (res.status === 200) {
-            // setUser(res.json);
             const json = await res.json();
             return json;
         }

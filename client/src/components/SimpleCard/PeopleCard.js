@@ -16,8 +16,6 @@ import "./style.css";
 import TopDownIcon from "./TopDownIcon";
 import { useAuthState, useUsersState } from "../../context";
 import { useTopUser } from "../../actions/user_profile";
-// import reactDom from "react-dom";
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 const PeopleCard = ({
     isAdmin,
@@ -87,7 +85,6 @@ const PeopleCard = ({
                                                 data.connections,
                                                 authContext.userName
                                             );
-                                            // setNumFriends(numFriends +1)
                                         }
                                     }}
                                 >
@@ -100,9 +97,6 @@ const PeopleCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            // data.topped = !data.topped;
-                                            // setifTopped(data.topped);
-                                            // settopUserName(data.userName)
                                             usersContext.topUser(
                                                 data.userName,
                                                 setifTopped,
@@ -118,7 +112,6 @@ const PeopleCard = ({
                                         className="simplecard-icon-admin"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            // removeFunction(data);
                                             usersContext.deleteUserByName(
                                                 data.userName
                                             );

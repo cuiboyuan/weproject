@@ -16,26 +16,6 @@ import { notification } from "antd";
 
 const ProjectContext = createContext();
 
-// const data = [...Array(9).keys()].map((_, i) => {
-// 	const id = uuid();
-// 	return new Project(
-// 		id,
-// 		{
-// 			id: uuid(),
-// 			userName: `user${i}`,
-// 			password: `user${i}`,
-// 			ownedProjectIds: [id],
-// 			joinedProjectIds: [],
-// 		},
-// 		`project ${i}`,
-// 		`project ${i} description`,
-// 		`project requirement ${i}`,
-// 		undefined,
-// 		undefined,
-// 		[],
-// 		["tag 1", "tag 2"]
-// 	);
-// });
 
 export const ProjectProvider = (props) => {
     const [projects, setProjects] = useState([]);
@@ -157,8 +137,6 @@ export const ProjectProvider = (props) => {
                 newProject.progress.current = newProject.progress.steps.length;
             }
             updateProject(newProject);
-            // projects.splice(index, 1, newProject);
-            // setProjects(projects);
         }
     };
 
@@ -172,8 +150,6 @@ export const ProjectProvider = (props) => {
                 newProject.progress.current = 0;
             }
             updateProject(newProject);
-            // projects.splice(index, 1, newProject);
-            // setProjects(projects);
         }
     };
 
