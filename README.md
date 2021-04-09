@@ -43,10 +43,60 @@ http://we-project.herokuapp.com/
 ### User Routes
 
 - GET "/api/user/:username"
+  - Return the user object with userName of parameter "username"; no request body required.
 - GET "/api/users"
+  - Return the all user objects in the database; no request body required.
 - POST "/api/newUser"
+  - Add a new user object to the database. The request body should be of type JSON and formatted as:
+    
+    {
+    
+        "userName": "user",
+        
+        "password": "user",
+        
+        "isAdmin": false
+        
+    }
+    
+    If "isAdmin" is false, the route will create a regular user and set its userName and password to values of the corresponding attributes in the body; otherwise, the route will create admin and set its credentials correspondingly.
+    
+   - Route returns the object id of the new user on success. If username already exists it will return status code 400.
+    
 - DELETE "/api/deleteUser/:username"
+   - The route deletes the user with userName of parameter username; no request body required
+   - The route will only execute successfully if the currently logged in user is an admin
+   - On success, it will return whatever is returned from the deleteOne() mongoose call.
 - PATCH "/api/updateProfile"
+   - The route updates the basic user info of the currently logged in user
+   - The request body contains updated information, and it should be a JSON document formatted as below:
+
+{
+
+    "description": "user description",
+    
+    "skills": ["skill1", ""skill2" ],
+    
+    "experiences":[{
+    
+        "company":"UofT",
+
+        "position": "student",
+
+        "start": "2018-09-01",
+
+        "end": "2022-05-01"
+    
+    }],
+    
+    "email": "user@user.com",
+    
+    "linkedin": "linkedin.com/user",
+    
+    "github": "github.com/user",
+    
+}
+
 - PATCH "/connections/reply/:username"
 - POST "/connections/request/:username"
 - DELETE "/connections/remove/:username"
