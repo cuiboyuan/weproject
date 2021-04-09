@@ -266,7 +266,8 @@ export const UsersProvider = props => {
             deleteFriend,
             replyRequests,
             deleteUserByName,
-			topUser
+            topUser,
+            uploadAvatar
 
 
         };
