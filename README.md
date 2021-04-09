@@ -120,10 +120,10 @@ http://we-project.herokuapp.com/
     ```
   - On success, the user will update its corresponding information in the request body, and the updated user object will be returned
 
-- POST "/connections/request/:username"
+- POST ```/connections/request/:username```
   - The request to add the current logged in user to the ```pending``` list of the user with the given **username**; i.e., login user sends a friend request to another user.
   - On success, the route will return the user object with the updated pending list.
-- PATCH "/connections/reply/:username"
+- PATCH ```/connections/reply/:username```
   - The request takes in a request body of type JSON with only one attribute:
   ```
   {
